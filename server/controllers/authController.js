@@ -7,7 +7,7 @@ export const register = async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    return res.json({ success: false, message: "Kurang Lengkap Brooo" });
+    return res.json({ success: false, message: "Input kurang Lengkap Brooo" });
   }
 
   try {
@@ -115,7 +115,7 @@ export const logout = async (req, res) => {
   }
 };
 
-//* Pengiriman Kode Otp Lewat Email
+//* Pengiriman Kode Otp verifikasi Email
 export const sendVerifyOtp = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -160,7 +160,7 @@ export const verifyEmail = async (req, res) => {
   if (!userId || !otp) {
     return res.json({
       success: false,
-      message: "Kurang Lengkap Brooo",
+      message: "Input Kurang Lengkap Brooo",
     });
   }
 
@@ -199,5 +199,85 @@ export const isAuthenticated = async (req, res) => {
     return res.json({ success: true });
   } catch (error) {
     res.json({ success: false, message: error.message });
+  }
+};
+
+//* Pengiriman kode otp reset password
+export const sendResetOtp = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.json({ success: false, message: "Masukkin emailnya dulu broo" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({ success: false, message: "User nggak ada broo" });
+    }
+
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    user.resetOtp = otp;
+    user.resetOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
+
+    await user.save();
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Kode Otp buat Reset Password",
+      text: `Halo ${user.name}, Kode Otpmu adalah: ${otp}. verifikasi segera yaah!`, // plain‑text body
+      messageId: `<${Date.now()}@${process.env.SENDER_EMAIL}>`, // properti messageId for debug
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({
+      success: true,
+      message: "Kode verifikasi Otp udah terkirim broo",
+    });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+//* Reset user Password
+export const resetPassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+
+  if (!email || !otp || !newPassword) {
+    return res.json({ success: false, message: "Input Kurang Lengkap Brooo" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({ success: false, message: "User nggak ada broo" });
+    }
+
+    if (user.resetOtp === "" || user.resetOtp !== otp) {
+      return res.json({ success: false, message: "Kode otpmu salah broo" });
+    }
+
+    if (user.resetOtpExpireAt < Date.now()) {
+      return res.json({ success: false, message: "Kode otpmu udah expired" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    user.resetOtp = "";
+    user.resetOtpExpireAt = 0;
+
+    await user.save();
+
+    return res.json({
+      success: true,
+      message: "Perubahan Password udah berhasil Broo",
+    });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
   }
 };
