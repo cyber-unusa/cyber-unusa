@@ -27,4 +27,4 @@ app.get("/", (req, res) =>
 app.use("/api/auth", authRoter);
 app.use("/api/user", userRouter);
 
-app.listen(port, () => console.log(`Server Started on PORT: ${port}`));
+module.exports = app;
