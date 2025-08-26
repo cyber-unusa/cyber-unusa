@@ -7,6 +7,8 @@ import connectDB from "./config/mongodb.js";
 import authRoter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 
+export default app;
+
 const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
@@ -26,5 +28,3 @@ app.get("/", (req, res) =>
 );
 app.use("/api/auth", authRoter);
 app.use("/api/user", userRouter);
-
-module.exports = app;
