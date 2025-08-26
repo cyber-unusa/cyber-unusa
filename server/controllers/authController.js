@@ -49,7 +49,7 @@ export const register = async (req, res) => {
     await transporter.sendMail(mailOptions);
     console.log("Message sent:", mailOptions.messageId);
 
-    return res.json({ success: true });
+    return res.json({ success: true, message: `Selamat Datang ${user.name}` });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
@@ -94,7 +94,7 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({ success: true });
+    return res.json({ success: true, message: `Selamat Datang ${user.name}` });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
@@ -109,7 +109,7 @@ export const logout = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({ success: true, message: "Logged Out" });
+    return res.json({ success: true, message: "Anda telah keluar" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
@@ -118,7 +118,7 @@ export const logout = async (req, res) => {
 //* Pengiriman Kode Otp verifikasi Email
 export const sendVerifyOtp = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.userId;
 
     const user = await userModel.findById(userId);
 
@@ -155,7 +155,8 @@ export const sendVerifyOtp = async (req, res) => {
 };
 
 export const verifyEmail = async (req, res) => {
-  const { userId, otp } = req.body;
+  const userId = req.userId;
+  const { otp } = req.body;
 
   if (!userId || !otp) {
     return res.json({
