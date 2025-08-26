@@ -12,8 +12,8 @@ const port = process.env.PORT || 4000;
 connectDB();
 
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://ukm-cyber-unusa.netlify.app",
+  "http://localhost:5173", //! untuk dev
+  "https://ukm-cyber-unusa.netlify.app", //? untuk deploy
 ];
 
 app.use(express.json());
