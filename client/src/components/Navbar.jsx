@@ -45,18 +45,18 @@ export default function Navbar() {
   return (
     <nav className="w-full flex justify-between items-center p-3 sm:p-4 sm:px-24 absolute top-0">
       <div className="flex items-center space-x-3 rtl:space-x-reverse">
-        <img src={assets.cyber_logo} alt="" className="w-10 sm:w-15" />
+        <img src={assets.cyber_logo} alt="" className="w-12 sm:w-15" />
         <GradientText
           colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
           animationSpeed={3}
           showBorder={false}
-          className="text-1xl sm:text-2xl self-center font-semibold whitespace-nowrap"
+          className="text-2xl self-center font-semibold whitespace-nowrap"
         >
           UKM Cyber Unusa
         </GradientText>
       </div>
       {userData ? (
-        <div className="w-10 h-10 flex justify-center items-center rounded-full bg-green-600 text-white relative group">
+        <div className="w-12 h-12 flex justify-center items-center rounded-full bg-green-600 text-white relative group m-4 text-2xl">
           {userData.name[0].toUpperCase()}
           <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10 w-31.5">
             <ul className="list-none m-0 p-2 bg-green-100 text-sm">
