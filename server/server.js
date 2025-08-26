@@ -30,4 +30,8 @@ app.get("/", (req, res) =>
 app.use("/api/auth", authRoter);
 app.use("/api/user", userRouter);
 
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => console.log(`Server Started on PORT: ${port}`));
+}
+
 export default app;
