@@ -126,7 +126,7 @@ export default function Login() {
 
           <button
             onSubmit={null}
-            className="w-full py-2.5 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-white font-medium"
+            className="w-full py-2.5 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-white font-medium cursor-pointer"
           >
             {state}
           </button>
@@ -145,10 +145,7 @@ export default function Login() {
         ) : (
           <p className="text-gray-400 text-center text-xs mt-2">
             Belum Punya Akun? {"  "}{" "}
-            <span
-              className="text-blue-400 cursor-pointer underline"
-              onClick={() => setState("Sign Up")}
-            >
+            <span className="text-blue-400 cursor-pointer underline">
               Daftar Disini
             </span>
           </p>
