@@ -243,11 +243,10 @@ export const sendResetOtp = async (req, res) => {
   }
 };
 
-//* Reset user Password
-export const resetPassword = async (req, res) => {
-  const { email, otp, newPassword } = req.body;
+export const verifyResetOtp = async (req, res) => {
+  const { email, otp } = req.body;
 
-  if (!email || !otp || !newPassword) {
+  if (!email || !otp) {
     return res.json({ success: false, message: "Input Kurang Lengkap Brooo" });
   }
 
@@ -266,11 +265,39 @@ export const resetPassword = async (req, res) => {
       return res.json({ success: false, message: "Kode otpmu udah expired" });
     }
 
+    user.resetOtp = "";
+    user.resetOtpExpireAt = 0;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Kode otpmu berhasil diverifikasi",
+    });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+//* Reset user Password
+export const resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+  console.log("email:", email);
+  console.log("newPassword:", newPassword);
+
+  if (!email || !newPassword) {
+    return res.json({ success: false, message: "Input Kurang Lengkap Brooo" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({ success: false, message: "User nggak ada broo" });
+    }
+
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     user.password = hashedPassword;
-    user.resetOtp = "";
-    user.resetOtpExpireAt = 0;
 
     await user.save();
 

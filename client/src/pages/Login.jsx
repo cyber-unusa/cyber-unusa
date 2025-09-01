@@ -57,12 +57,6 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-blue-200 to-green-300">
-      {/* <CircularText
-        text="UKM*CYBER*UNUSA*"
-        onHover="goBonkers"
-        spinDuration={20}
-        className="absolute right-30 top-6 w-[105px] h-[105px]"
-      /> */}
       <img
         onClick={() => navigate("/")}
         src={assets.cyber_logo}

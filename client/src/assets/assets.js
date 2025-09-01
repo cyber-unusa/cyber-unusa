@@ -13,3 +13,30 @@ export const assets = {
   person_icon,
   heroSection,
 };
+
+export const pengurus = [
+  {
+    id: 1,
+    nama: "Rizqi ",
+    jabatan: "PEmbina",
+    foto: "./pengurus/riz.jpg",
+  },
+  {
+    id: 2,
+    nama: "Galeh",
+    jabatan: "Ketua",
+    foto: "./pengurus/leh.jpg",
+  },
+  {
+    id: 3,
+    nama: "Yuliana",
+    jabatan: "Sekretaris 1",
+    foto: "./pengurus/yul.jpg",
+  },
+  {
+    id: 4,
+    nama: "Nandin",
+    jabatan: "Sekretaris 2",
+    foto: "./pengurus/nandini.jpg",
+  },
+];
