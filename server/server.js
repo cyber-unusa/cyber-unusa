@@ -13,7 +13,7 @@ connectDB();
 
 const allowedOrigins = [
   "http://localhost:5173", //! untuk dev
-  "https://ukm-cyber-unusa.netlify.app", //? untuk deploy
+  "https://cyber-unusa.netlify.app", //? untuk deploy
 ];
 
 app.use(express.json());

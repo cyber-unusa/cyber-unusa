@@ -1,4 +1,4 @@
-import HeroSection, { Mboh } from "../components/HeroSection";
+import HeroSection from "../components/HeroSection";
 import Navbar from "../components/Navbar";
 import Pengurus from "../components/Pengurus";
 
