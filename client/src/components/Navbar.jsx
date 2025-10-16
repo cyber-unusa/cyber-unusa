@@ -1,165 +1,279 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import CircularText from "./CircularText";
-import GradientText from "./GradientText";
 import { AppContext } from "../context/appContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import DropDownMenu from "./DropDownMenu";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const { userData, backendUrl, setUserData, setIsLoggedin } =
     useContext(AppContext);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const [dropdown1, setDropdown1] = useState(false);
-
-  const sendVerificationOtp = async () => {
-    try {
-      axios.defaults.withCredentials = true;
-      const { data } = await axios.post(
-        backendUrl + "/api/auth/send-verify-otp"
-      );
-      if (data.success) {
-        navigate("/email-verify");
-        toast.success(data.message);
-      } else {
-        toast.error(data.message);
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
       }
-    } catch (error) {
-      toast.error(error.message);
     }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
+  // Handlers
+  const handleNavigate = (path) => {
+    navigate(path);
+    setMobileMenu(false);
   };
 
-  const logout = async () => {
+  const handleDropdownToggle = () => setDropdownOpen((prev) => !prev);
+
+  const handleMobileMenuToggle = () => setMobileMenu((prev) => !prev);
+
+  // Logout handler, can close dropdown and mobile menu if needed
+  const handleLogout = async () => {
     try {
       axios.defaults.withCredentials = true;
       const { data } = await axios.post(backendUrl + "/api/auth/logout");
-      data.success && setIsLoggedin(false);
-      data.success && setUserData(false);
-      navigate("/");
-      toast.success(data.message);
+      if (data.success) {
+        setIsLoggedin(false);
+        setUserData(false);
+        toast.success(data.message);
+        setDropdownOpen(false);
+        setMobileMenu(false);
+        navigate("/");
+      }
     } catch (error) {
       toast.error(error.message);
+      setDropdownOpen(false);
+      setMobileMenu(false);
     }
   };
 
+  // Menu item data
+  const menuItems = [
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "Cyber Mart", path: "/cyber-mart" },
+    { label: "Member", path: "/member" },
+  ];
+
+  // Render
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 pr-6 pl-6">
+    <nav className="bg-gray-900 fixed top-0 left-0 w-full z-20 border-b border-gray-600 px-4 sm:px-6">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <div className="flex items-center space-x-3 rtl:space-x-reverse">
+        {/* Logo & Title */}
+        <div
+          className="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <img src={assets.cyber_logo} alt="" className="h-10" />
-          <GradientText
-            colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-            animationSpeed={3}
-            showBorder={false}
-            className="text-xl self-center font-semibold whitespace-nowrap"
-          >
+          <span className="text-xl self-center font-semibold whitespace-nowrap bg-gradient-to-r from-green-400 via-blue-500 to-green-400 bg-clip-text text-transparent">
             UKM Cyber Unusa
-          </GradientText>
-        </div>
-        <div className="hidden md:flex space-x-8 md:order-1 text-white">
-          <button
-            type="button"
-            className="hover:text-green-800 relative pb-2"
-            onClick={() => navigate("/")}
-          >
-            Home
-            <span
-              className={`absolute left-0 -bottom-0.5 w-full h-0.5 ${
-                window.location.pathname === "/" ? "bg-green-500" : ""
-              }`}
-            ></span>
-          </button>
-
-          <button
-            type="button"
-            className="hover:text-green-800 relative pb-2"
-            onClick={() => navigate("/about")}
-          >
-            About
-            <span
-              className={`absolute left-0 -bottom-0.5 w-full h-0.5 ${
-                window.location.pathname === "/about" ? "bg-green-500" : ""
-              }`}
-            ></span>
-          </button>
-          <button
-            type="button"
-            className="hover:text-green-800 relative pb-2"
-            onClick={() => navigate("/services")}
-          >
-            Services
-            <span
-              className={`absolute left-0 -bottom-0.5 w-full h-0.5 ${
-                window.location.pathname === "/services" ? "bg-green-500" : ""
-              }`}
-            ></span>
-          </button>
-
-          <button
-            type="button"
-            className="hover:text-green-800 relative pb-2"
-            onClick={() => navigate("/member")}
-          >
-            Member
-            <span
-              className={`absolute left-0 -bottom-0.5 w-full h-0.5 ${
-                window.location.pathname === "/member" ? "bg-green-500" : ""
-              }`}
-            ></span>
-          </button>
+          </span>
         </div>
 
-        {userData ? (
-          <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+        {/* Desktop menu */}
+        <div className="hidden md:flex space-x-8 md:order-1">
+          {menuItems.map((item) => (
             <button
+              key={item.path}
               type="button"
-              className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-              id="user-menu-button"
-              aria-expanded={dropdown1}
-              onClick={() => setDropdown1(!dropdown1)}
+              className="text-white hover:text-green-800 relative pb-2"
+              onClick={() => navigate(item.path)}
             >
-              <div className="w-8 h-8 rounded-full bg-green-600 text-white text-xl p-0.5">
-                {userData.name[0].toUpperCase()}
-              </div>
-              <span className="sr-only">Open user menu</span>
+              {item.label}
+              <span
+                className={`absolute left-0 -bottom-0.5 w-full h-0.5 ${
+                  window.location.pathname === item.path ? "bg-green-500" : ""
+                }`}
+              ></span>
             </button>
-            {dropdown1 && (
-              <div
-                className="z-50 absolute top-10 right-6 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600"
-                id="user-dropdown"
+          ))}
+        </div>
+
+        {/* Mobile Menu Ketika Sudah Login */}
+        <div className="md:hidden flex items-center space-x-2">
+          <button
+            onClick={handleMobileMenuToggle}
+            className="inline-flex items-center justify-center p-2 rounded-full text-white hover:text-green-800"
+            aria-label="Toggle menu"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {mobileMenu ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+          {userData && (
+            <div className="relative">
+              <button
+                type="button"
+                className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-600"
+                id="user-menu-button-mobile"
+                aria-expanded={dropdownOpen}
+                onClick={handleDropdownToggle}
               >
-                <div className="px-4 py-3">
-                  <span className="block text-sm text-gray-900 dark:text-white">
-                    {userData.name}
-                  </span>
-                  <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                    {userData.email}
-                  </span>
+                <div className="w-8 h-8 rounded-full bg-green-600 text-white text-xl p-0.5 flex items-center justify-center">
+                  {userData.name[0].toUpperCase()}
                 </div>
-                <ul className="py-2" aria-labelledby="user-menu-button">
-                  <li>
-                    <button
-                      onClick={logout}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            )}
-            <DropDownMenu />
+                <span className="sr-only">Open user menu</span>
+              </button>
+              {dropdownOpen && (
+                <div
+                  ref={dropdownRef}
+                  className="z-50 absolute right-0 mt-2 w-64 text-base bg-gray-900 rounded-2xl shadow-2xl border border-gray-700 transition-all duration-200 animate-fadeIn"
+                  style={{ top: "calc(100% + 8px)" }}
+                  id="user-dropdown-mobile"
+                >
+                  <div className="px-6 py-5 border-b border-gray-700">
+                    <span className="block text-lg font-bold text-white mb-1">
+                      {userData.name}
+                    </span>
+                    <span className="block text-xs truncate text-gray-400">
+                      {userData.email}
+                    </span>
+                  </div>
+                  <ul className="py-2">
+                    <li>
+                      <button
+                        onClick={() =>
+                          handleLogout({
+                            closeDropdown: true,
+                            closeMobileMenu: true,
+                          })
+                        }
+                        className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-600"
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* User menu & Login button (desktop) */}
+        {userData ? (
+          <div className="hidden md:flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            <div className="relative">
+              <button
+                type="button"
+                className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-600"
+                id="user-menu-button"
+                aria-expanded={dropdownOpen}
+                onClick={handleDropdownToggle}
+              >
+                <div className="w-8 h-8 rounded-full bg-green-600 text-white text-xl p-0.5 flex items-center justify-center">
+                  {userData.name[0].toUpperCase()}
+                </div>
+                <span className="sr-only">Open user menu</span>
+              </button>
+              {dropdownOpen && (
+                <div
+                  ref={dropdownRef}
+                  className="z-50 absolute top-10 right-6 my-4 w-56 text-base bg-gray-800 rounded-xl shadow-lg border border-gray-700 transition-all duration-200 animate-fadeIn"
+                  id="user-dropdown"
+                >
+                  <div className="px-5 py-4 border-b border-gray-700">
+                    <span className="block text-base font-semibold text-white mb-1">
+                      {userData.name}
+                    </span>
+                    <span className="block text-xs truncate text-gray-400">
+                      {userData.email}
+                    </span>
+                  </div>
+                  <ul className="py-2">
+                    <li>
+                      <button
+                        onClick={() =>
+                          handleLogout({
+                            closeDropdown: true,
+                            closeMobileMenu: true,
+                          })
+                        }
+                        className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-600"
+                      >
+                        Logout
+                      </button>
+                    </li>
+                    {userData && userData.role === "admin" && (
+                      <li>
+                        <button
+                          onClick={() => navigate("/dashboard")}
+                          className="block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white"
+                        >
+                          Dashboard
+                        </button>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <button
-            onClick={() => navigate("./login")}
-            className="flex items-center gap-2 md:order-1 order-3 md:m-0 m-5 border border-green-500 rounded-full px-6 py-2 text-green-800 hover:bg-green-100 transition-all"
+            onClick={() => navigate("/login")}
+            className="hidden md:flex items-center md:order-2 border border-green-500 rounded-full px-6 py-2 text-white hover:text-black hover:bg-green-100 transition-all"
           >
-            Login <img src={assets.arrow_icon} alt="" />
+            Login
           </button>
+        )}
+
+        {/* Mobile menu dropdown */}
+        {mobileMenu && (
+          <div className="md:hidden text-white bg-gray-900 px-4 pt-2 pb-4 space-y-1 shadow-lg border-b  border-gray-700">
+            {menuItems.map((item) => (
+              <button
+                key={item.path}
+                onClick={() => handleNavigate(item.path)}
+                className={`block w-full text-left px-3 py-2 rounded hover:bg-gray-700 ${
+                  window.location.pathname === item.path
+                    ? "text-green-600 font-semibold"
+                    : ""
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+            {/* Show Login button in mobile menu if not logged in */}
+            {!userData && (
+              <button
+                onClick={() => handleNavigate("/login")}
+                className="block w-full text-left px-3 py-2 rounded border border-green-500 text-white hover:text-black hover:bg-green-100 mt-2"
+              >
+                Login
+              </button>
+            )}
+          </div>
         )}
       </div>
     </nav>

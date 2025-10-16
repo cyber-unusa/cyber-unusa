@@ -1,7 +1,55 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
-
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap");
 
-* {
-  font-family: "Outfit", sans-serif;
+:root {
+  --primary: #13a085;
+  --lowprim: #26b99a;
+  --secbg: #f9f9f9;
+  --yel: #ffcd00;
+  --yellow: #FFDA44;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.humberger {
+  @apply w-[30px] h-[50px] my-2 block bg-[var(--primary)];
+}
+
+body {
+  font-family: "Rubik", sans-serif;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap");
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap");
+}
+
+@font-face {
+  font-family: "Nunito";
+  src: url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;800;900&display=swap");
 }

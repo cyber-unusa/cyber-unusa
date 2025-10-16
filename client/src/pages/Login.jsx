@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import CircularText from "../components/CircularText";
 import { AppContext } from "../context/appContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Mail, Lock, User } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ export default function Login() {
         onClick={() => navigate("/")}
         src={assets.cyber_logo}
         alt=""
-        className="absolute items-center sm:left-15 top-5 w-25 cursor-pointer"
+        className="absolute items-center sm:left-15 top-5 w-24 cursor-pointer"
       />
 
       <div className="bg-slate-800 p-10 rounded-lg shadow-lg w-96 sm:w-96 text-green-300 text-sm">
@@ -75,7 +75,7 @@ export default function Login() {
         <form onSubmit={onSubmitHandler}>
           {state === "Sign Up" && (
             <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-              <img src={assets.person_icon} alt="" />
+              <User color="white" size={20} strokeWidth={1.5} />
               <input
                 onChange={(e) => setName(e.target.value)}
                 value={name}
@@ -88,7 +88,7 @@ export default function Login() {
           )}
 
           <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-            <img src={assets.mail_icon} alt="" />
+            <Mail color="white" size={20} strokeWidth={1.5} />
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
@@ -100,7 +100,7 @@ export default function Login() {
           </div>
 
           <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-            <img src={assets.lock_icon} alt="" />
+            <Lock color="white" size={20} strokeWidth={1.5} />
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
@@ -139,7 +139,10 @@ export default function Login() {
         ) : (
           <p className="text-gray-400 text-center text-xs mt-2">
             Belum Punya Akun? {"  "}{" "}
-            <span className="text-blue-400 cursor-pointer underline">
+            <span
+              className="text-blue-400 cursor-pointer underline"
+              onClick={() => setState("Sign Up")}
+            >
               Daftar Disini
             </span>
           </p>

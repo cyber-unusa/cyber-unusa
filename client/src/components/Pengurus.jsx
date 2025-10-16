@@ -1,120 +1,78 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useRef } from "react";
-import { pengurus } from "../assets/assets";
+// import { useNavigate } from "react-router-dom";
+// import { useRef } from "react";
+import { bph } from "../assets/assets";
+
+// Card for BPH (Badan Pengurus Harian)
+function BphCard({ foto, nama, jabatan, color }) {
+  return (
+    <div
+      className={`bg-white rounded-lg border p-6 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto ${
+        color?.mt || ""
+      }`}
+    >
+      <div className="flex items-center justify-center mx-auto mb-4">
+        <img
+          src={foto}
+          alt=""
+          className="rounded-full w-24 h-24 sm:w-28 sm:h-28 md:w-30 md:h-30 object-cover"
+        />
+      </div>
+      <h3 className="font-semibold text-lg mb-1">{nama}</h3>
+      <p className={`${color?.text || "text-green-600"} text-sm mb-3`}>
+        {jabatan}
+      </p>
+    </div>
+  );
+}
 
 export default function Pengurus() {
-  const ref = useRef(null);
-  const navigate = useNavigate();
+  // Data for BPH
+  const bphList = [
+    {
+      ...bph.ketum,
+      color: { text: "text-blue-600", mt: "lg:mt-10" },
+    },
+    {
+      ...bph.pembina,
+      color: { text: "text-green-600" },
+    },
+    {
+      ...bph.watum,
+      color: { text: "text-[var(--yel)]", mt: "lg:mt-10" },
+    },
+    {
+      ...bph.sekre1,
+      color: { text: "text-blue-600" },
+    },
+    {
+      ...bph.sekre2,
+      color: { text: "text-green-600" },
+    },
+    {
+      ...bph.bendahara,
+      color: { text: "text-[var(--yel)]" },
+    },
+  ];
 
   return (
-    <section id="tim" className="py-20 px-6">
-      <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+    <section id="tim">
+      <div className="container px-8 lg:px-20">
+        {/* Judul dan deskripsi BPH */}
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-bold text-green-600 mb-4 mx-5">
             Badan Pengurus Cyber
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Devisi kami terdiri dari profesional berpengalaman di berbagai
-            bidang yang siap membantu mewujudkan visi dan misi bisnis Anda.
+          <p className="text-gray-600 max-w-2xl mx-5 sm:mx-auto">
+            Cyber Unusa terdiri dari individu berpengalaman di berbagai bidang
+            yang siap membantu mewujudkan visi dan misi UKM Cyber.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-white rounded-lg border p-6 mt-10 text-center hover:shadow-lg transition-shadow">
-            <div className="h-20 w-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-semibold">
-              AB
-            </div>
-            <h3 className="font-semibold text-lg mb-1">Ahmad Budi</h3>
-            <p className="text-blue-600 text-sm mb-3">CEO & Founder</p>
-            <p className="text-gray-600 text-sm">
-              15+ tahun pengalaman dalam konsultasi bisnis dan pengembangan
-              strategi
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg border p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="h-20 w-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-semibold">
-              SP
-            </div>
-            <h3 className="font-semibold text-lg mb-1">Sari Putri</h3>
-            <p className="text-green-600 text-sm mb-3">Head of HR</p>
-            <p className="text-gray-600 text-sm">
-              Spesialis manajemen SDM dengan keahlian dalam pengembangan talent
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg border p-6 mt-10 text-center hover:shadow-lg transition-shadow">
-            <div className="h-20 w-20 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-semibold">
-              RH
-            </div>
-            <h3 className="font-semibold text-lg mb-1">Riko Hartono</h3>
-            <p className="text-purple-600 text-sm mb-3">
-              Digital Marketing Lead
-            </p>
-            <p className="text-gray-600 text-sm">
-              Expert dalam strategi pemasaran digital dan growth hacking
-            </p>
-          </div>
-        </div>
-
-        <div className="text-center mb-16">
-          <div className="inline-block mb-4 bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-semibold">
-            Devisi Cyber
-          </div>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Devisi kami terdiri dari profesional berpengalaman di berbagai
-            bidang yang siap membantu mewujudkan visi dan misi bisnis Anda.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-4 gap-8">
-          <div className="bg-white rounded-lg border p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="h-20 w-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-semibold">
-              AB
-            </div>
-            <h3 className="font-semibold text-lg mb-1">Ahmad Budi</h3>
-            <p className="text-blue-600 text-sm mb-3">CEO & Founder</p>
-            <p className="text-gray-600 text-sm">
-              15+ tahun pengalaman dalam konsultasi bisnis dan pengembangan
-              strategi
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg border p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="h-20 w-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-semibold">
-              AB
-            </div>
-            <h3 className="font-semibold text-lg mb-1">Ahmad Budi</h3>
-            <p className="text-blue-600 text-sm mb-3">CEO & Founder</p>
-            <p className="text-gray-600 text-sm">
-              15+ tahun pengalaman dalam konsultasi bisnis dan pengembangan
-              strategi
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg border p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="h-20 w-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-semibold">
-              SP
-            </div>
-            <h3 className="font-semibold text-lg mb-1">Sari Putri</h3>
-            <p className="text-green-600 text-sm mb-3">Head of HR</p>
-            <p className="text-gray-600 text-sm">
-              Spesialis manajemen SDM dengan keahlian dalam pengembangan talent
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg border p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="h-20 w-20 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-semibold">
-              RH
-            </div>
-            <h3 className="font-semibold text-lg mb-1">Riko Hartono</h3>
-            <p className="text-purple-600 text-sm mb-3">
-              Digital Marketing Lead
-            </p>
-            <p className="text-gray-600 text-sm">
-              Expert dalam strategi pemasaran digital dan growth hacking
-            </p>
-          </div>
+        {/* BPH Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 my-10">
+          {bphList.map((item, idx) => (
+            <BphCard key={idx} {...item} />
+          ))}
         </div>
       </div>
     </section>

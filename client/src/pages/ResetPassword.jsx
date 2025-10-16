@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/appContext";
 import axios from "axios";
+import { Mail, Lock } from "lucide-react";
 
 export default function ResetPassword() {
   const { backendUrl } = useContext(AppContext);
@@ -13,7 +14,7 @@ export default function ResetPassword() {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isEmailSend, setIsEmailSend] = useState("");
-  const [otp, setOtp] = useState(0);
+  const [otp] = useState(0);
   const [isOtpSubmit, setIsOtpSubmit] = useState(false);
 
   const inputRefs = React.useRef([]);
@@ -94,7 +95,7 @@ export default function ResetPassword() {
         onClick={() => navigate("/")}
         src={assets.cyber_logo}
         alt=""
-        className="absolute items-center sm:left-15 top-5 w-25 cursor-pointer"
+        className="absolute items-center sm:left-15 top-16 w-24 cursor-pointer"
       />
 
       {/* Form reset password */}
@@ -111,7 +112,7 @@ export default function ResetPassword() {
           </p>
 
           <div className="mb-8 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-            <img src={assets.mail_icon} alt="" />
+            <Mail color="white" size={20} strokeWidth={1.5} />
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
@@ -176,7 +177,7 @@ export default function ResetPassword() {
           </p>
 
           <div className="mb-8 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-            <img src={assets.lock_icon} alt="" />
+            <Lock color="white" size={20} strokeWidth={1.5} />
             <input
               onChange={(e) => setNewPassword(e.target.value)}
               value={newPassword}
