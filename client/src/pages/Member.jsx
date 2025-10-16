@@ -39,7 +39,7 @@ const Member = () => {
 
   function DevisiCard({ foto, nama, jabatan, color }) {
     return (
-      <div className="bg-white rounded-lg border p-3 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto ">
+      <div className="bg-white rounded-lg border border-zinc-200 p-3 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto ">
         <div
           className={`h-20 w-20 ${color.bg} ${color.text} rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-semibold overflow-hidden`}
         >

@@ -6,7 +6,7 @@ import { bph } from "../assets/assets";
 function BphCard({ foto, nama, jabatan, color }) {
   return (
     <div
-      className={`bg-white rounded-lg border p-6 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto ${
+      className={`bg-white rounded-lg border border-zinc-200 p-6 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto ${
         color?.mt || ""
       }`}
     >

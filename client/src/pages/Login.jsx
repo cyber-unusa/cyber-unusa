@@ -61,7 +61,7 @@ export default function Login() {
         onClick={() => navigate("/")}
         src={assets.cyber_logo}
         alt=""
-        className="absolute items-center sm:left-15 top-5 w-24 cursor-pointer"
+        className="absolute top-6 w-24 cursor-pointer"
       />
 
       <div className="bg-slate-800 p-10 rounded-lg shadow-lg w-96 sm:w-96 text-green-300 text-sm">

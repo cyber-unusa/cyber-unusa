@@ -95,7 +95,7 @@ export default function ResetPassword() {
         onClick={() => navigate("/")}
         src={assets.cyber_logo}
         alt=""
-        className="absolute items-center sm:left-15 top-16 w-24 cursor-pointer"
+        className="absolute top-20 w-24 cursor-pointer"
       />
 
       {/* Form reset password */}

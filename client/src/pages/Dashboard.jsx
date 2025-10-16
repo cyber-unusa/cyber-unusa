@@ -22,7 +22,7 @@ const Dashboard = () => {
       <Navbar />
       <div className="container mx-auto mt-20 p-4 pb-32">
         <h1 className="text-3xl font-bold mb-4">Admin Dashboard</h1>
-        <div className="flex border-b mb-4">
+        <div className="flex border-b border-zinc-200 mb-4">
           <button
             onClick={() => setActiveTab("dokumenter")}
             className={`py-2 px-4 ${

@@ -72,7 +72,7 @@ export default function EmailVerify() {
         onClick={() => navigate("/")}
         src={assets.cyber_logo}
         alt=""
-        className="absolute items-center sm:left-15 top-5 w-25 cursor-pointer"
+        className="absolute top-6 w-24 cursor-pointer"
       />
 
       <form

@@ -86,7 +86,7 @@ const ManageDokumenter = () => {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Manajemen Dokumenter</h2>
-      <form onSubmit={handleSubmit} className="mb-6 p-4 border rounded">
+      <form onSubmit={handleSubmit} className="mb-6 p-4 border border-zinc-200 rounded">
         <h3 className="text-xl font-semibold text-gray-700 p-2">
           Tambah Dokumenter Baru
         </h3>

@@ -22,7 +22,7 @@ export default function About() {
           <p className="text-[#26B99A] font-bold pt-[5px]">
             UNIVERSITAS NAHDLATUL ULAMA SURABAYA
           </p>
-          <p className="pt-[20px] font-poppin bg-white rounded-lg border p-6 hover:shadow-lg transition-shadow">
+          <p className="pt-[20px] font-poppin bg-white rounded-lg border border-zinc-200 p-6 hover:shadow-lg transition-shadow">
             UKM Cyber Security Universitas Nahdlatul Ulama Surabaya dibentuk
             oleh mahasiswa angkatan 2018. Awal mula terbentuknya UKM ini adalah
             Cyber di bentuk berlatar belakang karena belum ada wadah yang dapat
