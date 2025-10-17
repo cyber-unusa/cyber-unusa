@@ -1,14 +1,14 @@
 import React, { useRef } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { SliderMember } from "../components/SliderMember";
 import { kadiv } from "../assets/assets";
-// import {
-//   staffPsdm,
-//   staffPendidikan,
-//   staffPengmas,
-//   staffInnovation,
-// } from "../assets/assets";
+import CircularGallery from "../components/CircularGallery";
+import {
+  staffPsdm,
+  staffPendidikan,
+  staffPengmas,
+  staffInnovation,
+} from "../assets/assets";
 
 const Member = () => {
   const ref = useRef(null);
@@ -55,6 +55,26 @@ const Member = () => {
     );
   }
 
+  const psdmItems = staffPsdm.map((staff) => ({
+    image: staff.foto,
+    text: staff.nama,
+  }));
+
+  const pendidikanItems = staffPendidikan.map((staff) => ({
+    image: staff.foto,
+    text: staff.nama,
+  }));
+
+  const pengmasItems = staffPengmas.map((staff) => ({
+    image: staff.foto,
+    text: staff.nama,
+  }));
+
+  const innovationItems = staffInnovation.map((staff) => ({
+    image: staff.foto,
+    text: staff.nama,
+  }));
+
   return (
     <div>
       <Navbar />
@@ -92,29 +112,49 @@ const Member = () => {
         </div>
       </section>
 
-      {/**List Divisi */}
-      {/* <section id="divisi1" className="mt-28 mx-2 sm:mx-4 md:mx-8 lg:mx-10">
-        <h2 className="text-center font-bold text-2xl lg:text-4xl text-yel pb-10 sm:pb-12 lg:pb-16">
-          Staff Devisi
-        </h2>
+      {/* Member Slider */}
+      <h2 className="text-center font-bold text-2xl lg:text-4xl text-[var(--primary)] pt-28">
+        Staff Devisi
+      </h2>
+      <section id="divisi1" className="mt-20 mx-2 sm:mx-4 md:mx-8 lg:mx-10">
         <div className="container flex flex-col lg:flex-row gap-4 pb-8 lg:pb-10 lg:m-auto">
           <div
             id="staff-psdm"
             className="border p-3 bg-primary w-full lg:w-1/2 text-center rounded-2xl"
           >
-            <h1 className="text-white text-xl lg:text-2xl font-bold text-center mb-4">
+            <h1 className="text-blue-600 text-xl lg:text-2xl font-bold text-center mb-4">
               Staff PSDM
             </h1>
-            {SliderMember(staffPsdm)}
+            <div
+              style={{ height: "300px", width: "100%", position: "relative" }}
+            >
+              <CircularGallery
+                bend={0}
+                textColor="#000"
+                borderRadius={0.05}
+                scrollEase={0.02}
+                items={psdmItems}
+              />
+            </div>
           </div>
           <div
             id="staff-pendidikan"
             className="border p-3 w-full lg:w-1/2 text-center rounded-2xl"
           >
-            <h1 className="text-primary text-xl lg:text-2xl font-bold text-center mb-4">
+            <h1 className="text-green-600 text-xl lg:text-2xl font-bold text-center mb-4">
               Staff Pendidikan
             </h1>
-            {SliderMember(staffPendidikan)}
+            <div
+              style={{ height: "300px", width: "100%", position: "relative" }}
+            >
+              <CircularGallery
+                bend={0}
+                textColor="#000"
+                borderRadius={0.05}
+                scrollEase={0.02}
+                items={pendidikanItems}
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -123,28 +163,47 @@ const Member = () => {
         id="divisi2"
         className="mb-20 lg:mb-32 mx-2 sm:mx-4 md:mx-8 lg:mx-10"
       >
-        <div className="container flex flex-col-reverse lg:flex-row gap-4 lg:m-auto">
+        <div className="container flex flex-col lg:flex-row gap-4 pb-8 lg:pb-10 lg:m-auto">
           <div
             id="staff-pengmas"
-            className="border p-3 bg-white w-full lg:w-1/2 text-center rounded-2xl"
+            className="border p-3 w-full lg:w-1/2 text-center rounded-2xl"
           >
-            <h1 className="text-primary text-xl lg:text-2xl font-bold text-center mb-4">
+            <h1 className="text-purple-600 text-xl lg:text-2xl font-bold text-center mb-4">
               Staff Pengmas
             </h1>
-            {SliderMember(staffPengmas)}
+            <div
+              style={{ height: "300px", width: "100%", position: "relative" }}
+            >
+              <CircularGallery
+                bend={0}
+                textColor="#000"
+                borderRadius={0.05}
+                scrollEase={0.02}
+                items={pengmasItems}
+              />
+            </div>
           </div>
           <div
             id="staff-inovation"
-            className="border p-3 bg-primary w-full lg:w-1/2 text-center rounded-2xl"
+            className="border p-3 w-full lg:w-1/2 text-center rounded-2xl"
           >
-            <h1 className="text-white text-xl lg:text-2xl font-bold text-center mb-4">
+            <h1 className="text-[var(--yel)] text-xl lg:text-2xl font-bold text-center mb-4">
               Staff Innovation & Entrepreneur
             </h1>
-            {SliderMember(staffInnovation)}
+            <div
+              style={{ height: "300px", width: "100%", position: "relative" }}
+            >
+              <CircularGallery
+                bend={0}
+                textColor="#000"
+                borderRadius={0.05}
+                scrollEase={0.02}
+                items={innovationItems}
+              />
+            </div>
           </div>
         </div>
-      </section> */}
-
+      </section>
       <Footer />
     </div>
   );

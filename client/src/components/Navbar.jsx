@@ -80,30 +80,70 @@ export default function Navbar() {
           </span>
         </div>
 
-        {/* Desktop menu */}
-        <div className="hidden md:flex space-x-8 md:order-1">
-          {menuItems.map((item) => (
+        {/* Tombol menu mobile dan user */}
+        <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+          {userData ? (
+            <div className="relative">
+              <button
+                type="button"
+                className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-600"
+                id="user-menu-button"
+                aria-expanded={dropdownOpen}
+                onClick={handleDropdownToggle}
+              >
+                <div className="w-8 h-8 rounded-full bg-green-600 text-white text-xl p-0.5 flex items-center justify-center">
+                  {userData.name[0].toUpperCase()}
+                </div>
+                <span className="sr-only">Open user menu</span>
+              </button>
+              {dropdownOpen && (
+                <div
+                  ref={dropdownRef}
+                  className="z-50 absolute top-10 right-0 my-4 w-56 text-base bg-gray-800 rounded-xl shadow-lg border border-gray-700 transition-all duration-200 animate-fadeIn"
+                  id="user-dropdown"
+                >
+                  <div className="px-5 py-4 border-b border-gray-700">
+                    <span className="block text-base font-semibold text-white mb-1">
+                      {userData.name}
+                    </span>
+                    <span className="block text-xs truncate text-gray-400">
+                      {userData.email}
+                    </span>
+                  </div>
+                  <ul className="py-2">
+                    {userData.role === "admin" && (
+                      <li>
+                        <button
+                          onClick={() => handleNavigate("/dashboard")}
+                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white"
+                        >
+                          Dashboard
+                        </button>
+                      </li>
+                    )}
+                    <li>
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-600"
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : (
             <button
-              key={item.path}
-              type="button"
-              className="text-white hover:text-green-800 relative pb-2"
-              onClick={() => navigate(item.path)}
+              onClick={() => navigate("/login")}
+              className="hidden md:flex items-center md:order-2 border border-green-500 rounded-full px-6 py-2 text-white hover:text-black hover:bg-green-100 transition-all"
             >
-              {item.label}
-              <span
-                className={`absolute left-0 -bottom-0.5 w-full h-0.5 ${
-                  window.location.pathname === item.path ? "bg-green-500" : ""
-                }`}
-              ></span>
+              Login
             </button>
-          ))}
-        </div>
-
-        {/* Mobile Menu Ketika Sudah Login */}
-        <div className="md:hidden flex items-center space-x-2">
+          )}
           <button
             onClick={handleMobileMenuToggle}
-            className="inline-flex items-center justify-center p-2 rounded-full text-white hover:text-green-800"
+            className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-green-800 md:hidden"
             aria-label="Toggle menu"
           >
             <svg
@@ -130,151 +170,42 @@ export default function Navbar() {
               )}
             </svg>
           </button>
-          {userData && (
-            <div className="relative">
-              <button
-                type="button"
-                className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-600"
-                id="user-menu-button-mobile"
-                aria-expanded={dropdownOpen}
-                onClick={handleDropdownToggle}
-              >
-                <div className="w-8 h-8 rounded-full bg-green-600 text-white text-xl p-0.5 flex items-center justify-center">
-                  {userData.name[0].toUpperCase()}
-                </div>
-                <span className="sr-only">Open user menu</span>
-              </button>
-              {dropdownOpen && (
-                <div
-                  ref={dropdownRef}
-                  className="z-50 absolute right-0 mt-2 w-64 text-base bg-gray-900 rounded-2xl shadow-2xl border border-gray-700 transition-all duration-200 animate-fadeIn"
-                  style={{ top: "calc(100% + 8px)" }}
-                  id="user-dropdown-mobile"
-                >
-                  <div className="px-6 py-5 border-b border-gray-700">
-                    <span className="block text-lg font-bold text-white mb-1">
-                      {userData.name}
-                    </span>
-                    <span className="block text-xs truncate text-gray-400">
-                      {userData.email}
-                    </span>
-                  </div>
-                  <ul className="py-2">
-                    <li>
-                      <button
-                        onClick={() =>
-                          handleLogout({
-                            closeDropdown: true,
-                            closeMobileMenu: true,
-                          })
-                        }
-                        className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-600"
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
-        {/* User menu & Login button (desktop) */}
-        {userData ? (
-          <div className="hidden md:flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <div className="relative">
-              <button
-                type="button"
-                className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-600"
-                id="user-menu-button"
-                aria-expanded={dropdownOpen}
-                onClick={handleDropdownToggle}
-              >
-                <div className="w-8 h-8 rounded-full bg-green-600 text-white text-xl p-0.5 flex items-center justify-center">
-                  {userData.name[0].toUpperCase()}
-                </div>
-                <span className="sr-only">Open user menu</span>
-              </button>
-              {dropdownOpen && (
-                <div
-                  ref={dropdownRef}
-                  className="z-50 absolute top-10 right-6 my-4 w-56 text-base bg-gray-800 rounded-xl shadow-lg border border-gray-700 transition-all duration-200 animate-fadeIn"
-                  id="user-dropdown"
-                >
-                  <div className="px-5 py-4 border-b border-gray-700">
-                    <span className="block text-base font-semibold text-white mb-1">
-                      {userData.name}
-                    </span>
-                    <span className="block text-xs truncate text-gray-400">
-                      {userData.email}
-                    </span>
-                  </div>
-                  <ul className="py-2">
-                    <li>
-                      <button
-                        onClick={() =>
-                          handleLogout({
-                            closeDropdown: true,
-                            closeMobileMenu: true,
-                          })
-                        }
-                        className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-600"
-                      >
-                        Logout
-                      </button>
-                    </li>
-                    {userData && userData.role === "admin" && (
-                      <li>
-                        <button
-                          onClick={() => navigate("/dashboard")}
-                          className="block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white"
-                        >
-                          Dashboard
-                        </button>
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-        ) : (
-          <button
-            onClick={() => navigate("/login")}
-            className="hidden md:flex items-center md:order-2 border border-green-500 rounded-full px-6 py-2 text-white hover:text-black hover:bg-green-100 transition-all"
-          >
-            Login
-          </button>
-        )}
-
-        {/* Mobile menu dropdown */}
-        {mobileMenu && (
-          <div className="md:hidden text-white bg-gray-900 px-4 pt-2 pb-4 space-y-1 shadow-lg border-b  border-gray-700">
+        {/* Menu utama */}
+        <div
+          className={`items-center justify-between ${
+            mobileMenu ? "block" : "hidden"
+          } w-full md:flex md:w-auto md:order-1`}
+          id="navbar-sticky"
+        >
+          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-700 rounded-lg bg-gray-800 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-gray-900">
             {menuItems.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => handleNavigate(item.path)}
-                className={`block w-full text-left px-3 py-2 rounded hover:bg-gray-700 ${
-                  window.location.pathname === item.path
-                    ? "text-green-600 font-semibold"
-                    : ""
-                }`}
-              >
-                {item.label}
-              </button>
+              <li key={item.path}>
+                <button
+                  onClick={() => handleNavigate(item.path)}
+                  className={`block py-2 px-3 rounded md:p-0 ${
+                    window.location.pathname === item.path
+                      ? "text-green-400"
+                      : "text-white"
+                  } hover:bg-gray-700 md:hover:bg-transparent md:hover:text-green-500`}
+                >
+                  {item.label}
+                </button>
+              </li>
             ))}
-            {/* Show Login button in mobile menu if not logged in */}
             {!userData && (
-              <button
-                onClick={() => handleNavigate("/login")}
-                className="block w-full text-left px-3 py-2 rounded border border-green-500 text-white hover:text-black hover:bg-green-100 mt-2"
-              >
-                Login
-              </button>
+              <li className="md:hidden">
+                <button
+                  onClick={() => handleNavigate("/login")}
+                  className="block w-full text-left py-2 px-3 text-white rounded hover:bg-gray-700"
+                >
+                  Login
+                </button>
+              </li>
             )}
-          </div>
-        )}
+          </ul>
+        </div>
       </div>
     </nav>
   );

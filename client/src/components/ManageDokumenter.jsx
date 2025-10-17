@@ -6,10 +6,11 @@ import { AppContext } from "../context/appContext";
 const ManageDokumenter = () => {
   const { backendUrl } = useContext(AppContext);
   const [dokumenters, setDokumenters] = useState([]);
-  
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [date, setDate] = useState("");
 
   const loadDokumenter = useCallback(async () => {
     try {
@@ -28,7 +29,7 @@ const ManageDokumenter = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !description || !image) {
+    if (!title || !description || !image || !date) {
       toast.warn("Harap isi semua kolom dan pilih gambar.");
       return;
     }
@@ -37,6 +38,7 @@ const ManageDokumenter = () => {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("image", image);
+    formData.append("date", date);
 
     try {
       const { data } = await axios.post(
@@ -53,6 +55,7 @@ const ManageDokumenter = () => {
         setTitle("");
         setDescription("");
         setImage(null);
+        setDate("");
         e.target.reset();
         await loadDokumenter();
       } else {
@@ -86,7 +89,10 @@ const ManageDokumenter = () => {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Manajemen Dokumenter</h2>
-      <form onSubmit={handleSubmit} className="mb-6 p-4 border border-zinc-200 rounded">
+      <form
+        onSubmit={handleSubmit}
+        className="mb-6 p-4 border border-zinc-200 rounded"
+      >
         <h3 className="text-xl font-semibold text-gray-700 p-2">
           Tambah Dokumenter Baru
         </h3>
@@ -139,6 +145,22 @@ const ManageDokumenter = () => {
             placeholder="Masukkan deskripsi singkat"
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           ></textarea>
+        </div>
+        <div className="p-2">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-600 mb-1"
+          >
+            Waktu Pelaksanaan
+          </label>
+          <input
+            type="date"
+            name="date"
+            id="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          ></input>
         </div>
         <button
           type="submit"
