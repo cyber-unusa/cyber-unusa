@@ -14,6 +14,12 @@ export default function EmailVerify() {
   const navigate = useNavigate();
   const inputRefs = React.useRef([]);
 
+  useEffect(() => {
+    if (userData.isAccountVerified === true) {
+      navigate("/");
+    }
+  }, [userData, navigate]);
+
   const handleInput = (e, index) => {
     if (e.target.value.length > 0 && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1].focus();

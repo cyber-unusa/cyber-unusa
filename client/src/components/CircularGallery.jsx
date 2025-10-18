@@ -166,14 +166,10 @@ class Media {
         attribute vec2 uv;
         uniform mat4 modelViewMatrix;
         uniform mat4 projectionMatrix;
-        uniform float uTime;
-        uniform float uSpeed;
         varying vec2 vUv;
         void main() {
           vUv = uv;
-          vec3 p = position;
-          p.z = (sin(p.x * 4.0 + uTime) * 1.5 + cos(p.y * 2.0 + uTime) * 1.5) * (0.1 + uSpeed * 0.5);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
       fragment: `
@@ -249,19 +245,38 @@ class Media {
       fontFamily: this.font,
     });
   }
+
   update(scroll, direction) {
     this.plane.position.x = this.x - scroll.current - this.extra;
 
-    const x = this.plane.position.x;
-    const H = this.viewport.width / 2;
+    const planeOffset = this.plane.scale.x / 2;
+    const viewportOffset = this.viewport.width / 2;
+    this.isBefore = this.plane.position.x + planeOffset < -viewportOffset;
+    this.isAfter = this.plane.position.x - planeOffset > viewportOffset;
 
+    if (direction === "right" && this.isBefore) {
+      this.extra -= this.widthTotal;
+      this.isBefore = this.isAfter = false;
+    }
+    if (direction === "left" && this.isAfter) {
+      this.extra += this.widthTotal;
+      this.isBefore = this.isAfter = false;
+    }
+
+    // Jika gambar ada di luar layar, sembunyikan dan hentikan update.
+    if (this.isBefore || this.isAfter) {
+      this.plane.visible = false;
+      return; // Berhenti
+    }
+    this.plane.visible = true;
+
+    const x = this.plane.position.x;
     if (this.bend === 0) {
       this.plane.position.y = 0;
       this.plane.rotation.z = 0;
     } else {
       const R = this.bendRadius;
       const effectiveX = Math.min(Math.abs(x), this.bendH);
-
       const arc = R - Math.sqrt(R * R - effectiveX * effectiveX);
       if (this.bend > 0) {
         this.plane.position.y = -arc;
@@ -275,19 +290,6 @@ class Media {
     this.speed = scroll.current - scroll.last;
     this.program.uniforms.uTime.value += 0.04;
     this.program.uniforms.uSpeed.value = this.speed;
-
-    const planeOffset = this.plane.scale.x / 2;
-    const viewportOffset = this.viewport.width / 2;
-    this.isBefore = this.plane.position.x + planeOffset < -viewportOffset;
-    this.isAfter = this.plane.position.x - planeOffset > viewportOffset;
-    if (direction === "right" && this.isBefore) {
-      this.extra -= this.widthTotal;
-      this.isBefore = this.isAfter = false;
-    }
-    if (direction === "left" && this.isAfter) {
-      this.extra += this.widthTotal;
-      this.isBefore = this.isAfter = false;
-    }
   }
   onResize({ screen, viewport } = {}) {
     if (screen) this.screen = screen;

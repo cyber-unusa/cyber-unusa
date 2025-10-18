@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/appContext";
@@ -8,6 +8,7 @@ import { Mail, Lock, User } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { userData } = useContext(AppContext);
 
   const { backendUrl, setIsLoggedin, getUserData } = useContext(AppContext);
 
@@ -15,6 +16,12 @@ export default function Login() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (userData) {
+      navigate("/");
+    }
+  }, [userData, navigate]);
 
   const onSubmitHandler = async (e) => {
     try {
