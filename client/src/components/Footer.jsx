@@ -8,7 +8,7 @@ const Footer = () => {
         {/* Logo dan nama */}
         <div className="mb-6 md:mb-0">
           <span className="text-xl self-center font-semibold whitespace-nowrap bg-gradient-to-r from-green-400 via-blue-500 to-green-400 bg-clip-text text-transparent">
-            UKM Cyber Unusa
+            UKM Cyber UNUSA
           </span>
           <p className="text-sm text-gray-400">
             Belajar, Berkembang, dan Berkontribusi dalam dunia IT

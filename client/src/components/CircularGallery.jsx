@@ -200,13 +200,15 @@ class Media {
           );
           vec4 color = texture2D(tMap, uv);
           
-          float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
+          float alpha = 1.0; // Alpha default
           
-          // Smooth antialiasing for edges
-          float edgeSmooth = 0.002;
-          float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
+          if (uBorderRadius > 0.0) {
+            float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
+            float edgeSmooth = 0.002;
+            alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
+          }
           
-          gl_FragColor = vec4(color.rgb, alpha);
+          gl_FragColor = vec4(color.rgb, color.a * alpha);
         }
       `,
       uniforms: {
@@ -257,9 +259,8 @@ class Media {
       this.plane.position.y = 0;
       this.plane.rotation.z = 0;
     } else {
-      const B_abs = Math.abs(this.bend);
-      const R = (H * H + B_abs * B_abs) / (2 * B_abs);
-      const effectiveX = Math.min(Math.abs(x), H);
+      const R = this.bendRadius;
+      const effectiveX = Math.min(Math.abs(x), this.bendH);
 
       const arc = R - Math.sqrt(R * R - effectiveX * effectiveX);
       if (this.bend > 0) {
@@ -312,6 +313,13 @@ class Media {
     this.width = this.plane.scale.x + this.padding;
     this.widthTotal = this.width * this.length;
     this.x = this.width * this.index;
+
+    if (this.bend !== 0) {
+      const H = this.viewport.width / 2;
+      const B_abs = Math.abs(this.bend);
+      this.bendRadius = (H * H + B_abs * B_abs) / (2 * B_abs);
+      this.bendH = H; // Simpan juga H
+    }
   }
 }
 
@@ -346,7 +354,7 @@ class App {
     this.renderer = new Renderer({
       alpha: true,
       antialias: true,
-      dpr: Math.min(window.devicePixelRatio || 1, 2),
+      dpr: Math.min(window.devicePixelRatio || 1, 1.5),
     });
     this.gl = this.renderer.gl;
     this.gl.clearColor(0, 0, 0, 0);
@@ -362,8 +370,8 @@ class App {
   }
   createGeometry() {
     this.planeGeometry = new Plane(this.gl, {
-      heightSegments: 50,
-      widthSegments: 100,
+      heightSegments: 10,
+      widthSegments: 20,
     });
   }
   createMedias(items, bend = 1, textColor, borderRadius, font) {

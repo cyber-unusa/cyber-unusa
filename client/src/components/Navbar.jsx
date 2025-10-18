@@ -76,7 +76,7 @@ export default function Navbar() {
         >
           <img src={assets.cyber_logo} alt="" className="h-10" />
           <span className="text-xl self-center font-semibold whitespace-nowrap bg-gradient-to-r from-green-400 via-blue-500 to-green-400 bg-clip-text text-transparent">
-            UKM Cyber Unusa
+            UKM Cyber UNUSA
           </span>
         </div>
 
