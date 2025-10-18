@@ -10,7 +10,8 @@ import About from "./pages/About.jsx";
 import Member from "./pages/Member";
 import CyberMart from "./pages/CyberMart";
 import Dashboard from "./pages/Dashboard";
-import CoomingSoon from "./components/CoomingSoon.jsx";
+import CoomingSoon from "./pages/CoomingSoon.jsx";
+import Page404 from "./pages/Page404.jsx";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/cyber-mart" element={<CyberMart />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/cooming" element={<CoomingSoon />} />
+          <Route path="*" element={<Page404 />} />
         </Routes>
       </div>
     </AppContextProvider>
