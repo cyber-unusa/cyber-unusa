@@ -106,4 +106,4 @@ Pastikan untuk memperbarui pengujian sesuai kebutuhan.
 
 #### Link Production
 
-[ukm-cyber-unusa.netlify.app](https://ukm-cyber-unusa.netlify.app)
+[cyber-unusa.netlify.app](https://cyber-unusa.netlify.app)

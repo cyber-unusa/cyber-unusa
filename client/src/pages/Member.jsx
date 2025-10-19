@@ -132,7 +132,7 @@ const Member = () => {
                 bend={0}
                 textColor="#000"
                 borderRadius={0.05}
-                scrollEase={0.02}
+                scrollEase={1}
                 items={psdmItems}
               />
             </div>
@@ -151,7 +151,7 @@ const Member = () => {
                 bend={0}
                 textColor="#000"
                 borderRadius={0.05}
-                scrollEase={0.02}
+                scrollEase={1}
                 items={pendidikanItems}
               />
             </div>
@@ -178,7 +178,7 @@ const Member = () => {
                 bend={0}
                 textColor="#000"
                 borderRadius={0.05}
-                scrollEase={0.02}
+                scrollEase={1}
                 items={pengmasItems}
               />
             </div>
@@ -197,7 +197,7 @@ const Member = () => {
                 bend={0}
                 textColor="#000"
                 borderRadius={0.05}
-                scrollEase={0.02}
+                scrollEase={1}
                 items={innovationItems}
               />
             </div>
