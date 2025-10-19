@@ -191,6 +191,13 @@ export default function Navbar() {
                   } hover:bg-gray-700 md:hover:bg-transparent md:hover:text-green-500`}
                 >
                   {item.label}
+                  <span
+                    className={`block py-0.5 md:py-0 md:mt-0.5 md:-bottom-0.5 h-0.5 ${
+                      window.location.pathname === item.path
+                        ? "bg-green-500"
+                        : "bg-transparent"
+                    }`}
+                  ></span>
                 </button>
               </li>
             ))}
