@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import { AppContext } from "../context/appContext";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import TextType from "./TextType";
 
 export default function HeroSection() {
   const { userData } = useContext(AppContext);
@@ -31,7 +32,15 @@ export default function HeroSection() {
           </span>
         </h1>
         <h2 className="text-3xl sm:text-5xl font-semibold mb-4">
-          Selamat Datang di Web Cyber Unusa
+          Selamat Datang di Web
+          <TextType
+            text={["Cyber UNUSA", "UKM Cyber UNUSA", "Cyber Community"]}
+            typingSpeed={100}
+            deletingSpeed={75}
+            pauseDuration={1500}
+            showCursor={true}
+            cursorCharacter="|"
+          />
         </h2>
         <p className="mb-7 max-w-md">
           UKM CYBER merupakan sebuah wadah bagi mahasiswa UNUSA untuk

@@ -20,6 +20,7 @@ export default function Login() {
   useEffect(() => {
     if (userData) {
       navigate("/");
+      toast.info("Anda sudah login");
     }
   }, [userData, navigate]);
 

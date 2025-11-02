@@ -49,13 +49,6 @@ export default function Dokumenter() {
                 </h3>
                 <p className="font-poppin">{item.description}</p>
                 <p className="font-poppin mb-2 mt-3">{formatDate(item.date)}</p>
-                <div className="font-semibold text-xl mb-2 mt-3 text-end text-green-500">
-                  <a href="/cooming">
-                    <p className="w-16 py-1 px-1 mb-4 text-base font-bold rounded-lg hover:shadow-lg hover:opacity-90 transition duration-300 ease-in-out font-poppin">
-                      Lihat...
-                    </p>
-                  </a>
-                </div>
               </div>
             </div>
           ))}

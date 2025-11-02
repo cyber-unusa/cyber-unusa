@@ -6,162 +6,116 @@ export default function About() {
   return (
     <>
       <Navbar />
-      <div className="container flex mt-20 lg:px-12 sm:px-0 m-auto flex-wrap">
-        <img
-          src="/asset/cyber-logo-2.png"
-          alt=""
-          className="lg:w-5/12 max-sm:w-10/12 sm:w-2/12 pt-4 lg:basis-2/4 sm:basis-full max-sm:m-auto sm:m-auto"
-        />
-        <div className="contens lg:basis-2/4 sm:basis-full text-left lg:px-15 max-sm:px-8 sm:px-8 lg:pt-24 max-sm:mt-4">
-          <p className="font-extrabold text-5xl max-sm:text-4xl sm:text-4xl  pt-[5px] text-[#13A085] font-rubik">
+      {/* Section 1: Sejarah UKM */}
+      <div className="container mx-auto mt-20 px-4 sm:px-6 lg:px-8 py-12 flex flex-col lg:flex-row items-center">
+        {/* Gambar Sejarah */}
+        <div className="w-full lg:w-1/2 flex justify-center lg:justify-start mb-8 lg:mb-0 lg:pr-8">
+          <img
+            src="/asset/cyber-logo-2.png" // Pastikan path ini benar
+            alt="Logo UKM Cyber UNUSA dengan latar"
+            className="w-3/4 sm:w-1/2 lg:w-full max-w-md object-contain" // Ukuran lebih konsisten
+          />
+        </div>
+        {/* Konten Teks Sejarah */}
+        <div className="w-full lg:w-1/2 text-left">
+          <h1 className="text-4xl lg:text-5xl font-extrabold text-[var(--primary)] font-rubik mb-2">
             SEJARAH UKM
-          </p>
-          <p className="font-extrabold text-5xl max-sm:text-4xl sm:text-4xl pt-[5px] text-[#13A085] font-rubik">
+          </h1>
+          <h1 className="text-4xl lg:text-5xl font-extrabold text-[var(--primary)] font-rubik mb-2">
             CYBER SECURITY
-          </p>
-          <p className="text-[#26B99A] font-bold pt-[5px]">
+          </h1>
+          <p className="text-[var(--lowprim)] font-bold text-lg mb-6">
             UNIVERSITAS NAHDLATUL ULAMA SURABAYA
           </p>
-          <p className="pt-[20px] font-poppin bg-white rounded-lg border border-zinc-200 p-6 hover:shadow-lg transition-shadow">
+          <p className="font-poppin text-base leading-relaxed text-gray-700 bg-white rounded-lg border border-zinc-200 p-6 shadow-sm hover:shadow-md transition-shadow">
             UKM Cyber Security Universitas Nahdlatul Ulama Surabaya dibentuk
-            oleh mahasiswa angkatan 2018. Awal mula terbentuknya UKM ini adalah
-            Cyber di bentuk berlatar belakang karena belum ada wadah yang dapat
-            menaungi mahasiswa unusa dalam hal teknologi. UKM Cyber sendiri
-            bergerak di bidang teknologi. Seperti editing, programming, dan
-            networking
+            oleh mahasiswa angkatan 2018. Latar belakang terbentuknya adalah
+            belum adanya wadah yang dapat menaungi mahasiswa UNUSA dalam hal
+            teknologi. UKM Cyber bergerak di bidang teknologi, seperti editing,
+            programming, dan networking.
           </p>
-          <p className="pt-[20px] font-poppin"></p>
         </div>
       </div>
-      {/**penjelasan lambang */}
-      <div className="container  lg:mt-16 max-sm:mt-12 sm:mt-12 max-sm:px-4 bg-[var(--secbg)] lg:p-12">
-        <p className="text-center font-rubik font-extrabold text-3xl text-[var(--yel)]">
-          MAKNA LAMBANG UKM CYBER SECURITY
-        </p>
-        <div className="container flex flex-wrap-reverse  mt-[60px] max-sm:mt-4px sm:mt-4px">
-          <div className="contens lg:basis-2/4 max-sm:basis-full sm:basis-full text-left  max-sm:px-4 sm:px-4 max-sm:mt-8 sm:mt-8 ">
-            <p className="font-poppin">
-              9 Bintang melambangkan visi dari Unit Kegiatan Mahasiswa Cyber
-              UNUSA yang rahmatan lil alamin
-            </p>
-            <p className="pt-12 font-poppin">
-              Smarthphone, Komputer, Perisai Gembok, Internet/Browser: Dengan
-              arti Unit Kegiatan Mahasiswa Cyber UNUSA fokus dalam bidang cyber
-              security, namun juga bersifat open universal learning.
-            </p>
-            <p className="pt-12 font-poppin">
-              Bentuk perisai: melambangkan keamanan
-            </p>
-          </div>
-          <div className="lg:basis-2/4 max-sm:basis-full sm:basis-full">
-            <img src="/asset/logo.png" alt="" className=" h-[400px] m-auto " />
+
+      {/* Section 2: Makna Lambang */}
+      <div className="bg-[var(--secbg)] py-16 px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto">
+          <h2 className="text-center font-rubik font-extrabold text-3xl text-[var(--yel)] mb-12">
+            MAKNA LAMBANG UKM CYBER SECURITY
+          </h2>
+          <div className="flex flex-col-reverse lg:flex-row items-center">
+            {/* Teks Makna Lambang */}
+            <div className="w-full lg:w-1/2 text-left lg:pr-12 space-y-6 mt-8 lg:mt-0">
+              <p className="font-poppin text-gray-700 leading-relaxed">
+                <strong className="text-gray-800">9 Bintang:</strong>{" "}
+                Melambangkan visi UKM Cyber UNUSA yang Rahmatan Lil Alamin.
+              </p>
+              <p className="font-poppin text-gray-700 leading-relaxed">
+                <strong className="text-gray-800">Ikon Teknologi:</strong>{" "}
+                Smartphone, komputer, perisai gembok, dan browser melambangkan
+                fokus UKM pada *cyber security*, namun tetap terbuka untuk
+                pembelajaran universal di bidang IT.
+              </p>
+              <p className="font-poppin text-gray-700 leading-relaxed">
+                <strong className="text-gray-800">Bentuk Perisai:</strong>{" "}
+                Melambangkan aspek keamanan.
+              </p>
+            </div>
+            {/* Gambar Lambang */}
+            <div className="w-full lg:w-1/2 flex justify-center">
+              <img
+                src="/asset/logo.png" // Pastikan path ini benar
+                alt="Logo UKM Cyber UNUSA"
+                className="w-1/2 sm:w-1/3 lg:w-1/2 max-w-xs h-auto object-contain" // Ukuran disesuaikan
+              />
+            </div>
           </div>
         </div>
       </div>
-      {/**visi&misi */}
-      <section id="visi&misi">
-        <div className="container flex max-sm:flex-col p-4 mt-8 font-poppin">
-          <div
-            id="visi"
-            className="lg:basis-1/2 max-sm:basis-full sm:basis-full text-center p-8"
-          >
-            <h1 className="font-bold lg:text-4xl text-[var(--primary)] max-sm:text-3xl sm:text-3xl">
-              {" "}
+
+      {/* Section 3: Visi & Misi */}
+      <section
+        id="visi-misi"
+        className="container mx-auto py-16 px-4 sm:px-6 lg:px-8"
+      >
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
+          {/* Visi */}
+          <div id="visi" className="w-full lg:w-1/2 text-center lg:text-left">
+            <h2 className="font-bold text-3xl lg:text-4xl text-[var(--primary)] mb-6">
               VISI
-            </h1>
-            <p className="mt-12 text-justify">
+            </h2>
+            <p className="font-poppin text-base leading-relaxed text-gray-700 text-justify">
               Menjadi Unit Kegiatan Mahasiswa Cyber UNUSA terdepan yang berfokus
               keamanan, unggul di tingkat nasional dan internasional dengan
-              membekali mahasiswa dengan ilmu IT serta meningkatkan softskill
-              dan hardskill guna mengabdi pada masyarakat serta menuju
-              entrepeneurship berasaskan rahmatan lil alamin.
+              membekali mahasiswa dengan ilmu IT serta meningkatkan *softskill*
+              dan *hardskill* guna mengabdi pada masyarakat serta menuju
+              *entrepeneurship* berasaskan Rahmatan Lil Alamin.
             </p>
           </div>
-          <div
-            id="misi"
-            className="lg:basis-1/2 max-sm:basis-full sm:basis-full p-8"
-          >
-            <h1 className="font-bold lg:text-4xl text-[var(--primary)] text-center max-sm:text-3xl sm:text-3xl">
+          {/* Misi */}
+          <div id="misi" className="w-full lg:w-1/2">
+            <h2 className="font-bold text-3xl lg:text-4xl text-[var(--primary)] text-center lg:text-left mb-6">
               MISI
-            </h1>
-            <div className="mt-12 text-justify">
-              <ul className="list-none space-y-1">
-                <li className="flex items-start gap-2">
-                  <Dot
-                    className="inline mt-1"
-                    color="green"
-                    size={50}
-                    strokeWidth="2"
+            </h2>
+            <ul className="list-none space-y-4 font-poppin text-base text-gray-700">
+              {[
+                "Meningkatkan minat dan bakat dibidang IT dikalangan mahasiswa UNUSA.",
+                'Mengembangkan softskill dan hardskill mahasiswa melalui kegiatan progresif "Forum Cyber".',
+                "Memfasilitasi kegiatan mahasiswa dibidang IT guna mengembangkan enterpreneurship IT berdasarkan rahmatan lil alamin.",
+                "Meningkatkan peran aktif mahasiswa dalam pengembangan dunia IT dilingkunan Universitas Nahdlatul Ulama Surabaya.",
+                "Membentuk generasi yang memiliki kesiapan mental dalam menghadapi perkembangan IT.",
+                "Aktif dalam membuat atau menjalankan kegiatan bertema IT yang dapat memberikan dampak langsung terhadap masyarakat sekitar.",
+              ].map((misi, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <Dot // Ukuran diperkecil dan warna disesuaikan
+                    className="inline text-[var(--primary)] mt-1 flex-shrink-0"
+                    size={24} // Ukuran ikon diperkecil
+                    strokeWidth="3"
                   />
-                  <span>
-                    Meningkatkan minat dan bakat dibidang IT dikalangan
-                    mahasiswa UNUSA.
-                  </span>
+                  <span className="text-justify leading-relaxed">{misi}</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <Dot
-                    className="inline mt-1"
-                    color="green"
-                    size={50}
-                    strokeWidth="2"
-                  />
-                  <span>
-                    Mengembangkan softskill dan hardskill mahasiswa melalui
-                    kegiatan progresif "Forum Cyber".
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Dot
-                    className="inline mt-1"
-                    color="green"
-                    size={50}
-                    strokeWidth="2"
-                  />
-                  <span>
-                    Memfasilitasi kegiatan mahasiswa dibidang IT guna
-                    mengembangkan enterpreneurship IT berdasarkan rahmatan lil
-                    alamin.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Dot
-                    className="inline mt-1"
-                    color="green"
-                    size={50}
-                    strokeWidth="2"
-                  />
-                  <span>
-                    Meningkatkan peran aktif mahasiswa dalam pengembangan dunia
-                    IT dilingkunan Universitas Nahdlatul Ulama Surabaya.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Dot
-                    className="inline mt-1"
-                    color="green"
-                    size={50}
-                    strokeWidth="2"
-                  />
-                  <span>
-                    Membentuk generasi yang memiliki kesiapan mental dalam
-                    menghadapi perkembangan IT.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Dot
-                    className="inline mt-1"
-                    color="green"
-                    size={50}
-                    strokeWidth="2"
-                  />
-                  <span>
-                    Aktif dalam membuat atau menjalankan kegiatan bertema IT
-                    yang dapat memberikan dampak langsung terhadap masyarakat
-                    sekitar.
-                  </span>
-                </li>
-              </ul>
-            </div>
+              ))}
+            </ul>
           </div>
         </div>
       </section>

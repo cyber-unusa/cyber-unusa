@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -13,142 +14,198 @@ import {
   codesBracket,
   rocket,
   icons1,
-} from "../assets/Icons";
+} from "../assets/Icons"; // Pastikan path Icons.jsx benar
 
 export default function CyberMart() {
   return (
-    <>
+    <div className="bg-white">
       <Navbar />
-      <section id="head" className="">
-        <div className="container px-4 lg:px-16 pb-12 flex flex-col lg:flex-row mt-12">
-          <div className="contens md:w-1/2 lg:w-2/4 pt-10 md:pt-20 lg:pt-36">
-            <h1 className="max-sm:text-4xl sm:text-4xl md:text-4xl lg:text-5xl font-bold text-[var(--primary)]">
-              PERLU
-              <span className="font-bold border-0 rounded-md bg-[var(--primary)] text-white m-4">
-                <span className="px-4 py-6">WEBSITE</span>
+
+      {/* Hero Section */}
+      <section
+        id="head"
+        className="pt-28 lg:pt-32 bg-gradient-to-br from-green-50 via-cyan-50 to-blue-50"
+      >
+        <div className="container mx-auto px-6 lg:px-16 flex flex-col lg:flex-row items-center">
+          {/* Teks */}
+          <div className="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0 lg:pr-12">
+            <h1 className="text-4xl sm:text-4xl lg:text-5xl font-extrabold text-[#13A085] mb-4 leading-tight">
+              PERLU{" "}
+              <span className="bg-[#13A085] text-white px-4 py-1 rounded-lg inline-block shadow-md">
+                WEBSITE
               </span>
+              ?
             </h1>
-            <h1 className="max-sm:text-4xl sm:text-4xl md:text-4xl lg:text-5xl font-bold text-[var(--primary)] mt-4">
-              TENANG ADA KAMI !!!
+            <h1 className="text-4xl sm:text-4xl lg:text-5xl font-extrabold text-[#13A085] mb-6 leading-tight">
+              TENANG ADA KAMI!
             </h1>
-            <h2 className="font-semibold text-[var(--lowprim)] mt-2 text-xl md:text-2xl">
+            <h2 className="font-bold text-[#26B99A] text-2xl md:text-2xl mb-6 tracking-wide">
               CYBERIN AJA
             </h2>
-            <p className="font-poppin mt-4 md:mt-10">
-              CYBERIN AJA bakal bikin kamu naik level dengan website dan jasa
-              kami yang lainnya. Bantu bisnismu ataupun yang lain menjadi
-              digital dan biar orang tau tentang kamu. Yuk jangan lupa
-              CYBERINAJA
+            <p className="font-poppins text-gray-600 text-lg mb-8 leading-relaxed">
+              Tingkatkan level bisnis Anda dengan layanan digital kami. Jadikan
+              kehadiran online Anda lebih profesional dan jangkau lebih banyak
+              orang. Yuk, #CyberinAja!
             </p>
           </div>
-          <div className="contens-img md:w-1/2 lg:w-2/4 md:mt-12 lg:mt-4">
+          {/* Gambar */}
+          <div className="lg:w-1/2">
             <img
-              src="/asset/services-img.png"
-              alt=""
-              className="w-full h-auto object-cover"
+              src="/asset/services-img.png" // Pastikan path ini benar
+              alt="Cyber Services Illustration"
+              className="w-full h-auto object-contain max-w-lg mx-auto drop-shadow-xl"
             />
           </div>
         </div>
       </section>
 
-      <section id="whyChooseMe" className="bg-[var(--secbg)]">
-        <div className="container text-center py-12">
-          <h1 className="text-xl lg:text-3xl font-bold text-[var(--primary)]">
-            WHY CHOOSE ME?
+      {/* Why Choose Us */}
+      <section id="whyChooseMe" className="bg-gray-50 py-16 lg:py-24">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-3xl lg:text-4xl font-bold text-[#13A085] mb-16">
+            MENGAPA MEMILIH KAMI?
           </h1>
-          <div className="itemsz flex flex-col md:flex-row text-center pt-16">
-            <div className="basis-3/4 px-4 md:px-10 lg:px-16 mb-8 md:mb-0">
-              <div className="m-auto w-2/4">{money()}</div>
-              <h1 className="mt-12">Paling Murah Dan Terjangkau !!!</h1>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+            {/* Item 1 */}
+            <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100 flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
+              <div className="w-20 h-20 mb-12 text-[#FFDA44]">{money()}</div>
+              <h2 className="text-xl font-semibold text-gray-700">
+                Harga Terjangkau
+              </h2>
+              <p className="text-gray-500 mt-2 text-sm">
+                Solusi berkualitas tanpa menguras kantong.
+              </p>
             </div>
-            <div className="basis-3/4 px-4 md:px-10 lg:px-16 mb-8 md:mb-0">
-              <div className="m-auto w-2/4">{bag()}</div>
-              <h1 className="mt-12">Professional Team</h1>
+            {/* Item 2 */}
+            <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100 flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
+              <div className="w-20 h-20 mb-12 text-[#13A085]">{bag()}</div>
+              <h2 className="text-xl font-semibold text-gray-700">
+                Tim Profesional
+              </h2>
+              <p className="text-gray-500 mt-2 text-sm">
+                Dikerjakan oleh mahasiswa IT berpengalaman.
+              </p>
             </div>
-            <div className="basis-3/4 px-4 md:px-10 lg:px-16">
-              <div className="m-auto w-2/4">{task()}</div>
-              <h1 className="mt-12">Terpercaya Dan Terstruktur</h1>
+            {/* Item 3 */}
+            <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100 flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
+              <div className="w-20 h-20 mb-12 text-[#FFDA44]">{task()}</div>
+              <h2 className="text-xl font-semibold text-gray-700">
+                Terpercaya & Terstruktur
+              </h2>
+              <p className="text-gray-500 mt-2 text-sm">
+                Proses kerja jelas dan hasil memuaskan.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="WhatWeDo?">
-        <div className="container text-center py-8 px-4">
-          <h1 className="text-xl lg:text-3xl font-bold text-[var(--primary)]">
-            WHAT WE DO?
+      {/* What We Do */}
+      <section id="WhatWeDo" className="py-16 lg:py-24 bg-white">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-3xl lg:text-4xl font-bold text-[#13A085] mb-16">
+            LAYANAN KAMI
           </h1>
-          <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-20 ">
-            <div
-              id="webDeveloper"
-              className="basis-3/4 rounded-md shadow-lg mx-2 lg:mx-8 mt-2 lg:mt h-[400px]"
-            >
-              <div className="images">
-                <span>{webDev()}</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Card 1 */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col group">
+              <div className="h-48 flex items-center justify-center p-6 bg-gradient-to-br from-cyan-50 to-blue-100 overflow-hidden relative">
+                <div className="transform transition-transform duration-500 group-hover:scale-110">
+                  {webDev()}
+                </div>
               </div>
-              <div className="contens text-white bg-[var(--primary)] py-4 px-4 h-[200px] rounded-b-lg mt-4">
-                <h2 className="font-extrabold text-2xl">Web Developer</h2>
-                <p className="font-bold text-sm pt-4">
-                  Bikin bisnismu ataupun apapun yang kamu inginkan menjadi
-                  digital yuk
+              <div className="p-6 text-left flex-grow">
+                <h2 className="font-bold text-xl text-gray-800 mb-2">
+                  Web Development
+                </h2>
+                <p className="font-poppins text-sm text-gray-600 leading-relaxed">
+                  Wujudkan ide Anda menjadi website profesional, mulai dari
+                  profil bisnis hingga toko online.
                 </p>
               </div>
             </div>
-            <div
-              id="uiUx"
-              className="basis-3/4 rounded-md shadow-lg mx-2 lg:mx-8 mt-2 lg:mt h-[400px]"
-            >
-              <div className="images">
-                <span>{uiux()}</span>
+            {/* Card 2 */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col group">
+              <div className="h-48 flex items-center justify-center p-6 bg-gradient-to-br from-green-50 to-teal-100 overflow-hidden relative">
+                <div className="transform transition-transform duration-500 group-hover:scale-110">
+                  {uiux()}
+                </div>
               </div>
-              <div className="contens text-white bg-[var(--primary)] py-4 px-4 h-[200px] rounded-b-lg mt-4">
-                <h2 className="font-extrabold text-2xl">UI/UX Desain</h2>
-                <p className="font-bold text-sm pt-4">
-                  Perbagus tampilanmu yuk agar orang-orang betah
+              <div className="p-6 text-left flex-grow">
+                <h2 className="font-bold text-xl text-gray-800 mb-2">
+                  UI/UX Desain
+                </h2>
+                <p className="font-poppins text-sm text-gray-600 leading-relaxed">
+                  Ciptakan tampilan aplikasi atau website yang menarik dan mudah
+                  digunakan oleh pengunjung.
                 </p>
               </div>
             </div>
-            <div
-              id="rakitPc"
-              className="basis-3/4 rounded-md shadow-lg mx-2 lg:mx-8 mt-2 lg:mt h-[400px]"
-            >
-              <div className="images">
-                <span>{rakitPc()}</span>
+            {/* Card 3 */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col group">
+              <div className="h-48 flex items-center justify-center p-6 bg-gradient-to-br from-yellow-50 to-amber-100 overflow-hidden relative">
+                <div className="transform transition-transform duration-500 group-hover:scale-110">
+                  {rakitPc()}
+                </div>
               </div>
-              <div className="contens text-white bg-[var(--primary)] py-4 px-4 h-[200px] rounded-b-lg mt-4">
-                <h2 className="font-extrabold text-2xl">Rakit PC</h2>
-                <p className="font-bold pt-4 text-sm">
-                  Bingung mau beli komputer dan laptop. Titip kami aja , nanti
-                  dicari kan yang bagus dan sesuai
+              <div className="p-6 text-left flex-grow">
+                <h2 className="font-bold text-xl text-gray-800 mb-2">
+                  Rakit PC
+                </h2>
+                <p className="font-poppins text-sm text-gray-600 leading-relaxed">
+                  Bingung spesifikasi PC? Kami bantu rakit komputer sesuai
+                  kebutuhan dan budget Anda.
                 </p>
               </div>
             </div>
-            <div
-              id="webDeveloper"
-              className="basis-3/4 rounded-md shadow-lg mx-2 lg:mx-8 mt-2 lg:mt h-[400px]"
-            >
-              <div className="images">
-                <span>{fastWorking()}</span>
+            {/* Card 4 */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col group">
+              <div className="h-48 flex items-center justify-center p-6 bg-gradient-to-br from-indigo-50 to-purple-100 overflow-hidden relative">
+                <div className="transform transition-transform duration-500 group-hover:scale-110">
+                  {fastWorking()}
+                </div>
               </div>
-              <div className="contens text-white bg-[var(--primary)] py-4 px-4 h-[200px] rounded-b-lg mt-4">
-                <h2 className="font-extrabold text-2xl">Instalasi Laptop</h2>
-                <p className="font-bold pt-4 text-sm">
-                  Bingung mau instal ulang windows, aplikasi lain dan
-                  sebagainya. Serah kan kami aja. Gak sampai 1 hari !!
+              <div className="p-6 text-left flex-grow">
+                <h2 className="font-bold text-xl text-gray-800 mb-2">
+                  Instalasi Software
+                </h2>
+                <p className="font-poppins text-sm text-gray-600 leading-relaxed">
+                  Instal ulang Windows, Office, atau software lainnya? Serahkan
+                  pada kami, cepat dan beres!
                 </p>
               </div>
             </div>
-            <div
-              id="webDeveloper"
-              className="basis-3/4 rounded-md shadow-lg mx-2 lg:mx-8 mt-2 lg:mt h-[400px]"
-            >
-              <div className="images">
-                <span>{undangan()}</span>
+            {/* Card 5 */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col group">
+              <div className="h-48 flex items-center justify-center p-6 bg-gradient-to-br from-pink-50 to-rose-100 overflow-hidden relative">
+                <div className="transform transition-transform duration-500 group-hover:scale-110">
+                  {undangan()}
+                </div>
               </div>
-              <div className="contens text-white bg-[var(--primary)] py-4 px-4 h-[200px] rounded-b-lg mt-4">
-                <h2 className="font-extrabold text-2xl">Undangan Digital</h2>
-                <p className="font-bold pt-4 text-sm">
-                  Gak perlu pusing bikin undangan lagi!!. Digitalin aja disini!!
+              <div className="p-6 text-left flex-grow">
+                <h2 className="font-bold text-xl text-gray-800 mb-2">
+                  Undangan Digital
+                </h2>
+                <p className="font-poppins text-sm text-gray-600 leading-relaxed">
+                  Buat undangan pernikahan, acara, atau lainnya lebih modern dan
+                  praktis dengan format digital.
+                </p>
+              </div>
+            </div>
+            {/* Card 6 (Bisa ditambahkan layanan lain atau kosongkan) */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col group">
+              <div className="h-48 flex items-center justify-center p-6 bg-gradient-to-br from-gray-50 to-slate-100 overflow-hidden relative">
+                <div className="transform transition-transform duration-500 group-hover:scale-110">
+                  {codesBracket()}
+                </div>
+              </div>
+              <div className="p-6 text-left flex-grow">
+                <h2 className="font-bold text-xl text-gray-800 mb-2">
+                  Layanan Lain?
+                </h2>
+                <p className="font-poppins text-sm text-gray-600 leading-relaxed">
+                  Punya kebutuhan IT lainnya? Jangan ragu untuk diskusikan
+                  dengan kami!
                 </p>
               </div>
             </div>
@@ -156,99 +213,138 @@ export default function CyberMart() {
         </div>
       </section>
 
-      <section id="Konsultasi" className="bg-[var(--secbg)] overflow-hidden lg:mt-28">
-        <div className="container flex flex-col md:flex-row p-12 lg:p-20">
-          <div className="item1 basis-2/4 md:basis-1/2 md:pt-0 lg:basis-1/2 relative pt-24 ] ">
-            <h1 className="text-[var(--primary)] font-extrabold lg:text-3xl max-sm:text-xl md:text-2xl">
-              Kami sudah membantu beberapa
-            </h1>
-            <h1 className="text-[var(--primary)] font-extrabold lg:text-3xl max-sm:text-xl md:text-2xl">
-              Orang untuk naik level. Kamu kapan?
-            </h1>
-            <h1 className="font-extrabold lg:text-4xl max-sm:text-xl  bg-[var(--primary)] md:w-2/4 max-sm:w-2/4 lg:w-56 p-2  text-white rounded-md mt-4 md:text-2xl">
-              #DIGITALIN <span className="block">AJA</span>
-            </h1>
-            <span className="absolute z-10 lg:-top-24 lg:right-24 max-sm:-top-4 max-sm:left-[18rem] max-sm:w-32 md:-top-20 md:right-0 lg:w-36">
+      {/* Konsultasi */}
+      <section
+        id="Konsultasi"
+        className="bg-gradient-to-br from-green-50 via-cyan-50 to-blue-50 py-16 lg:py-24 overflow-hidden"
+      >
+        <div className="container mx-auto px-6 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+          {/* Ilustrasi & Teks Kiri */}
+          <div className="lg:w-1/2 relative text-center lg:text-left">
+            {/* Decorative Icons */}
+            <span className="absolute z-0 -top-20 -left-10 w-32 md:w-48 lg:w-40 opacity-10 transform rotate-12">
               {icons1()}
             </span>
-            <div className="absolute z-10 lg:bottom-56 lg:right-36  max-sm:-bottom-24 max-sm:right-16 md:-right-4 md:bottom-72">
-              {rocket()}
-            </div>
-            <div className="absolute z-10 lg:bottom-32 lg:-left-16 max-sm:-bottom-36 max-sm:-left-8 md:bottom-52 md:-left-8">
+            <span className="absolute z-0 bottom-10 -right-10 w-40 md:w-56 lg:w-48 opacity-10 transform -rotate-12">
               {codesBracket()}
+            </span>
+            <span className="absolute z-0 top-1/2 left-1/4 w-24 md:w-32 lg:w-28 opacity-10 transform -translate-y-1/2 rotate-6">
+              {rocket()}
+            </span>
+
+            {/* Main Text */}
+            <div className="relative z-10">
+              <h1 className="text-[#13A085] font-extrabold text-3xl md:text-4xl lg:text-5xl leading-tight mb-4">
+                Sudah siap untuk Go Digital?
+              </h1>
+              <h2 className="text-gray-700 font-semibold text-xl md:text-2xl lg:text-3xl leading-tight mb-8">
+                Diskusikan kebutuhan Anda bersama kami.
+              </h2>
+              <div className="inline-block bg-[#13A085] text-white font-extrabold text-2xl md:text-3xl lg:text-4xl px-5 py-3 rounded-lg shadow-lg transform -rotate-2">
+                #DIGITALIN{" "}
+                <span className="block text-center lg:inline">AJA</span>
+              </div>
             </div>
           </div>
-          {/**konsul */}
-          <div className="item2 basis-2/4 md:basis-1/2 lg:basis-1/2 max-sm:mt-52 md:ml-8 lg:pl-32">
-            <div className="headTitle flex">
-              <div className="contens1 max-sm:m-auto">
-                <h1 className="text-[var(--primary)] font-extrabold lg:text-3xl max-sm:text-3xl sm:text-3xl  md:text-xl">
-                  Yuk Konsultasi <span className="block">Sekarang Juga</span>
-                </h1>
-              </div>
-              <div className="contens2 pl-4 items-center pt-1">
-                <h1 className="text-white font-extrabold rounded-md lg:text-4xl max-sm:text-3xl sm:text-4xl bg-[var(--primary)] p-3 md:text-2xl">
-                  GRATIS
-                </h1>
-              </div>
-            </div>
-            <div className="formulir mt-16 max-sm:text-center max-sm:m-auto max-sm:mt-20">
-              <p className="lg:text-start md:text-center text-[var(--primary)] font-bold">
-                Isi formulir dibawah ini agar kami bisa membantu anda
-              </p>
-              <form action="" className="pt-8">
-                <div className="flex">
-                  <div id="nama" className="basis-2/4">
-                    <span className="block text-[var(--primary)] font-bold">Nama</span>
-                    <input
-                      type="text"
-                      className="bg-[var(--primary)] w-3/5 rounded-md p-2 text-white"
-                    />
-                  </div>
-                  <div id="email" className="basis-2/4">
-                    <span className="block text-[var(--primary)] font-bold ">Email</span>
-                    <input
-                      type="text"
-                      className="bg-[var(--primary)] w-3/5 rounded-md p-2 text-white"
-                    />
-                  </div>
-                </div>
 
-                <div id="layanans" className="pt-4 ">
-                  <span className="block text-[var(--primary)] font-bold">
-                    Layanan Yang Diperlukan
-                  </span>
-                  <select
-                    name="layanan"
-                    className="bg-[var(--primary)] p-2 mt-2 text-white font-bold rounded-md w-4/5"
-                  >
-                    <option value="">Web Development</option>
-                    <option value="">UI/UX Desain</option>
-                    <option value="">Rakit PC</option>
-                    <option value="">Instalasi Komputer</option>
-                    <option value="">Undangan Digital</option>
-                  </select>
-                </div>
-                <div id="kendalas" className="pt-4">
-                  <span className="block text-[var(--primary)] font-bold">
-                    Kendala Yang Dihadapi
-                  </span>
-                  <textarea
-                    rows="6"
-                    className="bg-[var(--primary)] mt-2 w-4/5 rounded-md p-3 text-white resize-none"
-                  ></textarea>
-                  <Link to="/cooming">
-                    <button className="bg-[var(--yellow)] p-2 block rounded-md mt-4 text-[var(--primary)] font-bold max-sm:m-auto max-sm:mt-4">
-                      SUBMIT
-                    </button>
-                  </Link>
-                </div>
-              </form>
+          {/* Form Konsultasi */}
+          <div className="lg:w-1/2 w-full max-w-lg mx-auto lg:mx-0 bg-white p-8 rounded-xl shadow-xl z-10">
+            <div className="flex items-center mb-6 gap-3 justify-center lg:justify-start">
+              <h2 className="text-[#13A085] font-bold text-2xl md:text-3xl">
+                Konsultasi Gratis!
+              </h2>
             </div>
+            <p className="text-gray-600 mb-6 text-center lg:text-left text-sm">
+              Isi formulir di bawah ini, tim kami akan segera menghubungi Anda.
+            </p>
+            <form action="" className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    htmlFor="nama"
+                    className="block text-gray-600 font-medium mb-1 text-sm"
+                  >
+                    Nama
+                  </label>
+                  <input
+                    type="text"
+                    id="nama"
+                    className="w-full border border-gray-300 rounded-md p-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#26B99A] focus:border-transparent transition duration-200"
+                    placeholder="Nama Lengkap"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-gray-600 font-medium mb-1 text-sm"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    className="w-full border border-gray-300 rounded-md p-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#26B99A] focus:border-transparent transition duration-200"
+                    placeholder="email@anda.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="layanan"
+                  className="block text-gray-600 font-medium mb-1 text-sm"
+                >
+                  Layanan Yang Diperlukan
+                </label>
+                <select
+                  id="layanan"
+                  name="layanan"
+                  className="w-full border border-gray-300 rounded-md p-2.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#26B99A] focus:border-transparent transition duration-200 appearance-none bg-white pr-8 bg-no-repeat bg-right" // Added appearance-none and background for arrow styling
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: "right 0.5rem center",
+                    backgroundSize: "1.5em 1.5em",
+                  }} // Simple arrow
+                >
+                  <option value="">-- Pilih Layanan --</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="UI/UX Desain">UI/UX Desain</option>
+                  <option value="Rakit PC">Rakit PC</option>
+                  <option value="Instalasi Komputer">Instalasi Komputer</option>
+                  <option value="Undangan Digital">Undangan Digital</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="kendala"
+                  className="block text-gray-600 font-medium mb-1 text-sm"
+                >
+                  Pesan / Kendala
+                </label>
+                <textarea
+                  id="kendala"
+                  rows="4"
+                  className="w-full border border-gray-300 rounded-md p-2.5 text-gray-700 resize-none focus:outline-none focus:ring-2 focus:ring-[#26B99A] focus:border-transparent transition duration-200"
+                  placeholder="Ceritakan kebutuhan atau kendala Anda..."
+                ></textarea>
+              </div>
+
+              <Link to="/cooming" className="block pt-2">
+                <button
+                  type="button"
+                  className="w-full bg-gradient-to-r from-[#26B99A] to-[#13A085] hover:from-[#13A085] hover:to-[#26B99A] text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#13A085]"
+                >
+                  KIRIM KONSULTASI
+                </button>
+              </Link>
+            </form>
           </div>
         </div>
       </section>
+
       <Footer />
-    </>
+    </div>
   );
 }

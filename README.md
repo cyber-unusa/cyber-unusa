@@ -1,4 +1,4 @@
-# UKM Cyber UNUSA - Company Profile Website v2.0
+# UKM Cyber UNUSA - Website Company Profile 
 
 Selamat datang di repositori untuk website profil UKM Cyber Computer Security Universitas Nahdlatul Ulama Surabaya (UNUSA) versi 2.0. Proyek ini dibangun untuk menampilkan informasi, kegiatan, dan layanan yang ditawarkan oleh UKM Cyber UNUSA.
 

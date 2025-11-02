@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ManageDokumenter from "../components/ManageDokumenter";
 import ManageKegiatan from "../components/ManageKegiatan";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const { userData } = useContext(AppContext);
@@ -14,6 +15,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (userData && userData.role !== "admin") {
       navigate("/");
+      toast.warning("Akses ditolak: Hanya untuk admin");
     }
   }, [userData, navigate]);
 
