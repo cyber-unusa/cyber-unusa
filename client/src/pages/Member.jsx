@@ -89,7 +89,6 @@ const Member = () => {
       >
         <div className="container mx-auto px-6">
           <div className="flex flex-wrap lg:flex-nowrap items-center justify-between gap-12 lg:gap-16">
-            {/* Teks di Kiri */}
             <div className="w-full lg:w-1/2 text-center lg:text-left">
               <h1 className="text-3xl lg:text-4xl font-extrabold text-[#13A085] mb-4">
                 Struktur Divisi <br /> UKM Cyber UNUSA

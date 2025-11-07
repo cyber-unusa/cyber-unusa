@@ -8,6 +8,7 @@ import authRoter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import dokumenRouter from "./routes/dokumenterRoutes.js";
 import kegiatanRouter from "./routes/kegiatanRoutes.js";
+import productRouter from "./routes/productRoutes.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -41,6 +42,7 @@ app.use("/api/auth", authRoter);
 app.use("/api/user", userRouter);
 app.use("/api/dokumenter", dokumenRouter);
 app.use("/api/kegiatan", kegiatanRouter);
+app.use("/api/product", productRouter);
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(port, () => console.log(`Server Started on PORT: ${port}`));

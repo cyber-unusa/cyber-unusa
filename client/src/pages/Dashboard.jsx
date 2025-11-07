@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ManageDokumenter from "../components/ManageDokumenter";
 import ManageKegiatan from "../components/ManageKegiatan";
+import ManageProducts from "../components/ManageProducts";
 import { toast } from "react-toastify";
 
 const Dashboard = () => {
@@ -41,10 +42,19 @@ const Dashboard = () => {
           >
             Kegiatan
           </button>
+          <button
+            onClick={() => setActiveTab("Product")}
+            className={`py-2 px-4 ${
+              activeTab === "Product" ? "border-b-2 border-blue-500" : ""
+            }`}
+          >
+            Product
+          </button>
         </div>
         <div>
           {activeTab === "dokumenter" && <ManageDokumenter />}
           {activeTab === "kegiatan" && <ManageKegiatan />}
+          {activeTab === "Product" && <ManageProducts />}
         </div>
       </div>
       <Footer />
