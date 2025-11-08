@@ -83,7 +83,11 @@ export default function Products() {
             })}
           </div>
         ) : (
-          <p className="text-gray-600">Merchandise akan segera hadir.</p>
+          <div className="bg-white rounded-lg border border-zinc-200 p-6 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto">
+            <p className="text-center text-gray-600 text-xl font-bold">
+              Belum ada kegiatan yang ditambahkan.
+            </p>
+          </div>
         )}
       </div>
     </>
