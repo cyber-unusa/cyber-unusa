@@ -8,6 +8,7 @@ const dokumenterSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
 });
 
-const dokumenterModel = mongoose.models.dokumenter || mongoose.model("dokumenter", dokumenterSchema);
+const dokumenterModel =
+  mongoose.models.dokumenter || mongoose.model("dokumenter", dokumenterSchema);
 
 export default dokumenterModel;
