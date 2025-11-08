@@ -29,7 +29,7 @@ const ManageDokumenter = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !description || !image || !date) {
+    if (!title || !description || !image) {
       toast.warn("Harap isi semua kolom dan pilih gambar.");
       return;
     }
