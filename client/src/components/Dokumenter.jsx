@@ -20,11 +20,6 @@ export default function Dokumenter() {
     fetchDokumenter();
   }, [backendUrl]);
 
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString("id-ID", options);
-  };
-
   return (
     <>
       <h2 className="text-3xl lg:text-2xl font-bold text-center mb-16 text-green-500 pt-8 font-rubik">
@@ -48,11 +43,6 @@ export default function Dokumenter() {
                   {item.title}
                 </h3>
                 <p className="font-poppin">{item.description}</p>
-                {item.date && (
-                  <p className="font-poppin mb-2 mt-3">
-                    {formatDate(item.date)}
-                  </p>
-                )}
               </div>
             </div>
           ))}
