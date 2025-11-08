@@ -5,7 +5,7 @@ const dokumenterSchema = new mongoose.Schema({
   title: { type: String, required: true },
   imageUrl: { type: String, required: true },
   description: { type: String, required: true },
-  date: { type: Date },
+  date: { type: Date, default: Date.now },
 });
 
 const dokumenterModel =
