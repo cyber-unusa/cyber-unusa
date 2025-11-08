@@ -1,28 +1,21 @@
 import multer from "multer";
-import path from "path";
-import fs from "fs";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
-//* Konfigurasi penyimpanan untuk Multer */
-const publicImagesPath = path.join(process.cwd(), "public", "images");
+//? Konfigurasi Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    //! Menentukan folder tujuan penyimpanan file
-    try {
-      // create the folder if it doesn't exist (no-op if it does)
-      fs.mkdirSync(publicImagesPath, { recursive: true });
-      cb(null, publicImagesPath);
-    } catch (err) {
-      cb(err);
-    }
-  },
-  filename: function (req, file, cb) {
-    //! Membuat nama file yang unik untuk menghindari konflik
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
+//? Konfigurasi Storage Cloudinary untuk Multer
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "cyber-unusa", //! nama folder di Cloudinary
+    allowed_formats: ["jpg", "png", "jpeg", "JPG"],
+    //? public_id dibuat secara otomatis di Cloudinary
   },
 });
 

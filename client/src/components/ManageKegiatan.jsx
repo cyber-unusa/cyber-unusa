@@ -93,7 +93,10 @@ const ManageKegiatan = () => {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Manajemen Kegiatan</h2>
-      <form onSubmit={handleSubmit} className="mb-6 p-4 border border-zinc-200 rounded">
+      <form
+        onSubmit={handleSubmit}
+        className="mb-6 p-4 border border-zinc-200 rounded"
+      >
         <h3 className="text-xl font-semibold text-gray-700 p-2">
           Tambah Kegiatan Baru
         </h3>
@@ -196,7 +199,7 @@ const ManageKegiatan = () => {
             >
               <span>
                 <img
-                  src={`${backendUrl}/${doc.imageUrl}`}
+                  src={doc.imageUrl}
                   alt={doc.title}
                   className="w-full h-48 object-cover"
                 />

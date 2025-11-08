@@ -54,7 +54,7 @@ export default function Products() {
                   className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-xl flex flex-col group"
                 >
                   <img
-                    src={`${backendUrl}/${product.imageUrl}`}
+                    src={product.imageUrl}
                     alt={product.name}
                     className="w-full h-64 object-cover"
                   />

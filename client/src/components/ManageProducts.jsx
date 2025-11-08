@@ -202,7 +202,7 @@ const ManageProducts = () => {
             >
               <span>
                 <img
-                  src={`${backendUrl}/${doc.imageUrl}`}
+                  src={doc.imageUrl}
                   alt={doc.name}
                   className="w-full h-48 object-cover"
                 />

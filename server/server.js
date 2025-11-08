@@ -38,6 +38,7 @@ app.get("/", (req, res) =>
     error: false,
   })
 );
+
 app.use("/api/auth", authRoter);
 app.use("/api/user", userRouter);
 app.use("/api/dokumenter", dokumenRouter);

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const kegiatanSchema = new mongoose.Schema({
+  public_id: { type: String, required: true },
   title: { type: String, required: true },
   imageUrl: { type: String, required: true },
   description: { type: String, required: true },

@@ -39,7 +39,7 @@ export default function Dokumenter() {
               className="rounded-lg shadow-md mb-10 bg-white overflow-hidden w-80 lg:w-72"
             >
               <img
-                src={`${backendUrl}/${item.imageUrl}`}
+                src={item.imageUrl}
                 alt={item.title}
                 className="w-full h-48 object-cover"
               />
@@ -48,7 +48,11 @@ export default function Dokumenter() {
                   {item.title}
                 </h3>
                 <p className="font-poppin">{item.description}</p>
-                <p className="font-poppin mb-2 mt-3">{formatDate(item.date)}</p>
+                {item.date && (
+                  <p className="font-poppin mb-2 mt-3">
+                    {formatDate(item.date)}
+                  </p>
+                )}
               </div>
             </div>
           ))}

@@ -1,11 +1,6 @@
 import kegiatanModel from "../models/kegiatanModel.js";
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from "fs";
+import { v2 as cloudinary } from "cloudinary";
 import { promisify } from "util";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const addKegiatan = async (req, res) => {
   const { title, description, endDate, link } = req.body;
@@ -16,7 +11,8 @@ export const addKegiatan = async (req, res) => {
   }
 
   //! Path gambar yang akan disimpan di database
-  const imageUrl = path.join("images", image.filename).replace(/\\/g, "/");
+  const imageUrl = req.file.path;
+  const public_id = req.file.filename;
 
   if (!title || !description || !endDate || !link) {
     return res.json({ success: false, message: "Input Kurang Lengkap Brooo" });
@@ -24,6 +20,7 @@ export const addKegiatan = async (req, res) => {
 
   try {
     const newKegiatan = new kegiatanModel({
+      public_id,
       imageUrl,
       title,
       description,
@@ -41,37 +38,13 @@ export const deleteKegiatan = async (req, res) => {
   const { id } = req.params;
   try {
     const doc = await kegiatanModel.findById(id);
-    if (doc && doc.imageUrl) {
-      const storedImagePath = doc.imageUrl.replace(/^\/*/, "");
+    if (!doc) {
+      return res.json({ success: false, message: "kegiatan tidak ditemukan" });
+    }
 
-      const candidates = [
-        path.join(__dirname, "..", "public", storedImagePath),
-        path.join(__dirname, "public", storedImagePath),
-        path.join(process.cwd(), "public", storedImagePath),
-        path.join(process.cwd(), storedImagePath),
-      ];
-
-      const unlink = promisify(fs.unlink);
-      let deleted = false;
-      for (const p of candidates) {
-        try {
-          if (fs.existsSync(p)) {
-            await unlink(p);
-            console.log("File gambar berhasil dihapus:", p);
-            deleted = true;
-            break;
-          }
-        } catch (err) {
-          console.error("Gagal menghapus file gambar pada path:", p, err);
-        }
-      }
-
-      if (!deleted) {
-        console.warn(
-          "File gambar tidak ditemukan di paths candidates:",
-          candidates
-        );
-      }
+    //Todo Hapus gamabar dari cloudinary
+    if (doc.public_id) {
+      await cloudinary.uploader.destroy(doc.public_id);
     }
 
     await kegiatanModel.findByIdAndDelete(id);

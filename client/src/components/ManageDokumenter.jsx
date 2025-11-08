@@ -178,7 +178,7 @@ const ManageDokumenter = () => {
             >
               <span>
                 <img
-                  src={`${backendUrl}/${doc.imageUrl}`}
+                  src={doc.imageUrl}
                   alt={doc.title}
                   className="w-full h-48 object-cover"
                 />

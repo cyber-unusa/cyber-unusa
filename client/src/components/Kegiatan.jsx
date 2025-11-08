@@ -35,11 +35,7 @@ export default function Kegiatan() {
         <div className="container px-6 mx-auto flex flex-wrap gap-8 justify-center">
           {kegiatans.map((item) => (
             <div className="rounded-lg shadow-lg overflow-hidden mb-10 lg:w-72">
-              <img
-                src={`${backendUrl}/${item.imageUrl}`}
-                alt="banner"
-                className="w-full"
-              />
+              <img src={item.imageUrl} alt="banner" className="w-full" />
               <div className="py-6 px-4">
                 <div className="font-semibold text-xl font-nunito">
                   {item.title}

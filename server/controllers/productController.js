@@ -1,12 +1,5 @@
 import productModel from "../models/productModel.js";
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from "fs";
-import { promisify } from "util";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const unlink = promisify(fs.unlink);
+import { v2 as cloudinary } from "cloudinary";
 
 export const addProduct = async (req, res) => {
   const { name, price, description, nomorWa } = req.body;
@@ -17,13 +10,16 @@ export const addProduct = async (req, res) => {
   }
 
   //! Path gambar yang akan disimpan di database
-  const imageUrl = path.join("images", image.filename).replace(/\\/g, "/");
+  const imageUrl = req.file.path;
+  const public_id = req.file.filename;
+
   if (!name || !price || !description || !nomorWa) {
     return res.json({ success: false, message: "Input Kurang Lengkap Brooo" });
   }
 
   try {
     const newProduct = new productModel({
+      public_id,
       name,
       price,
       description,
@@ -41,36 +37,16 @@ export const deleteProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const prod = await productModel.findById(id);
-    if (prod && prod.imageUrl) {
-      const storedImagePath = prod.imageUrl.replace(/^\/*/, "");
-
-      const candidates = [
-        path.join(__dirname, "..", "public", storedImagePath),
-        path.join(__dirname, "public", storedImagePath),
-        path.join(process.cwd(), "public", storedImagePath),
-        path.join(process.cwd(), storedImagePath),
-      ];
-
-      const unlink = promisify(fs.unlink);
-      let deleted = false;
-      for (const p of candidates) {
-        try {
-          if (fs.existsSync(p)) {
-            await unlink(p);
-            console.log("File gambar berhasil dihapus:", p);
-            deleted = true;
-            break;
-          }
-        } catch (err) {
-          console.error("Gagal menghapus file gambar pada path:", p, err);
-        }
-      }
-
-      if (!deleted) {
-        console.warn("File gambar tidak ditemukan di semua path kandidat.");
-      }
+    const doc = await productModel.findById(id);
+    if (!doc) {
+      return res.json({ success: false, message: "Product tidak ditemukan" });
     }
+
+    //Todo Hapus gamabar dari cloudinary
+    if (doc.public_id) {
+      await cloudinary.uploader.destroy(doc.public_id);
+    }
+
     await productModel.findByIdAndDelete(id);
     res.json({ success: true, message: "Product berhasil dihapus" });
   } catch (error) {
