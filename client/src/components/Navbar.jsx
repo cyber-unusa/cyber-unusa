@@ -112,14 +112,24 @@ export default function Navbar() {
                   </div>
                   <ul className="py-2">
                     {userData.role === "admin" && (
-                      <li>
-                        <button
-                          onClick={() => handleNavigate("/dashboard")}
-                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white"
-                        >
-                          Dashboard
-                        </button>
-                      </li>
+                      <>
+                        <li>
+                          <button
+                            onClick={() => handleNavigate("/dashboard")}
+                            className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white"
+                          >
+                            Dashboard
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => handleNavigate("/absensi")}
+                            className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white"
+                          >
+                            Absensi
+                          </button>
+                        </li>
+                      </>
                     )}
                     <li>
                       <button
