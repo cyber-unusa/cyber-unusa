@@ -93,6 +93,7 @@ const ManageMembers = () => {
     setName(member.name);
     setNim(member.nim);
     setDivisi(member.divisi);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id) => {
@@ -119,114 +120,214 @@ const ManageMembers = () => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Kelola Daftar Anggota</h2>
-      <form
-        onSubmit={handleSubmit}
-        className="mb-6 p-4 border border-zinc-200 rounded"
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-gray-800">Kelola Anggota</h2>
+        <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium text-sm">
+          Total Anggota: {members.length}
+        </div>
+      </div>
+
+      {/* Bagian Form Input */}
+      <div
+        className={`rounded-xl shadow-sm border p-6 mb-8 transition-colors duration-300 ${
+          isEditing
+            ? "bg-yellow-50 border-yellow-200"
+            : "bg-white border-gray-200"
+        }`}
       >
-        <h3 className="text-xl font-semibold text-gray-700 p-2">
-          Tambah Member Baru
-        </h3>
-        <div className="p-2">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-600 mb-1"
+        <div className="flex justify-between items-center mb-4 border-b pb-2 border-gray-200/60">
+          <h3
+            className={`text-lg font-bold flex items-center gap-2 ${
+              isEditing ? "text-yellow-700" : "text-gray-700"
+            }`}
           >
-            Nama Lengkap
-          </label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Masukkan nama"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-        <div className="p-2">
-          <label
-            htmlFor="nim"
-            className="block text-sm font-medium text-gray-600 mb-1"
-          >
-            NIM
-          </label>
-          <input
-            type="text"
-            name="nim"
-            id="nim"
-            value={nim}
-            onChange={(e) => setNim(e.target.value)}
-            placeholder="Masukkan NIM"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-        <div className="p-2">
-          <label
-            htmlFor="divisi"
-            className="block text-sm font-medium text-gray-600 mb-1"
-          >
-            Divisi (Opsional)
-          </label>
-          <input
-            type="text"
-            name="divisi"
-            id="divisi"
-            value={divisi}
-            onChange={(e) => setDivisi(e.target.value)}
-            placeholder="Contoh: PSDM, Pendidikan"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white font-bold py-2 px-4 mt-4 rounded-md"
-        >
-          {isEditing ? "Update Member" : "Tambah Member"}
-        </button>
-        {isEditing && (
-          <button
-            type="button"
-            onClick={() => resetForm()}
-            className="w-full bg-gray-500 text-white font-bold py-2 px-4 mt-2 rounded-md hover:bg-gray-600"
-          >
-            Batal
-          </button>
-        )}
-      </form>
-      <div>
-        <h3 className="text-xl font-semibold text-gray-700 p-2">
-          Daftar Anggota Saat Ini
-        </h3>
-        {members.map((member) => (
-          <div
-            key={member._id}
-            className="grid grid-cols-4 items-center gap-4 p-2 border-b"
-          >
-            <span className="font-semibold col-span-1">{member.name}</span>
-            <span className="text-gray-600 col-span-1">
-              {member.nim || "-"}
+            {isEditing ? (
+              <>
+                <span>✏️</span> Mode Edit Data
+              </>
+            ) : (
+              <>
+                <span>➕</span> Tambah Anggota Baru
+              </>
+            )}
+          </h3>
+          {isEditing && (
+            <span className="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded">
+              Sedang mengedit ID: {currentEditId}
             </span>
-            <span className="text-gray-600 col-span-1">
-              {member.divisi || "-"}
-            </span>
-            <div className="col-span-1">
-              <button
-                onClick={() => handleEditClick(member)}
-                className="bg-yellow-500 text-white py-1 px-6 rounded hover:bg-yellow-600 transition-colors"
+          )}
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Input Nama */}
+            <div className="flex flex-col">
+              <label
+                htmlFor="name"
+                className="text-sm font-medium text-gray-600 mb-1"
               >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(member._id)}
-                className="bg-red-500 text-white py-1 px-4 my-3 lg:mx-5 rounded hover:bg-red-600 transition-colors"
+                Nama Lengkap <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Masukkan nama lengkap"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              />
+            </div>
+
+            {/* Input NIM */}
+            <div className="flex flex-col">
+              <label
+                htmlFor="nim"
+                className="text-sm font-medium text-gray-600 mb-1"
               >
-                Hapus
-              </button>
+                NIM <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="nim"
+                id="nim"
+                value={nim}
+                onChange={(e) => setNim(e.target.value)}
+                placeholder="Contoh: 12345678"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              />
+            </div>
+
+            {/* Input Divisi */}
+            <div className="flex flex-col">
+              <label
+                htmlFor="divisi"
+                className="text-sm font-medium text-gray-600 mb-1"
+              >
+                Divisi
+              </label>
+              <input
+                type="text"
+                name="divisi"
+                id="divisi"
+                value={divisi}
+                onChange={(e) => setDivisi(e.target.value)}
+                placeholder="Contoh: PSDM, Pendidikan"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              />
             </div>
           </div>
-        ))}
+
+          {/* Tombol Aksi */}
+          <div className="flex gap-3 mt-6 justify-end">
+            {isEditing && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className="px-6 py-2 rounded-lg text-gray-600 font-semibold hover:bg-gray-200 transition-colors"
+              >
+                Batal
+              </button>
+            )}
+            <button
+              type="submit"
+              className={`px-6 py-2 rounded-lg text-white font-bold shadow-md transition-transform transform active:scale-95 ${
+                isEditing
+                  ? "bg-yellow-500 hover:bg-yellow-600"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
+            >
+              {isEditing ? "Simpan Perubahan" : "Tambah Member"}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Bagian Daftar Anggota (Tabel) */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="p-6 border-b border-gray-200 bg-gray-50">
+          <h3 className="text-lg font-bold text-gray-700">Daftar Anggota</h3>
+        </div>
+
+        {/* Header Kolom (Desktop) */}
+        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-3 bg-gray-100 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+          <div className="col-span-4">Nama Lengkap</div>
+          <div className="col-span-3">NIM</div>
+          <div className="col-span-3">Divisi</div>
+          <div className="col-span-2 text-center">Aksi</div>
+        </div>
+
+        {/* Isi List */}
+        <div className="divide-y divide-gray-100">
+          {members.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+              <span className="text-4xl mb-2">📂</span>
+              <p>Belum ada data anggota.</p>
+            </div>
+          ) : (
+            members.map((member) => (
+              <div
+                key={member._id}
+                className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 items-center hover:bg-gray-50 transition-colors group"
+              >
+                {/* Kolom Nama */}
+                <div className="col-span-1 md:col-span-4">
+                  <span className="font-semibold text-gray-800 block md:hidden text-xs text-gray-400 mb-1">
+                    NAMA
+                  </span>
+                  <span className="text-gray-800 font-medium text-base">
+                    {member.name}
+                  </span>
+                </div>
+
+                {/* Kolom NIM */}
+                <div className="col-span-1 md:col-span-3">
+                  <span className="font-semibold block md:hidden text-xs text-gray-400 mb-1 mt-2">
+                    NIM
+                  </span>
+                  <span className="text-gray-600 font-mono bg-gray-100 px-2 py-1 rounded text-sm">
+                    {member.nim || "-"}
+                  </span>
+                </div>
+
+                {/* Kolom Divisi */}
+                <div className="col-span-1 md:col-span-3">
+                  <span className="font-semibold block md:hidden text-xs text-gray-400 mb-1 mt-2">
+                    DIVISI
+                  </span>
+                  {member.divisi ? (
+                    <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-semibold rounded-full border border-blue-100">
+                      {member.divisi}
+                    </span>
+                  ) : (
+                    <span className="text-gray-400 text-sm italic">
+                      - Tanpa Divisi -
+                    </span>
+                  )}
+                </div>
+
+                {/* Kolom Aksi */}
+                <div className="col-span-1 md:col-span-2 flex justify-start md:justify-center gap-2 mt-2 md:mt-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => handleEditClick(member)}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded text-sm transition-colors shadow-sm"
+                    title="Edit"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    onClick={() => handleDelete(member._id)}
+                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded text-sm transition-colors shadow-sm"
+                    title="Hapus"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
