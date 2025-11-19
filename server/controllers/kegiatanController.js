@@ -34,6 +34,40 @@ export const addKegiatan = async (req, res) => {
   }
 };
 
+export const updateKegiatan = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, endDate, link } = req.body;
+
+  try {
+    const kegiatan = await kegiatanModel.findById(id);
+    if (!kegiatan) {
+      return res.json({ success: false, message: "Kegiatan tidak ditemukan" });
+    }
+
+    let updateData = {
+      title,
+      description,
+      endDate,
+      link,
+    };
+
+    //? Cek jika ada file gambar baru
+    if (req.file) {
+      if (kegiatan.public_id) {
+        await cloudinary.uploader.destroy(kegiatan.public_id);
+      }
+      //? Update dengan gambar baru
+      updateData.imageUrl = req.file.path;
+      updateData.public_id = req.file.filename;
+    }
+
+    await kegiatanModel.findByIdAndUpdate(id, updateData);
+    res.json({ success: true, message: "Kegiatan berhasil diperbarui" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
 export const deleteKegiatan = async (req, res) => {
   const { id } = req.params;
   try {

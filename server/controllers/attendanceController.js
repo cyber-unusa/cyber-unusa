@@ -46,7 +46,7 @@ export const createAttendanceEvent = async (req, res) => {
       await attendanceRecordModel.insertMany(records);
     }
 
-    res.json({ success: true, message: "Acara absensi berhasil dibuat" });
+    res.json({ success: true, message: "Absensi berhasil dibuat" });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
@@ -85,8 +85,12 @@ export const updateAttendanceRecord = async (req, res) => {
   }
 
   try {
-    await attendanceRecordModel.findByIdAndUpdate(recordId, { status });
-    res.json({ success: true, message: "Status diperbarui" });
+    const record = await attendanceRecordModel.findByIdAndUpdate(
+      recordId,
+      { status },
+      { new: true }
+    );
+    res.json({ success: true, message: `${record.memberName} ${status}` });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }

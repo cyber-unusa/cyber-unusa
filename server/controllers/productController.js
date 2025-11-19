@@ -33,6 +33,41 @@ export const addProduct = async (req, res) => {
   }
 };
 
+export const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, price, description, nomorWa } = req.body;
+
+  try {
+    const product = await productModel.findById(id);
+    if (!product) {
+      return res.json({ success: false, message: "Produk tidak ditemukan" });
+    }
+
+    let updateData = {
+      name,
+      price,
+      description,
+      nomorWa,
+    };
+
+    //? Cek jika ada file gambar baru
+    if (req.file) {
+      //? Hapus gambar lama di Cloudinary
+      if (product.public_id) {
+        await cloudinary.uploader.destroy(product.public_id);
+      }
+      //? Update dengan gambar baru
+      updateData.imageUrl = req.file.path;
+      updateData.public_id = req.file.filename;
+    }
+
+    await productModel.findByIdAndUpdate(id, updateData);
+    res.json({ success: true, message: "Produk berhasil diperbarui" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
 export const deleteProduct = async (req, res) => {
   const { id } = req.params;
 

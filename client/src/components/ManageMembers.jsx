@@ -11,6 +11,10 @@ const ManageMembers = () => {
   const [nim, setNim] = useState("");
   const [divisi, setDivisi] = useState("");
 
+  //? State Edit Mode
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentEditId, setCurrentEditId] = useState(null);
+
   const fetchMembers = useCallback(async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/member/get", {
@@ -30,30 +34,65 @@ const ManageMembers = () => {
     fetchMembers();
   }, [fetchMembers]);
 
+  const resetForm = () => {
+    setName("");
+    setNim("");
+    setDivisi("");
+    setIsEditing(false);
+    setCurrentEditId(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name) {
-      toast.warn("Nama wajib diisi.");
+    if (!name || !nim) {
+      toast.warn("Nama dan Nim wajib diisi.");
       return;
     }
+
+    const formData = {
+      name,
+      nim,
+      divisi,
+    };
+
     try {
-      const { data } = await axios.post(
-        backendUrl + "/api/member/add",
-        { name, nim, divisi },
-        { withCredentials: true }
-      );
+      let data;
+
+      if (isEditing) {
+        const response = await axios.put(
+          `${backendUrl}/api/member/update/${currentEditId}`,
+          formData,
+          { withCredentials: true }
+        );
+        data = response.data;
+      } else {
+        const response = await axios.post(
+          `${backendUrl}/api/member/add`,
+          formData,
+          { withCredentials: true }
+        );
+        data = response.data;
+      }
+
       if (data.success) {
         toast.success(data.message);
-        setName("");
-        setNim("");
-        setDivisi("");
+        resetForm();
         await fetchMembers();
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      console.log(error);
+      toast.error(error.message || error.response?.data?.message);
     }
+  };
+
+  const handleEditClick = (member) => {
+    setIsEditing(true);
+    setCurrentEditId(member._id);
+    setName(member.name);
+    setNim(member.nim);
+    setDivisi(member.divisi);
   };
 
   const handleDelete = async (id) => {
@@ -87,7 +126,7 @@ const ManageMembers = () => {
         className="mb-6 p-4 border border-zinc-200 rounded"
       >
         <h3 className="text-xl font-semibold text-gray-700 p-2">
-          Tambah Anggota Baru
+          Tambah Member Baru
         </h3>
         <div className="p-2">
           <label
@@ -111,7 +150,7 @@ const ManageMembers = () => {
             htmlFor="nim"
             className="block text-sm font-medium text-gray-600 mb-1"
           >
-            NIM (Opsional)
+            NIM
           </label>
           <input
             type="text"
@@ -144,8 +183,17 @@ const ManageMembers = () => {
           type="submit"
           className="w-full bg-blue-600 text-white font-bold py-2 px-4 mt-4 rounded-md"
         >
-          Tambah Anggota
+          {isEditing ? "Update Member" : "Tambah Member"}
         </button>
+        {isEditing && (
+          <button
+            type="button"
+            onClick={() => resetForm()}
+            className="w-full bg-gray-500 text-white font-bold py-2 px-4 mt-2 rounded-md hover:bg-gray-600"
+          >
+            Batal
+          </button>
+        )}
       </form>
       <div>
         <h3 className="text-xl font-semibold text-gray-700 p-2">
@@ -163,12 +211,20 @@ const ManageMembers = () => {
             <span className="text-gray-600 col-span-1">
               {member.divisi || "-"}
             </span>
-            <button
-              onClick={() => handleDelete(member._id)}
-              className="text-red-500 justify-self-end"
-            >
-              Hapus
-            </button>
+            <div className="col-span-1">
+              <button
+                onClick={() => handleEditClick(member)}
+                className="bg-yellow-500 text-white py-1 px-6 rounded hover:bg-yellow-600 transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(member._id)}
+                className="bg-red-500 text-white py-1 px-4 my-3 lg:mx-5 rounded hover:bg-red-600 transition-colors"
+              >
+                Hapus
+              </button>
+            </div>
           </div>
         ))}
       </div>

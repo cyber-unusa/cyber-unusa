@@ -13,6 +13,11 @@ const ManageProducts = () => {
   const [image, setImage] = useState(null);
   const [nomorWA, setNomorWa] = useState("");
 
+  //? State Edit mode
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentEditId, setCurrentEditId] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
   const fetchProducts = useCallback(async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/product/get");
@@ -30,10 +35,30 @@ const ManageProducts = () => {
     fetchProducts();
   }, [fetchProducts]);
 
+  const resetForm = (e) => {
+    setName("");
+    setPrice("");
+    setDescription("");
+    setImage(null);
+    setNomorWa("");
+    setIsEditing(false);
+    setCurrentEditId(null);
+    setImagePreview(null);
+    if (e) e.target.reset(); // Reset file input
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !price || !description || !image || !nomorWA) {
-      toast.warn("Harap isi semua kolom dan pilih gambar.");
+
+    //? validasi dasar
+    if (!name || !price || !description || !nomorWA) {
+      toast.warn("Harap isi semua kolom");
+      return;
+    }
+
+    //? validasi gambar (hanya wajib saat 'Tambah', opsional saat 'Update')
+    if (!isEditing && !image) {
+      toast.warn("Harap Pilih gambar");
       return;
     }
 
@@ -41,28 +66,42 @@ const ManageProducts = () => {
     formData.append("name", name);
     formData.append("price", price);
     formData.append("description", description);
-    formData.append("image", image);
     formData.append("nomorWa", nomorWA);
 
+    if (image) {
+      //! Hanya tambahkan gambar jika ada file baru
+      formData.append("image", image);
+    }
+
     try {
-      const { data } = await axios.post(
-        backendUrl + "/api/product/add",
-        formData,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" }, //! Header penting
-        }
-      );
+      let data;
+      if (isEditing) {
+        //? LOGIKA UPDATE
+        const response = await axios.put(
+          `${backendUrl}/api/product/update/${currentEditId}`,
+          formData,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        data = response.data;
+      } else {
+        //? LOGIKA CREATE (TAMBAH)
+        const response = await axios.post(
+          backendUrl + "/api/product/add",
+          formData,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        data = response.data;
+      }
 
       if (data.success) {
         toast.success(data.message);
-        setName("");
-        setPrice("");
-        setDescription("");
-        setImage(null);
-        setNomorWa("");
-        fetchProducts();
-        e.target.reset();
+        resetForm(e);
         await fetchProducts();
       } else {
         toast.error(data.message || "Gagal menambahkan produk");
@@ -70,6 +109,18 @@ const ManageProducts = () => {
     } catch (error) {
       toast.error(error.message);
     }
+  };
+
+  //? Fungsi untuk meng-handle klik edit
+  const handleEditClick = (product) => {
+    setIsEditing(true);
+    setCurrentEditId(product._id);
+    setName(product.name);
+    setPrice(product.price);
+    setDescription(product.description);
+    setNomorWa(product.nomorWa);
+    setImage(null); //! Reset file input
+    setImagePreview(product.imageUrl); //! Tampilkan gambar yang ada
   };
 
   const handleDelete = async (id) => {
@@ -101,14 +152,29 @@ const ManageProducts = () => {
         className="mb-6 p-4 border border-zinc-200 rounded"
       >
         <h3 className="text-xl font-semibold text-gray-700 p-2">
-          Tambah Product Baru
+          {isEditing ? "Update Product" : "Tambah Product Baru"}
         </h3>
+
+        {/* Image Preview saat editing */}
+        {isEditing && imagePreview && (
+          <div className="p-2">
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Gambar Saat Ini
+            </label>
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="w-32 h-32 object-cover rounded"
+            />
+          </div>
+        )}
+
         <div className="p-2">
           <label
             htmlFor="image"
             className="block text-sm font-medium text-gray-600 mb-1"
           >
-            Gambar
+            {isEditing ? "Ganti Gambar" : "Gambar"}
           </label>
           <input
             type="file"
@@ -182,17 +248,29 @@ const ManageProducts = () => {
             id="link"
             value={nomorWA}
             onChange={(e) => setNomorWa(e.target.value)}
-            placeholder="Masukkan nomor WA"
+            placeholder="Masukkan nomor WA (cth: 62812...)"
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
         <button
           type="submit"
           className="w-full bg-blue-600 text-white font-bold py-2 px-4 mt-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
-          Tambah Produk
+          {isEditing ? "Update Produk" : "Tambah Produk"}
         </button>
+        {isEditing && (
+          <button
+            type="button"
+            onClick={() => resetForm()}
+            className="w-full bg-gray-500 text-white font-bold py-2 px-4 mt-2 rounded-md hover:bg-gray-600"
+          >
+            Batal
+          </button>
+        )}
       </form>
+
+      {/* Daftar Product */}
       <div>
         {products &&
           products.map((doc) => (
@@ -209,13 +287,21 @@ const ManageProducts = () => {
               </span>
               <span>{doc.name}</span>
               <span>{doc.price}</span>
-              <a href={doc.linkWa}>Link Pendaftaran</a>
-              <button
-                onClick={() => handleDelete(doc._id)}
-                className="text-red-500"
-              >
-                Hapus
-              </button>
+              <a href={doc.linkWa}>Link Wa</a>
+              <div className="flex gap-2 justify-self-end">
+                <button
+                  onClick={() => handleEditClick(doc)}
+                  className="bg-[var(--yel)] text-white"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(doc._id)}
+                  className="bg-red-500 text-white"
+                >
+                  Hapus
+                </button>
+              </div>
             </div>
           ))}
       </div>

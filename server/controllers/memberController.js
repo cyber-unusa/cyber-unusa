@@ -13,9 +13,33 @@ export const addMember = async (req, res) => {
     await newMember.save();
     res.json({ success: true, message: "Anggota berhasil ditambahkan" });
   } catch (error) {
-    if (error.code === 11000) { //! Duplikat NIM
+    if (error.code === 11000) {
+      //! Duplikat NIM
       return res.json({ success: false, message: "NIM sudah terdaftar" });
     }
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const updateMember = async (req, res) => {
+  const { id } = req.params;
+  const { name, nim, divisi } = req.body;
+
+  try {
+    const member = await memberModel.findById(id);
+    if (!member) {
+      return res.json({ success: false, message: "Member Tidak ada" });
+    }
+
+    let updateData = {
+      name,
+      nim,
+      divisi,
+    };
+
+    await memberModel.findByIdAndUpdate(id, updateData);
+    res.json({ success: true, message: "Member berhasil diperbarui" });
+  } catch (error) {
     res.json({ success: false, message: error.message });
   }
 };

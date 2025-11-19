@@ -12,11 +12,18 @@ const ManageDokumenter = () => {
   const [image, setImage] = useState(null);
   const [date, setDate] = useState("");
 
+  //? State Edit mode
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentEditId, setCurrentEditId] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
   const loadDokumenter = useCallback(async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/dokumenter/get");
       if (data.success) {
         setDokumenters(data.allDokumenter || []);
+      } else {
+        toast.error("Gagal memuat data Dokumenter");
       }
     } catch (error) {
       toast.error(error.message);
@@ -27,6 +34,17 @@ const ManageDokumenter = () => {
     loadDokumenter();
   }, [loadDokumenter]);
 
+  const resetForm = (e) => {
+    setTitle("");
+    setDate("");
+    setDescription("");
+    setImage(null);
+    setIsEditing(false);
+    setCurrentEditId(null);
+    setImagePreview(null);
+    if (e) e.target.reset(); // Reset file input
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !description || !image) {
@@ -34,29 +52,46 @@ const ManageDokumenter = () => {
       return;
     }
 
+    //? validasi gambar (hanya wajib saat 'Tambah', opsional saat 'Update')
+    if (!isEditing && image) {
+      toast.warn("Harap Pilih gambar");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("image", image);
     formData.append("date", date);
 
+    if (image) formData.append("image", image);
+
     try {
-      const { data } = await axios.post(
-        backendUrl + "/api/dokumenter/add",
-        formData,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" }, //! Header penting
-        }
-      );
+      let data;
+      if (isEditing) {
+        const response = await axios.post(
+          `${backendUrl}/api/dokumenter/update/${currentEditId}`,
+          formData,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" }, //! Header penting
+          }
+        );
+        data = response.data;
+      } else {
+        const response = await axios.post(
+          `${backendUrl}/api/dokumenter/add`,
+          formData,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        data = response.data;
+      }
+
       if (data.success) {
         toast.success(data.message);
-        //* Reset form
-        setTitle("");
-        setDescription("");
-        setImage(null);
-        setDate("");
-        e.target.reset();
+        resetForm(e);
         await loadDokumenter();
       } else {
         toast.error(data.message);
@@ -64,6 +99,16 @@ const ManageDokumenter = () => {
     } catch (error) {
       toast.error(error.message);
     }
+  };
+
+  const handleEditClick = (doc) => {
+    setIsEditing(true);
+    setCurrentEditId(doc._id);
+    setTitle(doc.title);
+    setDescription(doc.description);
+    setDate(doc.date);
+    setImage(null);
+    setImagePreview(doc.imageUrl);
   };
 
   const handleDelete = async (id) => {
@@ -94,14 +139,28 @@ const ManageDokumenter = () => {
         className="mb-6 p-4 border border-zinc-200 rounded"
       >
         <h3 className="text-xl font-semibold text-gray-700 p-2">
-          Tambah Dokumenter Baru
+          {isEditing ? "Update Dokumenter" : "Tambah Dokumenter"}
         </h3>
+
+        {isEditing && imagePreview && (
+          <div className="p-2">
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Gambar Saat Ini
+            </label>
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="w-32 h-32 object-cover rounded"
+            />
+          </div>
+        )}
+
         <div className="p-2">
           <label
             htmlFor="image"
             className="block text-sm font-medium text-gray-600 mb-1"
           >
-            Gambar
+            {isEditing ? "Ganti Gambar" : "Gambar"}
           </label>
           <input
             type="file"
@@ -166,8 +225,17 @@ const ManageDokumenter = () => {
           type="submit"
           className="w-full bg-blue-600 text-white font-bold py-2 px-4 mt-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
-          Tambah Dokumenter
+          {isEditing ? "Update Dokummenter" : "Tambah Dokumenter"}
         </button>
+        {isEditing && (
+          <button
+            type="button"
+            onClick={() => resetForm()}
+            className="w-full bg-gray-500 text-white font-bold py-2 px-4 mt-2 rounded-md hover:bg-gray-600"
+          >
+            Batal
+          </button>
+        )}
       </form>
       <div>
         {dokumenters &&
@@ -184,12 +252,20 @@ const ManageDokumenter = () => {
                 />
               </span>
               <span>{doc.title}</span>
-              <button
-                onClick={() => handleDelete(doc._id)}
-                className="text-red-500"
-              >
-                Hapus
-              </button>
+              <div className="flex gap-2 justify-self-end">
+                <button
+                  onClick={() => handleEditClick(doc)}
+                  className="bg-[var(--yel)] text-white"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(doc._id)}
+                  className="bg-red-500 text-white"
+                >
+                  Hapus
+                </button>
+              </div>
             </div>
           ))}
       </div>

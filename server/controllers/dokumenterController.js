@@ -31,6 +31,43 @@ export const addDokumenter = async (req, res) => {
   }
 };
 
+export const updateDokumenter = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, date } = req.body;
+
+  try {
+    const doc = await dokumenterModel.findById(id);
+    if (!doc) {
+      return res.json({
+        success: false,
+        message: "Dokumenter tidak ditemukan",
+      });
+    }
+
+    let updateData = {
+      title,
+      description,
+      date,
+    };
+
+    //? Cek jika ada file gambar baru
+    if (req.file) {
+      //? hapus gambar lama di Cloudinary
+      if (doc.public_id) {
+        await cloudinary.uploader.destroy(doc.public_id);
+      }
+      //? update dengan gambar baru
+      updateData.imageUrl = req.file.path;
+      updateData.public_id = req.file.filename;
+    }
+
+    await dokumenterModel.findByIdAndUpdate(id, updateData);
+    res.json({ success: true, message: "Dokumenter berhasil diperbarui" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
 export const deleteDokumenter = async (req, res) => {
   const { id } = req.params;
   try {
