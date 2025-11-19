@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/appContext";
+import { Trash2, Pencil, Plus, FolderOpen } from "lucide-react";
 
 const ManageMembers = () => {
   const { backendUrl } = useContext(AppContext);
@@ -136,7 +137,7 @@ const ManageMembers = () => {
             : "bg-white border-gray-200"
         }`}
       >
-        <div className="flex justify-between items-center mb-4 border-b pb-2 border-gray-200/60">
+        <div className="flex justify-between items-center mb-4 border-b pb-2 border-gray-200/100">
           <h3
             className={`text-lg font-bold flex items-center gap-2 ${
               isEditing ? "text-yellow-700" : "text-gray-700"
@@ -144,11 +145,11 @@ const ManageMembers = () => {
           >
             {isEditing ? (
               <>
-                <span>✏️</span> Mode Edit Data
+                <Pencil className="w-5 h-5 text-yellow-600" /> Mode Edit Data
               </>
             ) : (
               <>
-                <span>➕</span> Tambah Anggota Baru
+                <Plus className="w-5 h-5 text-blue-600" /> Tambah Anggota Baru
               </>
             )}
           </h3>
@@ -262,7 +263,9 @@ const ManageMembers = () => {
         <div className="divide-y divide-gray-100">
           {members.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-              <span className="text-4xl mb-2">📂</span>
+              <span className="w-12 h-12 text-gray-300">
+                <FolderOpen className="" />
+              </span>
               <p>Belum ada data anggota.</p>
             </div>
           ) : (
@@ -273,7 +276,7 @@ const ManageMembers = () => {
               >
                 {/* Kolom Nama */}
                 <div className="col-span-1 md:col-span-4">
-                  <span className="font-semibold text-gray-800 block md:hidden text-xs text-gray-400 mb-1">
+                  <span className="font-semibold text-gray-800 block md:hidden text-xs mb-1">
                     NAMA
                   </span>
                   <span className="text-gray-800 font-medium text-base">
@@ -286,7 +289,7 @@ const ManageMembers = () => {
                   <span className="font-semibold block md:hidden text-xs text-gray-400 mb-1 mt-2">
                     NIM
                   </span>
-                  <span className="text-gray-600 font-mono bg-gray-100 px-2 py-1 rounded text-sm">
+                  <span className="text-gray-600 font-mono bg-gray-100 px-2 py-1 rounded">
                     {member.nim || "-"}
                   </span>
                 </div>
@@ -297,7 +300,7 @@ const ManageMembers = () => {
                     DIVISI
                   </span>
                   {member.divisi ? (
-                    <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-semibold rounded-full border border-blue-100">
+                    <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-sm font-semibold rounded-full border border-blue-100">
                       {member.divisi}
                     </span>
                   ) : (
@@ -311,17 +314,17 @@ const ManageMembers = () => {
                 <div className="col-span-1 md:col-span-2 flex justify-start md:justify-center gap-2 mt-2 md:mt-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => handleEditClick(member)}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded text-sm transition-colors shadow-sm"
+                    className="bg-yellow-500 hover:bg-yellow-600 border border-yellow-100 p-2 rounded transition-colors shadow-sm"
                     title="Edit"
                   >
-                    ✏️
+                    <Pencil className="w-5 h-5 text-yellow-100" />
                   </button>
                   <button
                     onClick={() => handleDelete(member._id)}
-                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded text-sm transition-colors shadow-sm"
+                    className="bg-red-500 hover:bg-red-600 border border-red-100 p-2 rounded transition-colors shadow-sm"
                     title="Hapus"
                   >
-                    🗑️
+                    <Trash2 className="w-5 h-5 text-red-200" />
                   </button>
                 </div>
               </div>

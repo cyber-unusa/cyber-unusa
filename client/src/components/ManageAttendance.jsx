@@ -193,7 +193,7 @@ const ManageAttendance = () => {
 
       {/* Form Buat Acara Baru */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
-        <div className="flex items-center gap-2 mb-4 text-gray-700 font-semibold text-lg border-b pb-2">
+        <div className="flex items-center gap-2 mb-4 text-gray-700 font-semibold text-lg border-b pb-2 border-gray-200/100">
           <Plus className="w-5 h-5 text-blue-600" /> Buat Acara Baru
         </div>
         <form
