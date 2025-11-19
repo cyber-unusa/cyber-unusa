@@ -5,6 +5,7 @@ import {
   getAttendanceRecordsByEvent,
   updateAttendanceRecord,
   deleteAttendanceEvent,
+  toggleEventLock,
 } from "../controllers/attendanceController.js";
 import adminAuth from "../middleware/adminAuth.js";
 
@@ -29,6 +30,11 @@ attendanceRouter.put(
   "/record/update/:recordId",
   adminAuth,
   updateAttendanceRecord
+);
+attendanceRouter.put(
+  "/records/toggle-lock/:eventId",
+  adminAuth,
+  toggleEventLock
 );
 
 export default attendanceRouter;

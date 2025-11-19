@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 const attendanceEventSchema = new mongoose.Schema({
   eventName: { type: String, required: true },
   date: { type: Date, required: true },
+  isLocked: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 

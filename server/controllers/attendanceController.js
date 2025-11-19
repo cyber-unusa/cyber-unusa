@@ -78,19 +78,79 @@ export const getAttendanceRecordsByEvent = async (req, res) => {
 //? Admin meng-update status kehadiran satu anggota
 export const updateAttendanceRecord = async (req, res) => {
   const { recordId } = req.params;
-  const { status } = req.body; //* status harus "Hadir", "Izin", atau "Alpa"
+  const { status } = req.body;
 
+  //* status harus "Hadir", "Izin", atau "Alpa"
   if (!status || !["Hadir", "Izin", "Alpa"].includes(status)) {
     return res.json({ success: false, message: "Status tidak valid" });
   }
 
   try {
+    const recordToCheck = await attendanceRecordModel.findById(recordId);
+    if (!recordToCheck) {
+      return res.json({
+        success: false,
+        message: "Data absensi tidak ditemukan",
+      });
+    }
+
+    const parentEvent = await attendanceEventModel.findById(
+      recordToCheck.eventId
+    );
+
+    if (parentEvent && parentEvent.isLocked) {
+      return res.json({
+        success: false,
+        message:
+          "Absensi TERKUNCI. Buka kunci terlebih dahulu untuk mengubah data.",
+      });
+    }
+
     const record = await attendanceRecordModel.findByIdAndUpdate(
       recordId,
       { status },
       { new: true }
     );
     res.json({ success: true, message: `${record.memberName} ${status}` });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+//? Kunci atau Buka Kunci Absensi
+export const toggleEventLock = async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+    const event = await attendanceEventModel.findById(eventId);
+    if (!event) {
+      return res.json({ success: false, message: "Acara tidak ditemukan" });
+    }
+
+    //Todo Toggle status (jika true jadi false, jika false jadi true)
+    event.isLocked = !event.isLocked;
+    await event.save();
+
+    let messageAddon = "";
+
+    //? Otomatis set "Alpa" jika dikunci
+    if (event.isLocked) {
+      const result = await attendanceRecordModel.updateMany(
+        { eventId: eventId, status: "Belum Diisi" }, // Filter: cari yang event-nya sama & status masih kosong
+        { $set: { status: "Alpa" } } // Action: Ubah jadi Alpa
+      );
+
+      if (result.modifiedCount > 0) {
+        messageAddon = `(${result.modifiedCount} anggota otomatis dianggap Alpa)`;
+      }
+    }
+
+    const statusMsg = event.isLocked ? "terkunci" : "terbuka";
+    res.json({
+      success: true,
+      message: `Absensi berhasil ${statusMsg} ${messageAddon}`,
+      isLocked: event.isLocked, //! Kirim status terbaru ke frontend
+    });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
