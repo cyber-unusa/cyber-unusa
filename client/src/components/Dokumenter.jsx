@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../context/appContext";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function Dokumenter() {
   const { backendUrl } = useContext(AppContext);
@@ -21,21 +20,6 @@ export default function Dokumenter() {
     fetchDokumenter();
   }, [backendUrl]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    show: { opacity: 1, y: 0, transition: { duration: 1 } },
-  };
-
   return (
     <>
       <h2 className="text-3xl lg:text-2xl font-bold text-center mb-16 text-green-500 pt-8 font-rubik">
@@ -43,18 +27,11 @@ export default function Dokumenter() {
       </h2>
 
       {dokumenters && dokumenters.length > 0 ? (
-        <motion.div
-          className="container px-6 mx-auto flex flex-wrap gap-8 justify-center"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.4 }}
-        >
+        <div className="container px-6 mx-auto flex flex-wrap gap-8 justify-center">
           {dokumenters.map((item, index) => (
-            <motion.div
+            <div
               key={index}
               className="rounded-lg shadow-md mb-10 bg-white overflow-hidden w-80 lg:w-72"
-              variants={itemVariants}
             >
               <img
                 src={item.imageUrl}
@@ -67,21 +44,15 @@ export default function Dokumenter() {
                 </h3>
                 <p className="font-poppin">{item.description}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       ) : (
-        <motion.div
-          className="bg-white rounded-lg border border-zinc-200 p-6 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          viewport={{ once: true, amount: 0.4 }}
-        >
+        <div className="bg-white rounded-lg border border-zinc-200 p-6 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto">
           <p className="text-center text-gray-600 text-xl font-bold">
             Belum ada kegiatan yang ditambahkan.
           </p>
-        </motion.div>
+        </div>
       )}
     </>
   );
