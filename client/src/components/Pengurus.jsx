@@ -1,14 +1,31 @@
 // import { useNavigate } from "react-router-dom";
 // import { useRef } from "react";
 import { bph } from "../assets/assets";
+import { motion, AnimatePresence } from "framer-motion";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 50 },
+  show: { opacity: 1, y: 0, transition: { duration: 1 } },
+};
 
 // Card for BPH (Badan Pengurus Harian)
 function BphCard({ foto, nama, jabatan, color }) {
   return (
-    <div
+    <motion.div
       className={`bg-white rounded-lg border border-zinc-200 p-6 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto ${
         color?.mt || ""
       }`}
+      variants={itemVariants}
     >
       <div className="flex items-center justify-center mx-auto mb-4">
         <img
@@ -21,7 +38,7 @@ function BphCard({ foto, nama, jabatan, color }) {
       <p className={`${color?.text || "text-green-600"} text-sm mb-3`}>
         {jabatan}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -56,7 +73,7 @@ export default function Pengurus() {
 
   return (
     <section id="tim">
-      <div className="container px-8 lg:px-20">
+      <div className="container px-8 lg:px-20 mx-auto">
         {/* Judul dan deskripsi BPH */}
         <div className="text-center mb-10">
           <h2 className="text-4xl font-bold text-green-600 mb-4 mx-5">
@@ -69,11 +86,17 @@ export default function Pengurus() {
         </div>
 
         {/* BPH Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 my-10">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 my-10"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.4 }}
+        >
           {bphList.map((item, idx) => (
             <BphCard key={idx} {...item} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -253,14 +253,15 @@ const ManageMembers = () => {
 
         {/* Header Kolom (Desktop) */}
         <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-3 bg-gray-100 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200">
-          <div className="col-span-4">Nama Lengkap</div>
+          <div className="col-span-3">Nama Lengkap</div>
           <div className="col-span-3">NIM</div>
-          <div className="col-span-3">Divisi</div>
+          <div className="col-span-2">Divisi</div>
+          <div className="col-span-2 text-center">Absensi</div>
           <div className="col-span-2 text-center">Aksi</div>
         </div>
 
         {/* Isi List */}
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-gray-300">
           {members.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-gray-400">
               <span className="w-12 h-12 text-gray-300">
@@ -275,7 +276,7 @@ const ManageMembers = () => {
                 className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 items-center hover:bg-gray-50 transition-colors group"
               >
                 {/* Kolom Nama */}
-                <div className="col-span-1 md:col-span-4">
+                <div className="col-span-1 md:col-span-3">
                   <span className="font-semibold text-gray-800 block md:hidden text-xs mb-1">
                     NAMA
                   </span>
@@ -295,7 +296,7 @@ const ManageMembers = () => {
                 </div>
 
                 {/* Kolom Divisi */}
-                <div className="col-span-1 md:col-span-3">
+                <div className="col-span-1 md:col-span-2">
                   <span className="font-semibold block md:hidden text-xs text-gray-400 mb-1 mt-2">
                     DIVISI
                   </span>
@@ -308,6 +309,27 @@ const ManageMembers = () => {
                       - Tanpa Divisi -
                     </span>
                   )}
+                </div>
+
+                {/* Kolom Presentase Kehadiran */}
+                <div className="col-span-1 md:col-span-2 text-left md:text-center">
+                  <span className="font-semibold block md:hidden text-xs text-gray-400 mb-1 mt-2">
+                    ABSENSI
+                  </span>
+                  <span
+                    className={`inline-block px-3 py-1 text-sm font-bold rounded-full ${
+                      member.attendancePercentage >= 75
+                        ? "bg-green-100 text-green-700"
+                        : member.attendancePercentage >= 50
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {member.attendancePercentage}%
+                  </span>
+                  <p className="text-xs text-gray-400 mt-1">
+                    ({member.totalHadir} Hadir dari {member.totalEvents} Acara)
+                  </p>
                 </div>
 
                 {/* Kolom Aksi */}
