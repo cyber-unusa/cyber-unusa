@@ -93,7 +93,7 @@ const AIChatWidget = () => {
         <div className="absolute bottom-16 right-0 w-70 h-[350px] bg-white rounded-lg shadow-2xl flex flex-col border border-gray-300 overflow-hidden">
           {/* Header Chat */}
           <div className="bg-[#13A085] p-3 text-white flex items-center justify-between shadow-md">
-            <h3 className="font-semibold text-lg">Asisten Cyber AI</h3>
+            <h3 className="font-semibold text-lg">Cyber Ryu AI</h3>
             <button
               onClick={() => setIsOpen(false)}
               className="p-1 rounded-full hover:bg-[#26B99A]"

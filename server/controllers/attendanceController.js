@@ -52,42 +52,10 @@ export const createAttendanceEvent = async (req, res) => {
   }
 };
 
-//? Memeriksa dan Mengunci Acara yang Kedaluwarsa
-const checkAndLockExpiredEvents = async (events) => {
-  const today = new Date(new Date().toDateString());
-  const updatedEventIds = [];
-
-  for (const event of events) {
-    if (event.isLocked) continue;
-
-    const eventDateOnly = new Date(event.date.toDateString());
-
-    const lockDeadline = new Date(eventDateOnly);
-    lockDeadline.setDate(eventDateOnly.getDate() + 2);
-
-    if (today.getTime() >= lockDeadline.getTime()) {
-      event.isLocked = true;
-      await event.save();
-
-      await attendanceRecordModel.updateMany(
-        { eventId: event._id, status: "Belum Diisi" },
-        { $set: { status: "Alpa" } }
-      );
-
-      updatedEventIds.push(event._id);
-    }
-  }
-  return updatedEventIds;
-};
-
 //? Dapatkan semua Acara Absensi (list-nya saja)
 export const getAllAttendanceEvents = async (req, res) => {
   try {
-    let allEvents = await attendanceEventModel.find({}).sort({ date: -1 }); //! Urut dari terbaru dulu
-
-    await checkAndLockExpiredEvents(allEvents);
-
-    allEvents = await attendanceEventModel.find({}).sort({ date: -1 });
+    const allEvents = await attendanceEventModel.find({}).sort({ date: -1 }); //! Urut dari terbaru dulu
 
     res.json({ success: true, allEvents });
   } catch (error) {
@@ -99,12 +67,6 @@ export const getAllAttendanceEvents = async (req, res) => {
 export const getAttendanceRecordsByEvent = async (req, res) => {
   const { eventId } = req.params;
   try {
-    const event = await attendanceEventModel.findById(eventId);
-
-    if (event && !event.isLocked) {
-      await checkAndLockExpiredEvents([event]);
-    }
-
     const records = await attendanceRecordModel
       .find({ eventId })
       .sort({ memberName: 1 });
