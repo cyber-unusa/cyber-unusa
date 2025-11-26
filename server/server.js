@@ -11,6 +11,7 @@ import kegiatanRouter from "./routes/kegiatanRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import attendanceRouter from "./routes/attendanceRoutes.js";
 import memberRouter from "./routes/memberRoutes.js";
+import aiRouter from "./routes/aiRoutes.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -48,6 +49,7 @@ app.use("/api/kegiatan", kegiatanRouter);
 app.use("/api/product", productRouter);
 app.use("/api/member", memberRouter);
 app.use("/api/attendance", attendanceRouter);
+app.use("/api/ai", aiRouter);
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(port, () => console.log(`Server Started on PORT: ${port}`));

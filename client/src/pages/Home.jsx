@@ -4,6 +4,7 @@ import Dokumenter from "../components/Dokumenter";
 import HeroSection from "../components/HeroSection";
 import Pengurus from "../components/Pengurus";
 import Event from "../components/Kegiatan";
+import AIChatWidget from "../components/AiChatWidget";
 
 const Home = () => {
   return (
@@ -29,6 +30,8 @@ const Home = () => {
       <section id="dokumenter" className="pt-36 pb-32">
         <Dokumenter />
       </section>
+
+      <AIChatWidget />
 
       <Footer />
     </div>

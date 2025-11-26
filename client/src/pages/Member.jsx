@@ -7,9 +7,10 @@ import {
   staffPendidikan,
   staffPengmas,
   staffInnovation,
-} from "../assets/assets"; // Impor data staff
+} from "../assets/assets";
 import CircularGallery from "../components/CircularGallery";
-import { ArrowDown } from "lucide-react"; // Impor ikon panah
+import { ArrowDown } from "lucide-react";
+import { motion } from "motion/react";
 
 const Member = () => {
   const staffSectionRef = useRef(null);
@@ -37,6 +38,21 @@ const Member = () => {
       color: { bg: "bg-[var(--yel)]", text: "text-[var(--yel)]" },
     },
   ];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    show: { opacity: 1, y: 0, transition: { duration: 1 } },
+  };
 
   // Komponen Card untuk Kepala Divisi
   function DevisiCard({ foto, nama, jabatan, color }) {
@@ -108,13 +124,21 @@ const Member = () => {
               </button>
             </div>
             {/* Kartu Divisi di Kanan */}
-            <div className="w-full lg:w-1/2">
+            <motion.div
+              className="w-full lg:w-1/2"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.4 }}
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {devisiList.map((item, idx) => (
-                  <DevisiCard key={idx} {...item} />
+                  <motion.div variants={itemVariants}>
+                    <DevisiCard key={idx} {...item} />
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>

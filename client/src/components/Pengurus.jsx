@@ -1,7 +1,7 @@
 // import { useNavigate } from "react-router-dom";
 // import { useRef } from "react";
 import { bph } from "../assets/assets";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "motion/react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
