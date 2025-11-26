@@ -4,7 +4,7 @@ import Dokumenter from "../components/Dokumenter";
 import HeroSection from "../components/HeroSection";
 import Pengurus from "../components/Pengurus";
 import Event from "../components/Kegiatan";
-import AIChatWidget from "../components/AiChatWidget";
+import AIChatWidget from "../components/AIChatWidget";
 
 const Home = () => {
   return (
