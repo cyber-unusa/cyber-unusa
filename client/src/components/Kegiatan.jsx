@@ -63,7 +63,7 @@ export default function Kegiatan() {
       ) : (
         <div className="bg-white rounded-lg border border-zinc-200 p-6 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto">
           <p className="text-center text-gray-600 text-xl font-bold">
-            Belum ada kegiatan yang ditambahkan.
+            Belum ada kegiatan yang diselenggarakan.
           </p>
         </div>
       )}
