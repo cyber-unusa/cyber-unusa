@@ -46,7 +46,7 @@ export const register = async (req, res) => {
 
     return res.json({
       success: true,
-      message: `Selamat Datang ${user.name}`,
+      message: `Selamat Datang ${user.name}. Lakukan Verifikasi terlebih dahulu`,
     });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -136,8 +136,6 @@ const sendVerifyOtpEmail = async (userId) => {
     };
 
     await transporter.sendMail(mailOptions);
-
-    console.log("Kode verifikasi Otp udah terkirim broo");
   } catch (error) {
     console.error("Gagal kirim email:", error);
     throw error;
@@ -227,7 +225,7 @@ export const verifyEmail = async (req, res) => {
     await user.save();
     return res.json({
       success: true,
-      message: "Emailmu udah terverifikasi broo",
+      message: "Selamat Emailmu udah terverifikasi broo",
     });
   } catch (error) {
     return res.json({ success: false, message: error.message });

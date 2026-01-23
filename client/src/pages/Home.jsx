@@ -8,7 +8,6 @@ import AIChatWidget from "../components/AIChatWidget";
 import { useContext, useEffect } from "react";
 import { AppContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 
 const Home = () => {
   const { userData } = useContext(AppContext);
@@ -19,7 +18,6 @@ const Home = () => {
       //? Waiting for data
     } else if (userData && userData.isAccountVerified === false) {
       navigate("/email-verify");
-      toast.warning("Lakukan Verifikasi terlebih dahulu");
     }
   }, [userData, navigate]);
 

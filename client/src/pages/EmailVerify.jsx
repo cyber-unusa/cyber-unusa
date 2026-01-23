@@ -53,14 +53,11 @@ export default function EmailVerify() {
       const otpArray = inputRefs.current.map((e) => e.value);
       const otp = otpArray.join("");
 
-      const { data } = await verifyEmail(otp);
+      const success = await verifyEmail(otp);
 
-      if (data.success) {
-        toast.success(data.message);
+      if (success) {
         getUserData();
         navigate("/");
-      } else {
-        toast.error(data.message);
       }
     } catch (error) {
       toast.error(error.message);
@@ -70,7 +67,6 @@ export default function EmailVerify() {
   useEffect(() => {
     if (isLoggedin && userData && userData.isAccountVerified) {
       navigate("/");
-      toast.info("Akun Anda sudah terverifikasi!");
     }
   }, [isLoggedin, userData, navigate]);
 
