@@ -2,6 +2,11 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 import transporter from "../config/nodemailer.js";
+import {
+  EMAIL_VERIFY_TEMPLATE,
+  PASSWORD_RESET_TEMPLATE,
+  WELCOME_TEMPLATE,
+} from "../config/emailTemplate.js";
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -37,19 +42,12 @@ export const register = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    //* Sending Welcome Email
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: email,
-      subject: "Selamat Datang di Cyber",
-      text: `Selamat Datang ${name} di Website Kami, akun kamu terdaftar dengan email id: ${email}`, // plain‑text body
-      messageId: `<${Date.now()}@${process.env.SENDER_EMAIL}>`, // properti messageId for debug
-    };
+    await sendVerifyOtpEmail(user._id);
 
-    await transporter.sendMail(mailOptions);
-    console.log("Message sent:", mailOptions.messageId);
-
-    return res.json({ success: true, message: `Selamat Datang ${user.name}` });
+    return res.json({
+      success: true,
+      message: `Selamat Datang ${user.name}`,
+    });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
@@ -116,6 +114,36 @@ export const logout = async (req, res) => {
 };
 
 //* Pengiriman Kode Otp verifikasi Email
+const sendVerifyOtpEmail = async (userId) => {
+  try {
+    const user = await userModel.findById(userId);
+
+    if (user.isAccountVerified) {
+      throw new Error("Akunmu udah terverifikasi broo");
+    }
+
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    user.verifyOtp = otp;
+    user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
+
+    await user.save();
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Kode Verifikasi Akun Cyber Unusa",
+      html: EMAIL_VERIFY_TEMPLATE(otp),
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    console.log("Kode verifikasi Otp udah terkirim broo");
+  } catch (error) {
+    console.error("Gagal kirim email:", error);
+    throw error;
+  }
+};
+
 export const sendVerifyOtp = async (req, res) => {
   try {
     const userId = req.userId;
@@ -138,9 +166,8 @@ export const sendVerifyOtp = async (req, res) => {
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
       to: user.email,
-      subject: "Kode Otp buat verify",
-      text: `Halo ${user.name}, Kode Otpmu adalah: ${otp}. verifikasi segera yaah!`, // plain‑text body
-      messageId: `<${Date.now()}@${process.env.SENDER_EMAIL}>`, // properti messageId for debug
+      subject: "Kode Verifikasi Akun Cyber Unusa",
+      html: EMAIL_VERIFY_TEMPLATE(otp),
     };
 
     await transporter.sendMail(mailOptions);
@@ -150,6 +177,7 @@ export const sendVerifyOtp = async (req, res) => {
       message: "Kode verifikasi Otp udah terkirim broo",
     });
   } catch (error) {
+    console.error("Gagal kirim email:", error);
     res.json({ success: false, message: error.message });
   }
 };
@@ -183,6 +211,18 @@ export const verifyEmail = async (req, res) => {
     user.isAccountVerified = true;
     user.verifyOtp = "";
     user.verifyOtpExpireAt = 0;
+
+    //* Sending Welcome Email
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Selamat Datang di Cyber Unusa! 🚀",
+      html: WELCOME_TEMPLATE(user.name),
+    };
+    if (user.isAccountVerified == true) {
+      await transporter.sendMail(mailOptions);
+      console.log("Message sent:", mailOptions.messageId);
+    }
 
     await user.save();
     return res.json({
@@ -227,9 +267,8 @@ export const sendResetOtp = async (req, res) => {
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
       to: user.email,
-      subject: "Kode Otp buat Reset Password",
-      text: `Halo ${user.name}, Kode Otpmu adalah: ${otp}. verifikasi segera yaah!`, // plain‑text body
-      messageId: `<${Date.now()}@${process.env.SENDER_EMAIL}>`, // properti messageId for debug
+      subject: "Reset Password Cyber Unusa",
+      html: PASSWORD_RESET_TEMPLATE(otp),
     };
 
     await transporter.sendMail(mailOptions);

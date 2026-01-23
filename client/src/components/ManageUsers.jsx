@@ -141,7 +141,7 @@ export default function ManageUsers() {
                       </button>
                     ) : (
                       <span className="text-xs text-slate-400 italic">
-                        Akun Anda
+                        Akun Admin
                       </span>
                     )}
                   </td>

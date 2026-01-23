@@ -26,11 +26,54 @@ export const AppContextProvider = ({ children }) => {
   const getUserData = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/user/data");
-      data.success
-        ? setUserData(data.userData)
-        : toast.error(data.message + data.userId);
+      if (data && data.success) {
+        setUserData(data.userData);
+      } else if (data) {
+        toast.error(data.message || "Failed to fetch user data");
+      }
     } catch (error) {
       toast.error(error.message);
+    }
+  };
+
+  //? Kirim kode via Email
+  const sendVerifyOtp = async () => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/auth/send-verify-otp",
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        return true;
+      } else {
+        toast.error(data.message);
+        return false;
+      }
+    } catch (error) {
+      toast.error(error.message);
+      return false;
+    }
+  };
+
+  //? Verifikasi Akun dengan OTP yang diinput
+  const verifyEmail = async (otp) => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/auth/verify-account",
+        { otp },
+      );
+      if (data.success) {
+        toast.success(data.message);
+        getUserData(); //! Refresh data user agar status berubah jadi "Verified"
+        return true;
+      } else {
+        toast.error(data.message);
+        return false;
+      }
+    } catch (error) {
+      toast.error(error.message);
+      return false;
     }
   };
 
@@ -102,6 +145,8 @@ export const AppContextProvider = ({ children }) => {
     isLoggedin,
     setIsLoggedin,
     userData,
+    sendVerifyOtp,
+    verifyEmail,
     setUserData,
     getUserData,
     getAllUsers,

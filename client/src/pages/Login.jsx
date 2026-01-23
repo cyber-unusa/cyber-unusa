@@ -39,8 +39,7 @@ export default function Login() {
         if (data.success) {
           setIsLoggedin(true);
           getUserData();
-          navigate("/");
-          toast.success(data.message);
+          navigate("/email-verify");
         } else {
           toast.error(data.message);
         }
@@ -69,7 +68,7 @@ export default function Login() {
         onClick={() => navigate("/")}
         src={assets.cyber_logo}
         alt=""
-        className="absolute top-6 w-24 cursor-pointer"
+        className="absolute top-6 w-24 cursor-pointer hover:scale-105 transition"
       />
 
       <div className="bg-slate-800 p-10 rounded-lg shadow-lg w-96 sm:w-96 text-green-300 text-sm">

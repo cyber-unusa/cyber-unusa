@@ -9,16 +9,18 @@ import { useEffect } from "react";
 
 export default function EmailVerify() {
   axios.defaults.withCredentials = true;
-  const { backendUrl, isLoggedin, userData, getUserData } =
+  const { isLoggedin, userData, getUserData, sendVerifyOtp, verifyEmail } =
     useContext(AppContext);
   const navigate = useNavigate();
   const inputRefs = React.useRef([]);
 
-  useEffect(() => {
-    if (userData.isAccountVerified === true) {
-      navigate("/");
+  const sendOtp = async () => {
+    try {
+      await sendVerifyOtp();
+    } catch (error) {
+      toast.error(error.message);
     }
-  }, [userData, navigate]);
+  };
 
   const handleInput = (e, index) => {
     if (e.target.value.length > 0 && index < inputRefs.current.length - 1) {
@@ -51,10 +53,7 @@ export default function EmailVerify() {
       const otpArray = inputRefs.current.map((e) => e.value);
       const otp = otpArray.join("");
 
-      const { data } = await axios.post(
-        backendUrl + "/api/auth/verify-account",
-        { otp },
-      );
+      const { data } = await verifyEmail(otp);
 
       if (data.success) {
         toast.success(data.message);
@@ -69,8 +68,11 @@ export default function EmailVerify() {
   };
 
   useEffect(() => {
-    isLoggedin && userData && userData.isAccountVerified && navigate("/");
-  }, [isLoggedin, userData]);
+    if (isLoggedin && userData && userData.isAccountVerified) {
+      navigate("/");
+      toast.info("Akun Anda sudah terverifikasi!");
+    }
+  }, [isLoggedin, userData, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-green-300">
@@ -78,18 +80,18 @@ export default function EmailVerify() {
         onClick={() => navigate("/")}
         src={assets.cyber_logo}
         alt=""
-        className="absolute top-6 w-24 cursor-pointer"
+        className="absolute top-15 w-24 cursor-pointer hover:scale-105 transition"
       />
 
       <form
         onSubmit={onSubmitHandler}
         action=""
-        className="bg-slate-800 p-10 rounded-lg shadow-lg w-96 sm:w-96 text-green-300 text-sm"
+        className="bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-sm text-sm border border-slate-700"
       >
-        <h1 className="text-3xl font-semibold text-white text-center mb-3">
+        <h1 className="text-white text-2xl font-bold text-center mb-2">
           Verifikasi Email
         </h1>
-        <p className="text-center mb-6 text-green-500">
+        <p className="text-slate-400 text-center mb-6">
           Masukkan 6-digit kode yang terkirim lewat email
         </p>
 
@@ -98,20 +100,29 @@ export default function EmailVerify() {
             .fill(0)
             .map((_, index) => (
               <input
+                key={index}
                 type="text"
                 maxLength="1"
-                key={index}
                 required
+                className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-700 text-white text-center text-xl rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 border border-transparent focus:border-green-400 transition"
                 ref={(e) => (inputRefs.current[index] = e)}
                 onInput={(e) => handleInput(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
-                className="w-12 h-12 bg-[#0d6c5b] text-white text-center text-xl rounded-md"
               />
             ))}
         </div>
-        <button className="w-full py-2.5 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-white font-medium">
+        <button className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full font-semibold hover:shadow-lg hover:from-green-600 hover:to-emerald-700 transition transform active:scale-95">
           Verifikasi
         </button>
+        <p className="text-slate-400 text-center mt-4 text-xs">
+          Belum terima kode?{" "}
+          <span
+            onClick={sendOtp}
+            className="text-green-400 cursor-pointer hover:underline"
+          >
+            Kirim Ulang
+          </span>
+        </p>
       </form>
     </div>
   );
