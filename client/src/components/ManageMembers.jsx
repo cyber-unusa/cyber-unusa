@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import { Trash2, Pencil, Plus, FolderOpen } from "lucide-react";
 
 const ManageMembers = () => {

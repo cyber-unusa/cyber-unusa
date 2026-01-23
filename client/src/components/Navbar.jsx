@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -123,10 +123,10 @@ export default function Navbar() {
                         </li>
                         <li>
                           <button
-                            onClick={() => handleNavigate("/absensi")}
+                            onClick={() => handleNavigate("/presensi")}
                             className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white"
                           >
-                            Absensi
+                            Presensi
                           </button>
                         </li>
                       </>

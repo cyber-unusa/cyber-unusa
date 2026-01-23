@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import {
   Plus,
   Edit,
@@ -93,7 +93,7 @@ const ManageProducts = () => {
           {
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" },
-          }
+          },
         );
         data = response.data;
       } else {
@@ -104,7 +104,7 @@ const ManageProducts = () => {
           {
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" },
-          }
+          },
         );
         data = response.data;
       }
@@ -141,7 +141,7 @@ const ManageProducts = () => {
           `${backendUrl}/api/product/delete/${id}`,
           {
             withCredentials: true,
-          }
+          },
         );
         if (data.success) {
           toast.success(data.message);

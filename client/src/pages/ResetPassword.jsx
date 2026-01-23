@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import axios from "axios";
 import { Mail, Lock } from "lucide-react";
 
@@ -49,7 +49,7 @@ export default function ResetPassword() {
     try {
       const { data } = await axios.post(
         backendUrl + "/api/auth/send-reset-otp",
-        { email }
+        { email },
       );
       data.success ? toast.success(data.message) : toast.error(data.message);
       data.success && setIsEmailSend(true);
@@ -65,7 +65,7 @@ export default function ResetPassword() {
       const otp = otpArray.join("");
       const { data } = await axios.post(
         backendUrl + "/api/auth/verify-reset-otp",
-        { email, otp }
+        { email, otp },
       );
       data.success ? toast.success(data.message) : toast.error(data.message);
       data.success && setIsOtpSubmit(true);
@@ -79,7 +79,7 @@ export default function ResetPassword() {
     try {
       const { data } = await axios.post(
         backendUrl + "/api/auth/reset-password",
-        { email, otp, newPassword }
+        { email, otp, newPassword },
       );
 
       data.success ? toast.success(data.message) : toast.error(data.message);

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 
 export default function Dokumenter() {
   const { backendUrl } = useContext(AppContext);

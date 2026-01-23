@@ -28,7 +28,7 @@ export default function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/cyber-mart" element={<CyberMart />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/absensi" element={<Absensi />} />
+          <Route path="/presensi" element={<Absensi />} />
           <Route path="/cooming" element={<CoomingSoon />} />
           <Route path="*" element={<Page404 />} />
         </Routes>

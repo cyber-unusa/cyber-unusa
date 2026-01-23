@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Mail, Lock, User } from "lucide-react";

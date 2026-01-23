@@ -11,30 +11,30 @@ import adminAuth from "../middleware/adminAuth.js";
 
 const attendanceRouter = express.Router();
 
-//? Rute untuk Acara Absensi
+//? Rute untuk Acara Presensi
 attendanceRouter.post("/event/create", adminAuth, createAttendanceEvent);
 attendanceRouter.get("/events/get", adminAuth, getAllAttendanceEvents);
 attendanceRouter.delete(
   "/event/delete/:eventId",
   adminAuth,
-  deleteAttendanceEvent
+  deleteAttendanceEvent,
 );
 
-//? Rute untuk Record Absensi Spesifik
+//? Rute untuk Record Presensi Spesifik
 attendanceRouter.get(
   "/records/:eventId",
   adminAuth,
-  getAttendanceRecordsByEvent
+  getAttendanceRecordsByEvent,
 );
 attendanceRouter.put(
   "/record/update/:recordId",
   adminAuth,
-  updateAttendanceRecord
+  updateAttendanceRecord,
 );
 attendanceRouter.put(
   "/records/toggle-lock/:eventId",
   adminAuth,
-  toggleEventLock
+  toggleEventLock,
 );
 
 export default attendanceRouter;

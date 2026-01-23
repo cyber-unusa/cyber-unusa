@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import {
   Plus,
   Edit,
@@ -83,7 +83,7 @@ const ManageDokumenter = () => {
           {
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" }, //! Header penting
-          }
+          },
         );
         data = response.data;
       } else {
@@ -93,7 +93,7 @@ const ManageDokumenter = () => {
           {
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" },
-          }
+          },
         );
         data = response.data;
       }
@@ -130,7 +130,7 @@ const ManageDokumenter = () => {
         const { data } = await axios.post(
           `${backendUrl}/api/dokumenter/delete/${id}`,
           null,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         if (data.success) {
           toast.success(data.message);

@@ -1,17 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ManageDokumenter from "../components/ManageDokumenter";
 import ManageKegiatan from "../components/ManageKegiatan";
 import ManageProducts from "../components/ManageProducts";
+import ManageUsers from "../components/ManageUsers";
 import { toast } from "react-toastify";
 import {
   LayoutDashboard,
   FileVideo,
   CalendarRange,
   ShoppingBag,
+  User2,
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -58,6 +60,13 @@ const Dashboard = () => {
       icon: ShoppingBag,
       color: "text-yellow-600",
       bgColor: "bg-yellow-100",
+    },
+    {
+      id: "Users",
+      label: "managemen User",
+      icon: User2,
+      color: "text-green-600",
+      bgColor: "bg-green-100",
     },
   ];
 
@@ -125,6 +134,11 @@ const Dashboard = () => {
           {activeTab === "Product" && (
             <div className="animate-fadeIn">
               <ManageProducts />
+            </div>
+          )}
+          {activeTab === "Users" && (
+            <div className="animate-fadeIn">
+              <ManageUsers />
             </div>
           )}
         </div>

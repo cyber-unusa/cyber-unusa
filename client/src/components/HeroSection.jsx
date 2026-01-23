@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { assets } from "../assets/assets";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import TextType from "./TextType";

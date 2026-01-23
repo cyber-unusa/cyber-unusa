@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
@@ -53,7 +53,7 @@ export default function EmailVerify() {
 
       const { data } = await axios.post(
         backendUrl + "/api/auth/verify-account",
-        { otp }
+        { otp },
       );
 
       if (data.success) {

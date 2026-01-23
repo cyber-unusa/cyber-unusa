@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import axios from "axios";
 import { MessageSquare, Send, X, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";

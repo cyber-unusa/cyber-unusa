@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import {
   Lock,
   Unlock,
@@ -37,7 +37,7 @@ const ManageAttendance = () => {
         backendUrl + "/api/attendance/events/get",
         {
           withCredentials: true,
-        }
+        },
       );
       if (data.success) {
         setEvents(data.allEvents || []);
@@ -57,7 +57,7 @@ const ManageAttendance = () => {
       const { data } = await axios.post(
         backendUrl + "/api/attendance/event/create",
         { eventName, date: eventDate },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (data.success) {
         toast.success(data.message);
@@ -77,7 +77,7 @@ const ManageAttendance = () => {
     try {
       const { data } = await axios.get(
         `${backendUrl}/api/attendance/records/${event._id}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (data.success) {
         setRecords(data.records || []);
@@ -94,7 +94,7 @@ const ManageAttendance = () => {
       const { data } = await axios.put(
         `${backendUrl}/api/attendance/records/toggle-lock/${eventId}`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (data.success) {
@@ -110,7 +110,7 @@ const ManageAttendance = () => {
         if (selectedEvent && selectedEvent._id === eventId) {
           const recordResponse = await axios.get(
             `${backendUrl}/api/attendance/records/${eventId}`,
-            { withCredentials: true }
+            { withCredentials: true },
           );
           if (recordResponse.data.success) {
             setRecords(recordResponse.data.records);
@@ -134,15 +134,15 @@ const ManageAttendance = () => {
       const { data } = await axios.put(
         `${backendUrl}/api/attendance/record/update/${recordId}`,
         { status },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (data.success) {
         // toast.success(data.message);
         //Todo perbarui state records secara lokal untuk respons instan
         setRecords((prevRecords) =>
           prevRecords.map((record) =>
-            record._id === recordId ? { ...record, status: status } : record
-          )
+            record._id === recordId ? { ...record, status: status } : record,
+          ),
         );
       } else {
         toast.error(data.message);
@@ -155,13 +155,13 @@ const ManageAttendance = () => {
   const handleDeleteEvent = async (eventId) => {
     if (
       window.confirm(
-        "Yakin ingin menghapus acara ini? Semua data absensi terkait akan hilang."
+        "Yakin ingin menghapus acara ini? Semua data absensi terkait akan hilang.",
       )
     ) {
       try {
         const { data } = await axios.delete(
           `${backendUrl}/api/attendance/event/delete/${eventId}`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         if (data.success) {
           toast.success(data.message);
@@ -442,7 +442,7 @@ const ManageAttendance = () => {
                                   onClick={() =>
                                     handleUpdateStatus(
                                       record._id,
-                                      statusBtn.label
+                                      statusBtn.label,
                                     )
                                   }
                                   className={btnClass}

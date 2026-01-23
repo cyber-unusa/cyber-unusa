@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import {
   Plus,
   Edit,
@@ -90,7 +90,7 @@ const ManageKegiatan = () => {
           {
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" }, //! Header penting
-          }
+          },
         );
         data = response.data;
       } else {
@@ -101,7 +101,7 @@ const ManageKegiatan = () => {
           {
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" },
-          }
+          },
         );
         data = response.data;
       }
@@ -141,7 +141,7 @@ const ManageKegiatan = () => {
           `${backendUrl}/api/kegiatan/delete/${id}`,
           {
             withCredentials: true,
-          }
+          },
         );
         if (data.success) {
           toast.success(data.message);

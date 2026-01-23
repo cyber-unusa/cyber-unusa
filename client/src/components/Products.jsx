@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/appContext";
+import { AppContext } from "../context/Context";
 import { toast } from "react-toastify";
 
 export default function Products() {
