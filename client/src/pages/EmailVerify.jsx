@@ -1,5 +1,4 @@
 import React from "react";
-import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
@@ -35,16 +34,16 @@ export default function EmailVerify() {
   };
 
   const handlePaste = (e) => {
+    e.preventDefault();
     const paste = e.clipboardData.getData("text");
-    const pasteArr = paste.split("");
+    const pasteArr = paste.split("").slice(0, 6);
     pasteArr.forEach((char, index) => {
       if (inputRefs.current[index]) {
         inputRefs.current[index].value = char;
       }
     });
-    if (inputRefs.current[pasteArr.length - 1]) {
+    if (inputRefs.current[pasteArr.length - 1])
       inputRefs.current[pasteArr.length - 1].focus();
-    }
   };
 
   const onSubmitHandler = async (e) => {
@@ -71,55 +70,61 @@ export default function EmailVerify() {
   }, [isLoggedin, userData, navigate]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-green-300">
-      <img
-        onClick={() => navigate("/")}
-        src={assets.cyber_logo}
-        alt=""
-        className="absolute top-15 w-24 cursor-pointer hover:scale-105 transition"
-      />
+    <div className="flex items-center justify-center min-h-screen bg-slate-950 relative overflow-hidden">
+      {/* Background Effect */}
+      <div className="absolute top-[-20%] left-[30%] w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[120px]"></div>
 
-      <form
-        onSubmit={onSubmitHandler}
-        action=""
-        className="bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-sm text-sm border border-slate-700"
-      >
+      <div className="bg-slate-900/60 backdrop-blur-xl p-8 rounded-2xl shadow-2xl w-full max-w-sm border border-slate-700 z-10 mx-4">
+        <div className="flex justify-center mb-6">
+          <div className="p-4 bg-green-500/10 rounded-full">
+            <ShieldCheck size={48} className="text-green-500" />
+          </div>
+        </div>
+
         <h1 className="text-white text-2xl font-bold text-center mb-2">
-          Verifikasi Email
+          Verifikasi Keamanan
         </h1>
-        <p className="text-slate-400 text-center mb-6">
-          Masukkan 6-digit kode yang terkirim lewat email
+        <p className="text-slate-400 text-center text-sm mb-8">
+          Masukkan 6 digit kode OTP yang telah dikirim ke email Anda untuk
+          mengaktifkan akun.
         </p>
 
-        <div className="flex justify-between mb-8" onPaste={handlePaste}>
-          {Array(6)
-            .fill(0)
-            .map((_, index) => (
-              <input
-                key={index}
-                type="text"
-                maxLength="1"
-                required
-                className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-700 text-white text-center text-xl rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 border border-transparent focus:border-green-400 transition"
-                ref={(e) => (inputRefs.current[index] = e)}
-                onInput={(e) => handleInput(e, index)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-              />
-            ))}
-        </div>
-        <button className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full font-semibold hover:shadow-lg hover:from-green-600 hover:to-emerald-700 transition transform active:scale-95">
-          Verifikasi
-        </button>
-        <p className="text-slate-400 text-center mt-4 text-xs">
-          Belum terima kode?{" "}
+        <form onSubmit={onSubmitHandler}>
+          <div
+            className="flex justify-between gap-2 mb-8"
+            onPaste={handlePaste}
+          >
+            {Array(6)
+              .fill(0)
+              .map((_, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  maxLength="1"
+                  required
+                  className="w-10 h-12 sm:w-12 sm:h-14 bg-slate-800 text-white text-center text-xl font-bold rounded-lg border border-slate-600 focus:border-green-500 focus:ring-2 focus:ring-green-500/50 outline-none transition-all"
+                  ref={(e) => (inputRefs.current[index] = e)}
+                  onInput={(e) => handleInput(e, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                />
+              ))}
+          </div>
+
+          <button className="w-full py-3 rounded-lg bg-green-600 hover:bg-green-500 text-white font-bold shadow-lg hover:shadow-green-500/30 transition-all">
+            Verifikasi Akun
+          </button>
+        </form>
+
+        <p className="text-slate-500 text-center mt-6 text-sm">
+          Tidak menerima kode?{" "}
           <span
             onClick={sendOtp}
-            className="text-green-400 cursor-pointer hover:underline"
+            className="text-green-400 font-medium cursor-pointer hover:underline"
           >
             Kirim Ulang
           </span>
         </p>
-      </form>
+      </div>
     </div>
   );
 }

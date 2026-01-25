@@ -1,10 +1,9 @@
 import React, { useContext, useState } from "react";
-import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/Context";
 import axios from "axios";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, ArrowLeft } from "lucide-react";
 
 export default function ResetPassword() {
   const { backendUrl } = useContext(AppContext);
@@ -32,8 +31,9 @@ export default function ResetPassword() {
   };
 
   const handlePaste = (e) => {
+    e.preventDefault();
     const paste = e.clipboardData.getData("text");
-    const pasteArr = paste.split("");
+    const pasteArr = paste.split("").slice(0, 6);
     pasteArr.forEach((char, index) => {
       if (inputRefs.current[index]) {
         inputRefs.current[index].value = char;
@@ -90,108 +90,120 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-green-300">
-      <img
-        onClick={() => navigate("/")}
-        src={assets.cyber_logo}
-        alt=""
-        className="absolute top-20 w-24 cursor-pointer"
-      />
+    <div className="flex items-center justify-center min-h-screen bg-slate-950 relative overflow-hidden">
+      {/* Background Decoration */}
+      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-purple-500/20 rounded-full blur-[100px]"></div>
+      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-green-500/20 rounded-full blur-[100px]"></div>
 
-      {/* Form reset password */}
-      {!isEmailSend && (
-        <form
-          onSubmit={onSubmitEmail}
-          className="bg-slate-800 p-10 rounded-lg shadow-lg w-96 sm:w-96 text-green-300 text-sm"
-        >
-          <h1 className="text-3xl font-semibold text-white text-center mb-3">
-            Reset Password
-          </h1>
-          <p className="text-center mb-6 text-green-500">
-            Masukkan Email anda, untuk verifikasi otp
-          </p>
+      <button
+        onClick={() => navigate("/login")}
+        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-white transition z-20"
+      >
+        <ArrowLeft size={20} /> Kembali Login
+      </button>
 
-          <div className="mb-8 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-            <Mail color="white" size={20} strokeWidth={1.5} />
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              className="bg-transparent outline-none text-white"
-              type="email"
-              placeholder="Masukkan Email"
-              required
-            />
+      <div className="bg-slate-900/60 backdrop-blur-xl p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700 z-10 mx-4">
+        {/* Header Icon */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 border border-slate-700 mb-4">
+            {!isEmailSend ? (
+              <Mail className="text-green-400" />
+            ) : !isOtpSubmit ? (
+              <KeyRound className="text-green-400" />
+            ) : (
+              <Lock className="text-green-400" />
+            )}
           </div>
-          <button className="w-full py-2.5 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-white font-medium cursor-pointer">
-            Kirim Otp
-          </button>
-        </form>
-      )}
-
-      {/* Form Otp verifikasi */}
-      {!isOtpSubmit && isEmailSend && (
-        <form
-          onSubmit={onSubmitOtp}
-          className="bg-slate-800 p-10 rounded-lg shadow-lg w-96 sm:w-96 text-green-300 text-sm"
-        >
-          <h1 className="text-3xl font-semibold text-white text-center mb-3">
-            Reset Password Otp
-          </h1>
-          <p className="text-center mb-6 text-green-500">
-            Masukkan 6-digit kode yang terkirim lewat email
+          <h2 className="text-2xl font-bold text-white">
+            {!isEmailSend
+              ? "Reset Password"
+              : !isOtpSubmit
+                ? "Verifikasi OTP"
+                : "Password Baru"}
+          </h2>
+          <p className="text-slate-400 text-sm mt-2">
+            {!isEmailSend
+              ? "Kami akan mengirimkan kode OTP ke email Anda."
+              : !isOtpSubmit
+                ? "Cek email Anda dan masukkan 6 digit kode."
+                : "Buat kata sandi yang kuat dan aman."}
           </p>
+        </div>
 
-          <div className="flex justify-between mb-8" onPaste={handlePaste}>
-            {Array(6)
-              .fill(0)
-              .map((_, index) => (
-                <input
-                  type="text"
-                  maxLength="1"
-                  key={index}
-                  required
-                  ref={(e) => (inputRefs.current[index] = e)}
-                  onInput={(e) => handleInput(e, index)}
-                  onKeyDown={(e) => handleKeyDown(e, index)}
-                  className="w-12 h-12 bg-[#0d6c5b] text-white text-center text-xl rounded-md"
-                />
-              ))}
-          </div>
-          <button className="w-full py-2.5 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-white font-medium">
-            Submit
-          </button>
-        </form>
-      )}
+        {/* --- FORM 1: EMAIL --- */}
+        {!isEmailSend && (
+          <form onSubmit={onSubmitEmail} className="space-y-6">
+            <div className="group flex items-center gap-3 w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 focus-within:border-green-500 transition-all">
+              <Mail
+                className="text-slate-500 group-focus-within:text-green-400"
+                size={20}
+              />
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-transparent outline-none text-white w-full placeholder-slate-500"
+                type="email"
+                placeholder="Masukkan Email Anda"
+                required
+              />
+            </div>
+            <button className="w-full py-3 rounded-lg bg-green-600 hover:bg-green-500 text-white font-bold transition-all shadow-lg hover:shadow-green-500/20">
+              Kirim Kode
+            </button>
+          </form>
+        )}
 
-      {/* Form Password baru */}
-      {isOtpSubmit && isEmailSend && (
-        <form
-          onSubmit={onSubmitNewPass}
-          className="bg-slate-800 p-10 rounded-lg shadow-lg w-96 sm:w-96 text-green-300 text-sm"
-        >
-          <h1 className="text-3xl font-semibold text-white text-center mb-3">
-            Password Baru
-          </h1>
-          <p className="text-center mb-6 text-green-500">
-            Masukkan Password baru anda
-          </p>
+        {/* --- FORM 2: OTP --- */}
+        {isEmailSend && !isOtpSubmit && (
+          <form onSubmit={onSubmitOtp} className="space-y-6">
+            <div
+              className="flex justify-between gap-1 sm:gap-2"
+              onPaste={handlePaste}
+            >
+              {Array(6)
+                .fill(0)
+                .map((_, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    maxLength="1"
+                    required
+                    className="w-10 h-12 sm:w-12 sm:h-14 bg-slate-800 text-white text-center text-lg font-bold rounded-md border border-slate-600 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-all"
+                    ref={(e) => (inputRefs.current[index] = e)}
+                    onInput={(e) => handleInput(e, index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                  />
+                ))}
+            </div>
+            <button className="w-full py-3 rounded-lg bg-green-600 hover:bg-green-500 text-white font-bold transition-all">
+              Verifikasi Kode
+            </button>
+          </form>
+        )}
 
-          <div className="mb-8 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-            <Lock color="white" size={20} strokeWidth={1.5} />
-            <input
-              onChange={(e) => setNewPassword(e.target.value)}
-              value={newPassword}
-              className="bg-transparent outline-none text-white"
-              type="password"
-              placeholder="Masukkan Password Baru"
-              required
-            />
-          </div>
-          <button className="w-full py-2.5 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-white font-medium cursor-pointer">
-            Reset Password
-          </button>
-        </form>
-      )}
+        {/* --- FORM 3: PASSWORD BARU --- */}
+        {isEmailSend && isOtpSubmit && (
+          <form onSubmit={onSubmitNewPass} className="space-y-6">
+            <div className="group flex items-center gap-3 w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 focus-within:border-green-500 transition-all">
+              <Lock
+                className="text-slate-500 group-focus-within:text-green-400"
+                size={20}
+              />
+              <input
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="bg-transparent outline-none text-white w-full placeholder-slate-500"
+                type="password"
+                placeholder="Password Baru"
+                required
+              />
+            </div>
+            <button className="w-full py-3 rounded-lg bg-green-600 hover:bg-green-500 text-white font-bold transition-all">
+              Simpan Password
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }

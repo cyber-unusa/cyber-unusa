@@ -7,7 +7,7 @@ import ManageMembers from "../components/ManageMembers";
 import ManageAttendance from "../components/ManageAttendance";
 import { toast } from "react-toastify";
 
-const Absensi = () => {
+const Presensi = () => {
   const { userData } = useContext(AppContext);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("absensi");
@@ -67,4 +67,4 @@ const Absensi = () => {
   );
 };
 
-export default Absensi;
+export default Presensi;

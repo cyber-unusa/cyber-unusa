@@ -3,7 +3,7 @@ import { discord, gmail, instagram, youtube } from "../assets/Icons.jsx";
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-800 text-gray-300 py-4 mt-10">
+    <footer className="bg-slate-950 text-gray-300 py-4 mt-10">
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
         {/* Logo dan nama */}
         <div className="mb-6 md:mb-0">

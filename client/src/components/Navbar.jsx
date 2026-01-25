@@ -67,7 +67,7 @@ export default function Navbar() {
 
   // Render
   return (
-    <nav className="bg-gray-900 fixed top-0 left-0 w-full z-20 border-b border-gray-600 px-4 sm:px-6">
+    <nav className="bg-slate-950 fixed top-0 left-0 w-full z-20 border-b border-gray-600 px-4 sm:px-6">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo & Title */}
         <div
@@ -189,7 +189,7 @@ export default function Navbar() {
           } w-full md:flex md:w-auto md:order-1`}
           id="navbar-sticky"
         >
-          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-700 rounded-lg bg-gray-800 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-gray-900">
+          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-slate-700 rounded-lg bg-slate-950 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-slate-950">
             {menuItems.map((item) => (
               <li key={item.path}>
                 <button

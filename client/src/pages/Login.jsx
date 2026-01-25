@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Mail, Lock, User } from "lucide-react";
+import { Mail, Lock, User, ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -64,97 +64,175 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-blue-200 to-green-300">
-      <img
-        onClick={() => navigate("/")}
-        src={assets.cyber_logo}
-        alt=""
-        className={`absolute w-24 cursor-pointer hover:scale-105 transition ${state === "Sign Up" ? "top-3" : "top-9"}`}
-      />
+    <div className="flex min-h-screen w-full bg-slate-950 text-white">
+      {/* --- BAGIAN KIRI (GAMBAR VISUAL) --- */}
+      <div className="hidden md:flex w-1/2 relative overflow-hidden bg-slate-900 justify-center items-center">
+        {/* Gambar Background (Gunakan gambar hero kamu) */}
+        <div className="absolute inset-0 bg-slate-900">
+          {/* Kita pakai CSS Gradient Pattern biar Cyber banget jika gambar gagal load */}
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-green-500 via-slate-900 to-slate-950"></div>
+          <img
+            src={assets.heroSection}
+            alt="Cyber Background"
+            className="w-full h-full object-cover opacity-60 mix-blend-overlay"
+          />
+        </div>
 
-      <div className="bg-slate-800 p-10 rounded-lg shadow-lg w-96 sm:w-96 text-green-300 text-sm">
-        <h2 className="text-3xl font-semibold text-white text-center mb-3">
-          {state === "Login" ? "Selamat Datang" : "Registrasi"}
-        </h2>
-        <p className="text-center text-sm mb-6">
-          {state === "Login" ? "Masukan Ke Akun Anda" : "Daftarkan Akun Anda"}
-        </p>
+        {/* Back Button */}
+        <button
+          onClick={() => navigate("/")}
+          className="absolute top-6 left-6 z-10 flex items-center gap-2 text-slate-400 hover:text-white transition"
+        >
+          <ArrowLeft size={20} /> Kembali
+        </button>
 
-        <form onSubmit={onSubmitHandler}>
-          {state === "Sign Up" && (
-            <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-              <User color="white" size={20} strokeWidth={1.5} />
+        {/* Konten Text di atas Gambar */}
+        <div className="relative z-10 p-10 text-center">
+          <img
+            src={assets.cyber_logo}
+            alt="Logo"
+            className="w-32 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(34,197,94,0.5)]"
+          />
+          <h1 className="text-4xl font-bold mb-4 tracking-wider">
+            CYBER UNUSA
+          </h1>
+          <p className="text-slate-300 text-lg max-w-md mx-auto leading-relaxed">
+            Menghubungkan talenta digital, membangun masa depan teknologi
+            bersama komunitas terbaik.
+          </p>
+        </div>
+
+        {/* Dekorasi Garis Tech */}
+      </div>
+
+      {/* --- BAGIAN KANAN (FORM LOGIN) --- */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 sm:p-16 relative">
+        {/* Tombol Back Mobile */}
+        <div className="absolute top-6 left-6 md:hidden">
+          <img
+            src={assets.cyber_logo}
+            className="w-12"
+            onClick={() => navigate("/")}
+            alt=""
+          />
+        </div>
+
+        <div className="w-full max-w-md space-y-8 absolute">
+          {/* Header Form */}
+          <div className="text-center md:text-left">
+            <h2 className="text-3xl font-bold text-white tracking-tight">
+              {state === "Login" ? "Welcome Back, Coders!" : "Create Account"}
+            </h2>
+            <p className="mt-2 text-slate-400">
+              {state === "Login"
+                ? "Masukkan kredensial Anda untuk mengakses sistem."
+                : "Daftar sekarang untuk menjadi bagian dari Cyber Unusa."}
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={onSubmitHandler} className="mt-8 space-y-6">
+            {state === "Sign Up" && (
+              <div className="group relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-slate-500 group-focus-within:text-green-400 transition-colors" />
+                </div>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-900 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  placeholder="Nama Lengkap"
+                />
+              </div>
+            )}
+
+            <div className="group relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-green-400 transition-colors" />
+              </div>
               <input
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                className="bg-transparent outline-none text-white"
-                type="text"
-                placeholder="Masukkan Nama Lengkap"
+                type="email"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-900 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                placeholder="Alamat Email"
               />
             </div>
-          )}
 
-          <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-            <Mail color="white" size={20} strokeWidth={1.5} />
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              className="bg-transparent outline-none text-white"
-              type="email"
-              placeholder="Masukkan Email"
-              required
-            />
-          </div>
+            <div className="group relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-green-400 transition-colors" />
+              </div>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-900 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                placeholder="Password"
+              />
+            </div>
 
-          <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#0d6c5b]">
-            <Lock color="white" size={20} strokeWidth={1.5} />
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              className="bg-transparent outline-none text-white"
-              type="password"
-              placeholder="Masukkan Password"
-              required
-            />
-          </div>
+            {state === "Login" && (
+              <div className="flex items-center justify-end">
+                <div className="text-sm">
+                  <span
+                    onClick={() => navigate("/reset-password")}
+                    className="font-medium text-green-500 hover:text-green-300 cursor-pointer transition-colors"
+                  >
+                    Lupa Password?
+                  </span>
+                </div>
+              </div>
+            )}
 
-          <p
-            onClick={() => navigate("/reset-password")}
-            className="mb-4 text-green-500 cursor-pointer"
-          >
-            Lupa Kata Sandi?
-          </p>
-
-          <button
-            onSubmit={null}
-            className="w-full py-2.5 rounded-full bg-gradient-to-r from-green-400 to-green-600 text-white font-medium cursor-pointer"
-          >
-            {state}
-          </button>
-        </form>
-
-        {state === "Sign Up" ? (
-          <p className="text-gray-400 text-center text-xs mt-4">
-            Sudah Punya Akun? {"  "}{" "}
-            <span
-              className="text-blue-400 cursor-pointer underline"
-              onClick={() => setState("Login")}
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-slate-900 bg-green-500 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:ring-offset-slate-900 transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] hover:shadow-[0_0_25px_rgba(34,197,94,0.5)]"
             >
-              Login Disini
-            </span>
-          </p>
-        ) : (
-          <p className="text-gray-400 text-center text-xs mt-2">
-            Belum Punya Akun? {"  "}{" "}
-            <span
-              className="text-blue-400 cursor-pointer underline"
-              onClick={() => setState("Sign Up")}
-            >
-              Daftar Disini
-            </span>
-          </p>
-        )}
+              <span className="flex items-center gap-2">
+                {state === "Login" ? "MASUK SEKARANG" : "DAFTAR SEKARANG"}
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
+          </form>
+
+          {/* Footer Switcher */}
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-800"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-slate-950 text-slate-500">Atau</span>
+              </div>
+            </div>
+
+            <div className="mt-6 text-center">
+              <p className="text-slate-400">
+                {state === "Sign Up"
+                  ? "Sudah punya akun?"
+                  : "Belum punya akun?"}{" "}
+                <button
+                  onClick={() =>
+                    setState(state === "Login" ? "Sign Up" : "Login")
+                  }
+                  className="font-bold text-green-500 hover:text-green-300 transition-colors"
+                >
+                  {state === "Sign Up" ? "Login di sini" : "Buat akun baru"}
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Credit Kecil */}
+        <div className="absolute bottom-6 text-xs text-slate-600">
+          &copy; {new Date().getFullYear()} Cyber Unusa Dev Team.
+        </div>
       </div>
     </div>
   );

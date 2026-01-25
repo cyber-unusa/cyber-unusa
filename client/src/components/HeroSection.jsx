@@ -49,11 +49,17 @@ export default function HeroSection() {
         </p>
         <button
           onClick={() => navigate("/about")}
-          className="border border-green-500 rounded-full px-8 py-2.5 hover:bg-green-100 hover:text-gray-800 transition-all flex items-center focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+          className="group border border-green-500 rounded-full px-8 py-2.5 hover:bg-green-100 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:ring-offset-slate-900 transition-all flex items-center"
           aria-label="Read more about Cyber"
         >
-          Read More
-          <ArrowRight className="ml-2" size={20} strokeWidth={1.5} />
+          <span className="flex items-center gap-2">
+            Read More
+            <ArrowRight
+              className="w-6 h-6 group-hover:translate-x-1 transition-transform"
+              size={20}
+              strokeWidth={1.5}
+            />
+          </span>
         </button>
       </div>
     </section>
