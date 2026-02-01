@@ -2,19 +2,22 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AppContext } from "../context/Context";
-import { Trash2, Pencil, Plus, FolderOpen } from "lucide-react";
+import { Trash2, Pencil, Plus, FolderOpen, ImageIcon } from "lucide-react";
 
 const ManageMembers = () => {
   const { backendUrl } = useContext(AppContext);
   const [members, setMembers] = useState([]);
 
   const [name, setName] = useState("");
+  const [role, setRole] = useState("Staff");
   const [nim, setNim] = useState("");
-  const [divisi, setDivisi] = useState("");
+  const [divisi, setDivisi] = useState("PSDM");
+  const [image, setImage] = useState(null);
 
   //? State Edit Mode
   const [isEditing, setIsEditing] = useState(false);
   const [currentEditId, setCurrentEditId] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const fetchMembers = useCallback(async () => {
     try {
@@ -35,26 +38,34 @@ const ManageMembers = () => {
     fetchMembers();
   }, [fetchMembers]);
 
+  //! Auto-set divisi based on role
+  useEffect(() => {
+    if (role !== "Staff" || role !== "Kadiv") {
+      setDivisi("BPH");
+    }
+  }, [role, divisi]);
+
   const resetForm = () => {
     setName("");
+    setRole("");
     setNim("");
     setDivisi("");
+    setImage(null);
     setIsEditing(false);
     setCurrentEditId(null);
+    setImagePreview(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !nim) {
-      toast.warn("Nama dan Nim wajib diisi.");
-      return;
-    }
 
-    const formData = {
-      name,
-      nim,
-      divisi,
-    };
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("role", role);
+    formData.append("nim", nim);
+    formData.append("divisi", divisi);
+
+    if (image) formData.append("image", image);
 
     try {
       let data;
@@ -63,14 +74,14 @@ const ManageMembers = () => {
         const response = await axios.put(
           `${backendUrl}/api/member/update/${currentEditId}`,
           formData,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         data = response.data;
       } else {
         const response = await axios.post(
           `${backendUrl}/api/member/add`,
           formData,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         data = response.data;
       }
@@ -92,21 +103,25 @@ const ManageMembers = () => {
     setIsEditing(true);
     setCurrentEditId(member._id);
     setName(member.name);
+    setRole(member.role);
     setNim(member.nim);
     setDivisi(member.divisi);
+    setImage(null);
+    setImagePreview(member.imageUrl);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id) => {
     if (
       window.confirm(
-        "Yakin ingin menghapus anggota ini? Ini akan menghapus semua data absensinya."
+        "Yakin ingin menghapus anggota ini? Ini akan menghapus semua data absensinya.",
       )
     ) {
       try {
         const { data } = await axios.delete(
           `${backendUrl}/api/member/delete/${id}`,
-          { withCredentials: true }
+          null,
+          { withCredentials: true },
         );
         if (data.success) {
           toast.success(data.message);
@@ -124,7 +139,7 @@ const ManageMembers = () => {
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold text-gray-800">Kelola Anggota</h2>
-        <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium text-sm">
+        <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
           Total Anggota: {members.length}
         </div>
       </div>
@@ -160,13 +175,52 @@ const ManageMembers = () => {
           )}
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        >
+          {/* Kolom Kiri: Upload Gambar */}
+          <div className="lg:col-span-1">
+            <label className="block text-sm font-medium text-gray-600 mb-2">
+              Foto Profile
+            </label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center text-center h-48 relative bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setImage(file);
+                  if (file) setImagePreview(URL.createObjectURL(file));
+                }}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-full object-contain rounded"
+                />
+              ) : (
+                <div className="text-gray-400 group-hover:text-gray-600">
+                  <ImageIcon className="w-12 h-12 mx-auto mb-2" />
+                  <p className="text-sm">Klik atau tarik gambar ke sini</p>
+                </div>
+              )}
+            </div>
+            {isEditing && !image && (
+              <p className="text-xs text-gray-500 mt-1 text-center">
+                *Biarkan kosong jika tidak ingin mengganti gambar
+              </p>
+            )}
+          </div>
+
+          <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Input Nama */}
-            <div className="flex flex-col">
+            <div className="md:col-span-1">
               <label
                 htmlFor="name"
-                className="text-sm font-medium text-gray-600 mb-1"
+                className="block text-sm font-medium text-gray-600 mb-1"
               >
                 Nama Lengkap <span className="text-red-500">*</span>
               </label>
@@ -182,7 +236,7 @@ const ManageMembers = () => {
             </div>
 
             {/* Input NIM */}
-            <div className="flex flex-col">
+            <div className="md:col-span-1">
               <label
                 htmlFor="nim"
                 className="text-sm font-medium text-gray-600 mb-1"
@@ -200,47 +254,71 @@ const ManageMembers = () => {
               />
             </div>
 
-            {/* Input Divisi */}
-            <div className="flex flex-col">
-              <label
-                htmlFor="divisi"
-                className="text-sm font-medium text-gray-600 mb-1"
-              >
-                Divisi
+            {/* Role */}
+            <div className="md:col-span-1">
+              <label className="text-sm font-medium text-gray-600 mb-1">
+                Level (Role)
               </label>
-              <input
-                type="text"
-                name="divisi"
-                id="divisi"
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="Staff">Staff</option>
+                <option value="Kadiv">Kepala Divisi (Kadiv)</option>
+                <option value="Sekertaris 1">Sekertaris 1</option>
+                <option value="Sekertaris 2">Sekertaris 2</option>
+                <option value="Bendahara Umum">Bendahara Umum</option>
+                <option value="Wakil Ket. Umum">Wakil Ket. Umum</option>
+                <option value="Ketua Umum">Ketua Umum</option>
+              </select>
+            </div>
+
+            {/* Input Divisi */}
+            <div className="md:col-span-1">
+              <label className="text-sm font-medium text-gray-600 mb-1">
+                Divisi <span className="text-red-500">*</span>
+              </label>
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 value={divisi}
                 onChange={(e) => setDivisi(e.target.value)}
-                placeholder="Contoh: PSDM, Pendidikan"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-              />
-            </div>
-          </div>
-
-          {/* Tombol Aksi */}
-          <div className="flex gap-3 mt-6 justify-end">
-            {isEditing && (
-              <button
-                type="button"
-                onClick={resetForm}
-                className="px-6 py-2 rounded-lg text-gray-600 font-semibold hover:bg-gray-200 transition-colors"
               >
-                Batal
+                {role === "Kadiv" || role === "Staff" ? (
+                  <>
+                    <option value="PSDM">PSDM</option>
+                    <option value="Pendidikan">Pendidikan</option>
+                    <option value="Pengmas">Pengmas</option>
+                    <option value="Innovation">Innovation</option>
+                  </>
+                ) : (
+                  <option value="BPH">Badan Pengurus Harian (BPH)</option>
+                )}
+              </select>
+            </div>
+
+            {/* Tombol Aksi */}
+            <div className="md:col-span-2 flex justify-end gap-2 mt-2">
+              {isEditing && (
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="px-6 py-2 rounded-lg text-gray-600 font-semibold hover:bg-gray-200 transition-colors"
+                >
+                  Batal
+                </button>
+              )}
+              <button
+                type="submit"
+                className={`px-6 py-2 rounded-lg text-white font-bold shadow-md transition-transform transform active:scale-95 ${
+                  isEditing
+                    ? "bg-yellow-500 hover:bg-yellow-600"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
+              >
+                {isEditing ? "Simpan Perubahan" : "Tambah Member"}
               </button>
-            )}
-            <button
-              type="submit"
-              className={`px-6 py-2 rounded-lg text-white font-bold shadow-md transition-transform transform active:scale-95 ${
-                isEditing
-                  ? "bg-yellow-500 hover:bg-yellow-600"
-                  : "bg-blue-600 hover:bg-blue-700"
-              }`}
-            >
-              {isEditing ? "Simpan Perubahan" : "Tambah Member"}
-            </button>
+            </div>
           </div>
         </form>
       </div>
@@ -252,19 +330,20 @@ const ManageMembers = () => {
         </div>
 
         {/* Header Kolom (Desktop) */}
-        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-3 bg-gray-100 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+        <div className="hidden md:grid grid-cols-14 gap-4 px-6 py-3 bg-gray-100 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200 text-center">
+          <div className="col-span-2">Foto Profile</div>
           <div className="col-span-3">Nama Lengkap</div>
           <div className="col-span-3">NIM</div>
           <div className="col-span-2">Divisi</div>
-          <div className="col-span-2 text-center">Absensi</div>
-          <div className="col-span-2 text-center">Aksi</div>
+          <div className="col-span-2">Absensi</div>
+          <div className="col-span-2">Aksi</div>
         </div>
 
         {/* Isi List */}
         <div className="divide-y divide-gray-300">
           {members.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-              <span className="w-12 h-12 text-gray-300">
+            <div className="flex flex-col items-center justify-center py-14 text-gray-400">
+              <span className="w-14 h-14 text-gray-300">
                 <FolderOpen className="" />
               </span>
               <p>Belum ada data anggota.</p>
@@ -273,8 +352,21 @@ const ManageMembers = () => {
             members.map((member) => (
               <div
                 key={member._id}
-                className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 items-center hover:bg-gray-50 transition-colors group"
+                className="grid grid-cols-1 md:grid-cols-14 gap-2 md:gap-4 px-6 py-4 items-center lg:text-center hover:bg-gray-50 transition-colors group"
               >
+                <div className="col-span-1 md:col-span-2">
+                  <span className="font-semibold text-gray-800 block md:hidden text-xs mb-1">
+                    FOTO PROFILE
+                  </span>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center text-center h-40 relative bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group">
+                    <img
+                      src={member.imageUrl}
+                      alt={member.name}
+                      className="w-full h-full object-cover rounded-md border border-gray-200 shadow-sm"
+                    />
+                  </div>
+                </div>
+
                 {/* Kolom Nama */}
                 <div className="col-span-1 md:col-span-3">
                   <span className="font-semibold text-gray-800 block md:hidden text-xs mb-1">
@@ -300,13 +392,13 @@ const ManageMembers = () => {
                   <span className="font-semibold block md:hidden text-xs text-gray-400 mb-1 mt-2">
                     DIVISI
                   </span>
-                  {member.divisi ? (
+                  {member.divisi != "BPH" ? (
                     <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-sm font-semibold rounded-full border border-blue-100">
-                      {member.divisi}
+                      {member.role} {member.divisi}
                     </span>
                   ) : (
-                    <span className="text-gray-400 text-sm italic">
-                      - Tanpa Divisi -
+                    <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-sm font-semibold rounded-full border border-blue-100">
+                      {member.role}
                     </span>
                   )}
                 </div>
@@ -321,8 +413,8 @@ const ManageMembers = () => {
                       member.attendancePercentage >= 75
                         ? "bg-green-100 text-green-700"
                         : member.attendancePercentage >= 50
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
                     }`}
                   >
                     {member.attendancePercentage}%

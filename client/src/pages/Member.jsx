@@ -10,6 +10,7 @@ import {
 } from "../assets/assets";
 import CircularGallery from "../components/CircularGallery";
 import { ArrowDown } from "lucide-react";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
 
 const Member = () => {

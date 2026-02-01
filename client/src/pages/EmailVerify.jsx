@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { AppContext } from "../context/Context";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { ShieldCheck } from "lucide-react";
 
 export default function EmailVerify() {
   axios.defaults.withCredentials = true;
