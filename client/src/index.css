@@ -20,15 +20,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-.humberger {
-  @apply w-[30px] h-[50px] my-2 block bg-[var(--primary)];
-}
-
 body {
   font-family: "Rubik", sans-serif;
 }
