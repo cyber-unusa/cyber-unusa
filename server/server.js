@@ -24,8 +24,8 @@ const __dirname = path.dirname(__filename);
 connectDB();
 
 const allowedOrigins = [
-  "http://localhost:3000", //! untuk dev
-  "https://cyber-unusa.netlify.app", //? untuk deploy
+  // "http://localhost:3000", //! untuk dev
+  // "https://cyber-unusa.netlify.app", //? untuk deploy
   process.env.WEB_URL,
 ];
 
