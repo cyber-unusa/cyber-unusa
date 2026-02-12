@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { assets } from "../assets/assets";
+import { assets } from "../utils/constants";
 import { AppContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import TextType from "./TextType";
+import TextType from "./common/TextType";
 
 export default function HeroSection() {
   const { userData } = useContext(AppContext);

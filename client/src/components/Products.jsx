@@ -1,33 +1,8 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/Context";
-import { toast } from "react-toastify";
+import useProducts from "../hooks/useProducts";
+import { formatRupiah } from "../utils/utils";
 
 export default function Products() {
-  const { backendUrl } = useContext(AppContext);
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const { data } = await axios.get(backendUrl + "/api/product/get");
-        if (data.success) {
-          setProducts(data.allProducts || []);
-        }
-      } catch (error) {
-        toast.error("Gagal memuat data produk:", error);
-      }
-    };
-    fetchProducts();
-  }, [backendUrl]);
-
-  const formatRupiah = (number) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
+  const { products } = useProducts();
 
   return (
     <>

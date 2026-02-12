@@ -1,14 +1,14 @@
 import React, { useRef, useMemo } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../components/layouts/Navbar";
+import Footer from "../components/layouts/Footer";
 import {
   kadiv,
   staffPsdm,
   staffPendidikan,
   staffPengmas,
   staffInnovation,
-} from "../assets/assets";
-import CircularGallery from "../components/CircularGallery";
+} from "../utils/constants";
+import CircularGallery from "../components/common/CircularGallery";
 import { ArrowDown } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
@@ -77,22 +77,22 @@ const Member = () => {
   // Memoize data items untuk CircularGallery
   const psdmItems = useMemo(
     () => staffPsdm.map((staff) => ({ image: staff.foto, text: staff.nama })),
-    []
+    [],
   );
   const pendidikanItems = useMemo(
     () =>
       staffPendidikan.map((staff) => ({ image: staff.foto, text: staff.nama })),
-    []
+    [],
   );
   const pengmasItems = useMemo(
     () =>
       staffPengmas.map((staff) => ({ image: staff.foto, text: staff.nama })),
-    []
+    [],
   );
   const innovationItems = useMemo(
     () =>
       staffInnovation.map((staff) => ({ image: staff.foto, text: staff.nama })),
-    []
+    [],
   );
 
   return (

@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../components/layouts/Navbar";
+import Footer from "../components/layouts/Footer";
 import Dokumenter from "../components/Dokumenter";
 import HeroSection from "../components/HeroSection";
 import Pengurus from "../components/Pengurus";

@@ -22,7 +22,7 @@ const memberSchema = new mongoose.Schema({
     required: true,
     enum: ["PSDM", "Pendidikan", "Pengmas", "Innovation & Entrepreneur", "BPH"],
   },
-  imageUrl: { type: String, required: true },
+  imageUrl: { type: String, required: false },
   createdAt: { type: Date, default: Date.now },
 });
 

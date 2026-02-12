@@ -1,5 +1,5 @@
 import React from "react";
-import { discord, gmail, instagram, youtube } from "../assets/Icons.jsx";
+import { discord, gmail, instagram, youtube } from "../common/Icons.jsx";
 
 const Footer = () => {
   return (

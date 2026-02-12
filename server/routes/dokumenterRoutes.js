@@ -11,7 +11,7 @@ const dokumenterRouter = express.Router();
 
 dokumenterRouter.post("/add", upload.single("image"), addDokumenter);
 dokumenterRouter.put("/update/:id", upload.single("image"), updateDokumenter);
-dokumenterRouter.post("/delete/:id", deleteDokumenter);
+dokumenterRouter.delete("/delete/:id", deleteDokumenter);
 dokumenterRouter.get("/get", getAllDokumenter);
 
 export default dokumenterRouter;

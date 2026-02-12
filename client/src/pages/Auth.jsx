@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
-import { assets } from "../assets/assets";
+import { assets } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Mail, Lock, User, ArrowLeft, ArrowRight } from "lucide-react";
 
-export default function Login() {
+export default function Auth() {
   const navigate = useNavigate();
   const { userData } = useContext(AppContext);
 

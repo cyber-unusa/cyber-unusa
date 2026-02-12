@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
 import EmailVerify from "./pages/EmailVerify";
 import ResetPassword from "./pages/ResetPassword";
 import { ToastContainer } from "react-toastify";
@@ -13,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import CoomingSoon from "./pages/CoomingSoon.jsx";
 import Page404 from "./pages/Page404.jsx";
 import Presensi from "./pages/Presensi.jsx";
+import Auth from "./pages/Auth.jsx";
 
 export default function App() {
   return (
@@ -23,7 +23,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/member" element={<Member />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Auth />} />
           <Route path="/email-verify" element={<EmailVerify />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/cyber-mart" element={<CyberMart />} />

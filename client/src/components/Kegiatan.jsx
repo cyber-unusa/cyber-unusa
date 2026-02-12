@@ -1,29 +1,8 @@
-import axios from "axios";
-import { useEffect, useState, useContext } from "react";
-import { AppContext } from "../context/Context";
+import useKegiatan from "../hooks/useKegiatans";
+import { formatDate } from "../utils/utils";
 
 export default function Kegiatan() {
-  const { backendUrl } = useContext(AppContext);
-  const [kegiatans, setKegiatans] = useState([]);
-
-  useEffect(() => {
-    const fetchKegiatan = async () => {
-      try {
-        const { data } = await axios.get(backendUrl + "/api/kegiatan/get");
-        if (data.success) {
-          setKegiatans(data.allKegiatan || []);
-        }
-      } catch (error) {
-        console.error("Gagal memuat data kegiatan:", error);
-      }
-    };
-    fetchKegiatan();
-  }, [backendUrl]);
-
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString("id-ID", options);
-  };
+  const { kegiatans } = useKegiatan();
 
   return (
     <>
@@ -34,7 +13,11 @@ export default function Kegiatan() {
       {kegiatans && kegiatans.length > 0 ? (
         <div className="container px-6 mx-auto flex flex-wrap gap-8 justify-center">
           {kegiatans.map((item) => (
-            <div className="rounded-lg shadow-lg overflow-hidden mb-10 lg:w-72">
+            <div
+              className="rounded-lg shadow-lg overflow-hidden mb-10 lg:w-72"
+              id={item._id}
+              key={item._id}
+            >
               <img src={item.imageUrl} alt="banner" className="w-full" />
               <div className="py-6 px-4">
                 <div className="font-semibold text-xl font-nunito">

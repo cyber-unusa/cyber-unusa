@@ -1,16 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/Context";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import ManageMembers from "../components/ManageMembers";
-import ManageAttendance from "../components/ManageAttendance";
+import Navbar from "../components/layouts/Navbar";
+import Footer from "../components/layouts/Footer";
+import ManageMembers from "../features/dashboard/ManageMembers";
+import ManageAttendance from "../features/dashboard/ManageAttendance";
 import { toast } from "react-toastify";
 
 const Presensi = () => {
   const { userData } = useContext(AppContext);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("absensi");
+  const [activeTab, setActiveTab] = useState("presensi");
 
   useEffect(() => {
     //! Proteksi halaman, sama seperti Dashboard
@@ -38,15 +38,15 @@ const Presensi = () => {
     <div>
       <Navbar />
       <div className="container mx-auto mt-20 p-4 pb-32">
-        <h1 className="text-3xl font-bold mb-4">Manajemen Absensi</h1>
+        <h1 className="text-3xl font-bold mb-4">Manajemen Presensi</h1>
         <div className="flex border-b border-zinc-200 mb-4">
           <button
-            onClick={() => setActiveTab("absensi")}
+            onClick={() => setActiveTab("presensi")}
             className={`py-2 px-4 ${
-              activeTab === "absensi" ? "border-b-2 border-blue-500" : ""
+              activeTab === "presensi" ? "border-b-2 border-blue-500" : ""
             }`}
           >
-            Kelola Absensi
+            Kelola Presensi
           </button>
           <button
             onClick={() => setActiveTab("anggota")}
@@ -58,7 +58,7 @@ const Presensi = () => {
           </button>
         </div>
         <div>
-          {activeTab === "absensi" && <ManageAttendance />}
+          {activeTab === "presensi" && <ManageAttendance />}
           {activeTab === "anggota" && <ManageMembers />}
         </div>
       </div>

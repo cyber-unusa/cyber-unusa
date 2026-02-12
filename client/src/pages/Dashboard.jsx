@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/Context";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import ManageDokumenter from "../components/ManageDokumenter";
-import ManageKegiatan from "../components/ManageKegiatan";
-import ManageProducts from "../components/ManageProducts";
-import ManageUsers from "../components/ManageUsers";
+import Navbar from "../components/layouts/Navbar";
+import Footer from "../components/layouts/Footer";
+import ManageDokumenter from "../features/dashboard/ManageDokumenter";
+import ManageKegiatan from "../features/dashboard/ManageKegiatan";
+import ManageProducts from "../features/dashboard/ManageProducts";
+import ManageUsers from "../features/dashboard/ManageUsers";
 import { toast } from "react-toastify";
 import {
   LayoutDashboard,
@@ -19,7 +19,7 @@ import {
 const Dashboard = () => {
   const { userData } = useContext(AppContext);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("dokumenter");
+  const [activeTab, setActiveTab] = useState("users");
 
   useEffect(() => {
     if (userData === false) {
@@ -41,6 +41,13 @@ const Dashboard = () => {
   // Data Tab Navigasi
   const tabs = [
     {
+      id: "users",
+      label: "managemen User",
+      icon: User2,
+      color: "text-green-600",
+      bgColor: "bg-green-100",
+    },
+    {
       id: "dokumenter",
       label: "Dokumenter",
       icon: FileVideo,
@@ -55,18 +62,11 @@ const Dashboard = () => {
       bgColor: "bg-blue-100",
     },
     {
-      id: "Product",
+      id: "product",
       label: "Produk / Mart",
       icon: ShoppingBag,
       color: "text-yellow-600",
       bgColor: "bg-yellow-100",
-    },
-    {
-      id: "Users",
-      label: "managemen User",
-      icon: User2,
-      color: "text-green-600",
-      bgColor: "bg-green-100",
     },
   ];
 
@@ -85,7 +85,8 @@ const Dashboard = () => {
               Admin Dashboard
             </h1>
             <p className="text-gray-500 mt-1">
-              Kelola konten, kegiatan, dan produk merchandise Cyber UNUSA.
+              Kelola Pengguna, konten, kegiatan, dan produk merchandise Cyber
+              UNUSA.
             </p>
           </div>
         </div>
@@ -121,6 +122,11 @@ const Dashboard = () => {
 
         {/* Konten Utama */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[500px]">
+          {activeTab === "users" && (
+            <div className="animate-fadeIn">
+              <ManageUsers />
+            </div>
+          )}
           {activeTab === "dokumenter" && (
             <div className="animate-fadeIn">
               <ManageDokumenter />
@@ -131,14 +137,9 @@ const Dashboard = () => {
               <ManageKegiatan />
             </div>
           )}
-          {activeTab === "Product" && (
+          {activeTab === "product" && (
             <div className="animate-fadeIn">
               <ManageProducts />
-            </div>
-          )}
-          {activeTab === "Users" && (
-            <div className="animate-fadeIn">
-              <ManageUsers />
             </div>
           )}
         </div>

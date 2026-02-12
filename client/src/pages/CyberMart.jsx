@@ -1,7 +1,7 @@
 import React from "react";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-import { money, bag, task } from "../assets/Icons";
+import Footer from "../components/layouts/Footer";
+import Navbar from "../components/layouts/Navbar";
+import { money, bag, task } from "../components/common/Icons";
 import Products from "../components/Products";
 
 export default function CyberMart() {

@@ -1,5 +1,5 @@
-import cyber_logo from "./logo.png";
-import heroSection from "./heroSection.jpg";
+import cyber_logo from "../assets/logo.png";
+import heroSection from "../assets/heroSection.jpg";
 
 export const assets = {
   cyber_logo,

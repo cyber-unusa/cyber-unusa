@@ -1,24 +1,7 @@
-import axios from "axios";
-import { useEffect, useState, useContext } from "react";
-import { AppContext } from "../context/Context";
+import useDokumenter from "../hooks/useDokumenter";
 
 export default function Dokumenter() {
-  const { backendUrl } = useContext(AppContext);
-  const [dokumenters, setDokumenters] = useState([]);
-
-  useEffect(() => {
-    const fetchDokumenter = async () => {
-      try {
-        const { data } = await axios.get(backendUrl + "/api/dokumenter/get");
-        if (data.success) {
-          setDokumenters(data.allDokumenter || []);
-        }
-      } catch (error) {
-        console.error("Gagal memuat dokumenter:", error);
-      }
-    };
-    fetchDokumenter();
-  }, [backendUrl]);
+  const { dokumenters } = useDokumenter();
 
   return (
     <>
