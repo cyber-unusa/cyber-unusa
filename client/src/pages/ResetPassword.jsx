@@ -1,20 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { AppContext } from "../context/Context";
-import axios from "axios";
-import { Mail, Lock, ArrowLeft } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
+import { Mail, Lock, ArrowLeft, KeyRound } from "lucide-react";
 
 export default function ResetPassword() {
-  const { backendUrl } = useContext(AppContext);
-  axios.defaults.withCredentials = true;
-
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [isEmailSend, setIsEmailSend] = useState("");
-  const [otp] = useState(0);
+
+  const [isEmailSend, setIsEmailSend] = useState(false);
   const [isOtpSubmit, setIsOtpSubmit] = useState(false);
+
+  const { requestResetOtp, verifyResetCode, submitNewPassword } = useAuth();
+  const navigate = useNavigate();
 
   const inputRefs = React.useRef([]);
 
@@ -46,46 +43,26 @@ export default function ResetPassword() {
 
   const onSubmitEmail = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        backendUrl + "/api/auth/send-reset-otp",
-        { email },
-      );
-      data.success ? toast.success(data.message) : toast.error(data.message);
-      data.success && setIsEmailSend(true);
-    } catch (error) {
-      toast.error(error.message);
+    const success = await requestResetOtp(email);
+    if (success) {
+      setIsEmailSend(true);
     }
   };
 
   const onSubmitOtp = async (e) => {
     e.preventDefault();
-    try {
-      const otpArray = inputRefs.current.map((e) => e.value);
-      const otp = otpArray.join("");
-      const { data } = await axios.post(
-        backendUrl + "/api/auth/verify-reset-otp",
-        { email, otp },
-      );
-      data.success ? toast.success(data.message) : toast.error(data.message);
-      data.success && setIsOtpSubmit(true);
-    } catch (error) {
-      toast.error(error.message);
-    }
+    const otpArray = inputRefs.current.map((e) => e.value);
+    const otp = otpArray.join("");
+    const success = await verifyResetCode(email, otp);
+    if (success) setIsOtpSubmit(true);
   };
 
   const onSubmitNewPass = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        backendUrl + "/api/auth/reset-password",
-        { email, otp, newPassword },
-      );
-
-      data.success ? toast.success(data.message) : toast.error(data.message);
-      data.success && navigate("/login");
-    } catch (error) {
-      toast.error(error.message);
+    const success = await submitNewPassword(email, newPassword);
+    if (success) {
+      setIsEmailSend(false);
+      setIsOtpSubmit(false);
     }
   };
 

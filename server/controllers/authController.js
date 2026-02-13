@@ -1,38 +1,16 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import userModel from "../models/userModel.js";
-import transporter from "../config/nodemailer.js";
-import {
-  EMAIL_VERIFY_TEMPLATE,
-  PASSWORD_RESET_TEMPLATE,
-  WELCOME_TEMPLATE,
-} from "../config/emailTemplate.js";
+import * as authService from "../services/authService.js";
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
-
   if (!name || !email || !password) {
-    return res.json({ success: false, message: "Input kurang Lengkap Brooo" });
+    return res.json({ success: false, message: "Data tidak lengkap" });
   }
 
   try {
-    const existingUser = await userModel.findOne({ email });
-
-    if (existingUser) {
-      return res.json({
-        success: false,
-        message: "User udah Kedaftar Brooo!",
-      });
-    }
-
-    //* enkripsi password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = new userModel({ name, email, password: hashedPassword });
-    await user.save();
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+    const { token, user } = await authService.registerService({
+      name,
+      email,
+      password,
     });
 
     res.cookie("token", token, {
@@ -42,14 +20,9 @@ export const register = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    await sendVerifyOtpEmail(user._id);
-
-    return res.json({
-      success: true,
-      message: `Selamat Datang ${user.name}. Lakukan Verifikasi terlebih dahulu`,
-    });
+    return res.json({ success: true, message: "Register Berhasil", user });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -64,26 +37,18 @@ export const login = async (req, res) => {
   }
 
   try {
-    const user = await userModel.findOne({ email });
+    const result = await authService.loginService({ email, password });
 
-    if (!user) {
+    if (result.status === "UNVERIFIED") {
       return res.json({
         success: false,
-        message: "Emailnya salah Broo",
+        isVerified: false,
+        userId: result.userId,
+        message: result.message,
       });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.json({
-        success: false,
-        message: "Passwordnya salah Broo",
-      });
-    }
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const { token, user } = result;
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -92,7 +57,11 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({ success: true, message: `Selamat Datang ${user.name}` });
+    return res.json({
+      success: true,
+      message: `Selamat Datang ${user.name}`,
+      user,
+    });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
@@ -113,66 +82,15 @@ export const logout = async (req, res) => {
   }
 };
 
-//* Pengiriman Kode Otp verifikasi Email
-const sendVerifyOtpEmail = async (userId) => {
-  try {
-    const user = await userModel.findById(userId);
-
-    if (user.isAccountVerified) {
-      throw new Error("Akunmu udah terverifikasi broo");
-    }
-
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
-    user.verifyOtp = otp;
-    user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
-
-    await user.save();
-
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: "Kode Verifikasi Akun Cyber Unusa",
-      html: EMAIL_VERIFY_TEMPLATE(otp),
-    };
-
-    await transporter.sendMail(mailOptions);
-  } catch (error) {
-    console.error("Gagal kirim email:", error);
-    throw error;
-  }
-};
-
 export const sendVerifyOtp = async (req, res) => {
   try {
     const userId = req.userId;
 
-    const user = await userModel.findById(userId);
-
-    if (user.isAccountVerified) {
-      return res.json({
-        success: false,
-        message: "Akunmu udah terverifikasi broo",
-      });
-    }
-
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
-    user.verifyOtp = otp;
-    user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
-
-    await user.save();
-
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: "Kode Verifikasi Akun Cyber Unusa",
-      html: EMAIL_VERIFY_TEMPLATE(otp),
-    };
-
-    await transporter.sendMail(mailOptions);
+    const message = await authService.sendVerifyEmailOtpService(userId);
 
     res.json({
       success: true,
-      message: "Kode verifikasi Otp udah terkirim broo",
+      message,
     });
   } catch (error) {
     console.error("Gagal kirim email:", error);
@@ -181,7 +99,7 @@ export const sendVerifyOtp = async (req, res) => {
 };
 
 export const verifyEmail = async (req, res) => {
-  const userId = req.userId;
+  const userId = req.userId || req.body.userId;
   const { otp } = req.body;
 
   if (!userId || !otp) {
@@ -192,40 +110,19 @@ export const verifyEmail = async (req, res) => {
   }
 
   try {
-    const user = await userModel.findById(userId);
+    const { token, user } = await authService.verifyEmailService(userId, otp);
 
-    if (!user) {
-      return res.json({ success: false, message: "User nggak ada broo" });
-    }
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
-    if (user.verifyOtp === "" || user.verifyOtp !== otp) {
-      return res.json({ success: false, message: "Kode otpmu salah broo" });
-    }
-
-    if (user.verifyOtpExpireAt < Date.now()) {
-      return res.json({ success: false, message: "Kode otpmu udah expired" });
-    }
-
-    user.isAccountVerified = true;
-    user.verifyOtp = "";
-    user.verifyOtpExpireAt = 0;
-
-    //* Sending Welcome Email
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: "Selamat Datang di Cyber Unusa! 🚀",
-      html: WELCOME_TEMPLATE(user.name),
-    };
-    if (user.isAccountVerified == true) {
-      await transporter.sendMail(mailOptions);
-      console.log("Message sent:", mailOptions.messageId);
-    }
-
-    await user.save();
     return res.json({
       success: true,
-      message: "Selamat Emailmu udah terverifikasi broo",
+      message: "Email berhasil diverifikasi dan Anda telah login otomatis",
+      user,
     });
   } catch (error) {
     return res.json({ success: false, message: error.message });
@@ -244,36 +141,11 @@ export const isAuthenticated = async (req, res) => {
 //* Pengiriman kode otp reset password
 export const sendResetOtp = async (req, res) => {
   const { email } = req.body;
-
-  if (!email) {
-    return res.json({ success: false, message: "Masukkin emailnya dulu broo" });
-  }
-
   try {
-    const user = await userModel.findOne({ email });
-
-    if (!user) {
-      return res.json({ success: false, message: "User nggak ada broo" });
-    }
-
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
-    user.resetOtp = otp;
-    user.resetOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
-
-    await user.save();
-
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: "Reset Password Cyber Unusa",
-      html: PASSWORD_RESET_TEMPLATE(otp),
-    };
-
-    await transporter.sendMail(mailOptions);
-
+    const message = await authService.sendResetOtpService(email);
     res.json({
       success: true,
-      message: "Kode verifikasi Otp udah terkirim broo",
+      message,
     });
   } catch (error) {
     return res.json({ success: false, message: error.message });
@@ -283,32 +155,12 @@ export const sendResetOtp = async (req, res) => {
 export const verifyResetOtp = async (req, res) => {
   const { email, otp } = req.body;
 
-  if (!email || !otp) {
-    return res.json({ success: false, message: "Input Kurang Lengkap Brooo" });
-  }
-
   try {
-    const user = await userModel.findOne({ email });
-
-    if (!user) {
-      return res.json({ success: false, message: "User nggak ada broo" });
-    }
-
-    if (user.resetOtp === "" || user.resetOtp !== otp) {
-      return res.json({ success: false, message: "Kode otpmu salah broo" });
-    }
-
-    if (user.resetOtpExpireAt < Date.now()) {
-      return res.json({ success: false, message: "Kode otpmu udah expired" });
-    }
-
-    user.resetOtp = "";
-    user.resetOtpExpireAt = 0;
-    await user.save();
+    const message = await authService.verifyResetOtpService(email, otp);
 
     res.json({
       success: true,
-      message: "Kode otpmu berhasil diverifikasi",
+      message,
     });
   } catch (error) {
     return res.json({ success: false, message: error.message });
@@ -318,29 +170,13 @@ export const verifyResetOtp = async (req, res) => {
 //* Reset user Password
 export const resetPassword = async (req, res) => {
   const { email, newPassword } = req.body;
-  console.log("email:", email);
-  console.log("newPassword:", newPassword);
-
-  if (!email || !newPassword) {
-    return res.json({ success: false, message: "Input Kurang Lengkap Brooo" });
-  }
 
   try {
-    const user = await userModel.findOne({ email });
-
-    if (!user) {
-      return res.json({ success: false, message: "User nggak ada broo" });
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    user.password = hashedPassword;
-
-    await user.save();
+    const message = await authService.resetPasswordService(email, newPassword);
 
     return res.json({
       success: true,
-      message: "Perubahan Password udah berhasil Broo",
+      message,
     });
   } catch (error) {
     return res.json({ success: false, message: error.message });

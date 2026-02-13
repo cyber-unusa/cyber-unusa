@@ -1,26 +1,18 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { useAuth } from "../hooks/useAuth";
 import { AppContext } from "../context/Context";
-import { toast } from "react-toastify";
-import { useEffect } from "react";
 import { ShieldCheck } from "lucide-react";
 
 export default function EmailVerify() {
-  axios.defaults.withCredentials = true;
-  const { isLoggedin, userData, getUserData, sendVerifyOtp, verifyEmail } =
-    useContext(AppContext);
+  const { isLoggedin, userData } = useContext(AppContext);
+  const { sendVerificationCode, verifyEmailAddress } = useAuth();
   const navigate = useNavigate();
-  const inputRefs = React.useRef([]);
+  const location = useLocation();
+  const userIdFromLogin = location.state?.userId;
 
-  const sendOtp = async () => {
-    try {
-      await sendVerifyOtp();
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  const inputRefs = React.useRef([]);
 
   const handleInput = (e, index) => {
     if (e.target.value.length > 0 && index < inputRefs.current.length - 1) {
@@ -47,21 +39,16 @@ export default function EmailVerify() {
       inputRefs.current[pasteArr.length - 1].focus();
   };
 
+  const sendOtp = async () => {
+    await sendVerificationCode();
+  };
+
   const onSubmitHandler = async (e) => {
-    try {
-      e.preventDefault();
-      const otpArray = inputRefs.current.map((e) => e.value);
-      const otp = otpArray.join("");
-
-      const success = await verifyEmail(otp);
-
-      if (success) {
-        getUserData();
-        navigate("/");
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
+    e.preventDefault();
+    const otpArray = inputRefs.current.map((e) => e.value);
+    const otp = otpArray.join("");
+    if (otp.length < 6) return;
+    await verifyEmailAddress(otp, userIdFromLogin);
   };
 
   useEffect(() => {

@@ -23,6 +23,7 @@ authRouter.get("/is-auth", userAuth, isAuthenticated);
 // ? Verifikasi Email
 authRouter.post("/send-verify-otp", userAuth, sendVerifyOtp);
 authRouter.post("/verify-account", userAuth, verifyEmail);
+authRouter.post("/verify-account-public", verifyEmail);
 
 //? Reset Password
 authRouter.post("/send-reset-otp", sendResetOtp);

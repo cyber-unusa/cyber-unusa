@@ -1,14 +1,13 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { assets } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/Context";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const { userData, backendUrl, setUserData, setIsLoggedin } =
-    useContext(AppContext);
+  const { userData } = useContext(AppContext);
+  const { logoutUser } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
   const dropdownRef = useRef(null);
@@ -37,24 +36,10 @@ export default function Navbar() {
 
   const handleMobileMenuToggle = () => setMobileMenu((prev) => !prev);
 
-  // Logout handler, can close dropdown and mobile menu if needed
   const handleLogout = async () => {
-    try {
-      axios.defaults.withCredentials = true;
-      const { data } = await axios.post(backendUrl + "/api/auth/logout");
-      if (data.success) {
-        setIsLoggedin(false);
-        setUserData(false);
-        toast.success(data.message);
-        setDropdownOpen(false);
-        setMobileMenu(false);
-        navigate("/");
-      }
-    } catch (error) {
-      toast.error(error.message);
-      setDropdownOpen(false);
-      setMobileMenu(false);
-    }
+    await logoutUser();
+    setDropdownOpen(false);
+    setMobileMenu(false);
   };
 
   // Menu item data

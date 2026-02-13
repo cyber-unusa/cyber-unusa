@@ -12,7 +12,6 @@ const userRouter = express.Router();
 
 //? Route user
 userRouter.get("/data", userAuth, getUserData);
-// userRouter.put("/change-password", userAuth, changePassword);
 
 //? Route admin
 userRouter.get("/all-users", adminAuth, getAllUsers);

@@ -1,65 +1,25 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useState } from "react";
 import { assets } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../context/Context";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { useAuth } from "../hooks/useAuth";
 import { Mail, Lock, User, ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function Auth() {
   const navigate = useNavigate();
-  const { userData } = useContext(AppContext);
 
-  const { backendUrl, setIsLoggedin, getUserData } = useContext(AppContext);
+  const { loginUser, registerUser } = useAuth();
 
   const [state, setState] = useState("Login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    if (userData) {
-      navigate("/");
-      toast.info("Anda sudah login");
-    }
-  }, [userData, navigate]);
-
   const onSubmitHandler = async (e) => {
-    try {
-      e.preventDefault();
-
-      axios.defaults.withCredentials = true;
-
-      if (state === "Sign Up") {
-        const { data } = await axios.post(backendUrl + "/api/auth/register", {
-          name,
-          email,
-          password,
-        });
-        if (data.success) {
-          setIsLoggedin(true);
-          getUserData();
-          navigate("/email-verify");
-          toast.success(data.message);
-        } else {
-          toast.error(data.message);
-        }
-      } else {
-        const { data } = await axios.post(backendUrl + "/api/auth/login", {
-          email,
-          password,
-        });
-        if (data.success) {
-          setIsLoggedin(true);
-          getUserData();
-          navigate("/");
-          toast.success(data.message);
-        } else {
-          toast.error(data.message);
-        }
-      }
-    } catch (error) {
-      toast.error(error.message);
+    e.preventDefault();
+    if (state === "Sign Up") {
+      await registerUser(name, email, password);
+    } else {
+      await loginUser(email, password);
     }
   };
 
