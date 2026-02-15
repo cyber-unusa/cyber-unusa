@@ -1,5 +1,6 @@
 {
   "name": "server",
+  "private": "true",
   "version": "1.0.0",
   "main": "server.js",
   "type": "module",
@@ -13,7 +14,7 @@
     "node": "22.x"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "@google/genai": "^1.30.0",
