@@ -8,7 +8,7 @@ export default function Dokumenter() {
 
   return (
     <>
-      <div className="container mx-auto px-20 text-center">
+      <div className="container mx-auto px-8 lg:px-20 text-center">
         <h2 className="text-3xl lg:text-2xl font-bold text-center mb-16 text-green-500 pt-8 font-rubik">
           DOKUMENTER KEGIATAN CYBER
         </h2>
@@ -36,9 +36,11 @@ export default function Dokumenter() {
             ))}
           </div>
         ) : (
-          <p className="text-gray-600 font-bold">
-            Belum ada dokumentasi tersedia.
-          </p>
+          <div className="bg-white rounded-lg border border-zinc-200 p-6 text-center hover:shadow-lg transition-shadow w-full max-w-xs mx-auto">
+            <p className="text-center text-gray-600 text-xl font-bold">
+              Belum ada Kegiatan yang Dokumentasikan.
+            </p>
+          </div>
         )}
       </div>
 
