@@ -141,17 +141,29 @@ cyber-unusa/
 │   ├── public/            # Static assets
 │   ├── src/
 │   │   ├── components/    # Reusable components
+|   |   |   ├── layouts/      # Layout components (Header, Footer, etc.)
+|   |   |   ├── common/       # Common components (Button, Input, etc.)
+│   │   |   └── ...
+|   |   ├── contexts/      # React contexts (auth, theme, etc.)
+|   |   ├── features/      # Feature-specific components (dashboard, marketplace, etc.)
+|   |   ├── hooks/         # Custom hooks
 │   │   ├── pages/         # Page components
 │   │   ├── services/      # API services
+|   |   ├── utils/         # Utility functions (auth, validation, etc.)
 │   │   └── ...
 │   └── package.json
 ├── server/                 # Backend Node.js + Express
 │   ├── api/               # API entry point
+|   ├── config/            # Configuration files (database, email, etc.)
 │   ├── controllers/       # Route controllers
+|   ├── middlewares/       # Custom middleware (auth, error handling, etc.)
 │   ├── models/            # MongoDB models
 │   ├── routes/            # API routes
+|   ├── services/          # Business logic services
+|   ├── utils/             # Utility functions (auth, middleware, etc.)
 │   └── package.json
-├── asset/                  # Shared assets
+├── asset/                 # Shared assets
+├── LICENSE                # Lisensi MIT
 ├── netlify.toml           # Netlify config
 └── README.md
 ```
