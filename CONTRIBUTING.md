@@ -13,14 +13,14 @@ Sebelum mulai menulis kode, pastikan kamu sudah melakukan hal berikut:
 1. Pastikan akun GitHub kamu sudah diundang (_invited_) ke dalam repositori ini oleh Kepala Divisi / Pengurus Harian.
 2. Lakukan _clone_ repositori ke komputer lokal kamu:
    ```bash
-   git clone [https://github.com/cyber-unusa/cyber-unusa.git](https://github.com/cyber-unusa/cyber-unusa.git)
+   git clone https://github.com/cyber-unusa/cyber-unusa.git
    ```
 3. Masuk ke folder project, lalu install semua dependency (baik di folder client maupun server):
 
-```bash
-cd cyber-unusa/client && npm install
-cd ../server && npm install
-```
+   ```bash
+   cd cyber-unusa/client && npm install
+   cd ../server && npm install
+   ```
 
 4. Mintalah file .env (Environment Variables) kepada Tech Lead atau Kadiv kamu dan letakkan di folder client dan server. JANGAN PERNAH mengunggah file .env ke GitHub!
 
