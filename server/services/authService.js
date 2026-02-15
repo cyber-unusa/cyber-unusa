@@ -119,7 +119,7 @@ export const verifyEmailService = async (userId, otp) => {
   try {
     await transporter.sendMail(mailOptions);
   } catch (err) {
-    console.log("Email welcome error (ignored):", err);
+    console.error("Email welcome error (ignored):", err);
   }
 
   return {

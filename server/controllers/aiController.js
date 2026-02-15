@@ -7,7 +7,7 @@ export const getAiRespons = async (req, res) => {
     const answer = await getAiChatResponseService(question);
     res.json({ success: true, answer });
   } catch (error) {
-    console.log("AI Error: ", error.message);
+    console.error("AI Error: ", error.message);
     res.json({
       success: false,
       message:

@@ -19,7 +19,11 @@ export const AppContextProvider = ({ children }) => {
         getUserData();
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response && error.response.status === 401) {
+        setIsLoggedin(false);
+      } else {
+        toast.error(error.response?.data?.message || error.message);
+      }
     }
   };
 
@@ -32,7 +36,11 @@ export const AppContextProvider = ({ children }) => {
         toast.error(data.message || "Failed to fetch user data");
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response && error.response.status === 401) {
+        setUserData(null);
+      } else {
+        toast.error(error.response?.data?.message || error.message);
+      }
     }
   };
 

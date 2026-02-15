@@ -36,7 +36,7 @@ export default function useAI() {
         ]);
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       toast.error("Koneksi gagal ke server");
       setChatHistory((prev) => [
         ...prev,

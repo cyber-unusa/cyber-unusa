@@ -70,7 +70,7 @@ export const useAuth = () => {
         navigate("/login");
       }
     } catch (error) {
-      console.error(error);
+      toast.error(error.message || "Terjadi kesalahan saat logout");
     }
   };
 
