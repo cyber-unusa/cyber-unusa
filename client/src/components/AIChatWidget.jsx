@@ -1,64 +1,19 @@
-import React, { useContext, useState } from "react";
-import { AppContext } from "../context/Context";
-import axios from "axios";
+import React, { useState } from "react";
 import { MessageSquare, Send, X, Loader2 } from "lucide-react";
-import { toast } from "react-toastify";
 import Message from "./common/Message";
+import useAI from "../hooks/useAI";
 
 const AIChatWidget = () => {
-  const { backendUrl } = useContext(AppContext);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [question, setQuestion] = useState("");
-  const [chatHistory, setChatHistory] = useState([
-    {
-      role: "assistant",
-      text: "Halo! Saya Asisten Cyber UNUSA. Ada yang bisa saya bantu terkait UKM kami?",
-    },
-  ]);
+
+  const { chatHistory, isLoading, askAI } = useAI();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!question.trim() || isLoading) return;
-
-    const userQuestion = question.trim();
+    if (!question.trim()) return;
+    await askAI(question.trim());
     setQuestion("");
-    setIsLoading(true);
-
-    setChatHistory((prev) => [...prev, { role: "user", text: userQuestion }]);
-    try {
-      const response = await axios.post(`${backendUrl}/api/ai/chat`, {
-        question: userQuestion,
-      });
-
-      if (response.data.success) {
-        setChatHistory((prev) => [
-          ...prev,
-          { role: "assistant", text: response.data.answer },
-        ]);
-      } else {
-        toast.error("AI Error: " + response.data.message);
-        setChatHistory((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            text: "Maaf, terjadi kesalahan di server AI. silahkan coba lagi nanti.",
-          },
-        ]);
-      }
-    } catch (error) {
-      console.log(error.message);
-      toast.error("Koneksi gagal ke server");
-      setChatHistory((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          text: "Gagal terhubung. periksa koneksi atau setatus server",
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
