@@ -5,27 +5,45 @@ const adminAuth = async (req, res, next) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return res.json({
+    return res.status(401).json({
       success: false,
-      message: "Not Authorized. Login again.",
+      message: "Tidak ada akses. Silakan login kembali.",
     });
   }
 
   try {
     const tokenDecode = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await userModel.findById(tokenDecode.id);
+    if (tokenDecode.id) {
+      const user = await userModel.findById(tokenDecode.id);
 
-    if (user && user.role === "admin") {
+      if (!user || user.role !== "admin") {
+        return res.status(403).json({
+          success: false,
+          message: "Akses ditolak! Area ini khusus untuk Admin broo.",
+        });
+      }
+
       req.userId = tokenDecode.id;
       next();
     } else {
-      return res.json({
+      return res.status(401).json({
         success: false,
-        message: "Not Authorized as Admin.",
+        message: "Token tidak valid. Silakan login kembali.",
       });
     }
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        message: "Sesi login telah habis. Silakan login kembali.",
+      });
+    }
+
+    //? Jika token diubah secara ilegal atau error lainnya (403 Forbidden)
+    return res.status(403).json({
+      success: false,
+      message: "Autentikasi gagal: " + error.message,
+    });
   }
 };
 

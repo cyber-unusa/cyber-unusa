@@ -4,9 +4,9 @@ const userAuth = async (req, res, next) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return res.json({
+    return res.status(401).json({
       success: false,
-      message: "Not Authorized. Login lagi broo",
+      message: "Tidak ada akses. Silakan login kembali",
     });
   }
 
@@ -15,16 +15,26 @@ const userAuth = async (req, res, next) => {
 
     if (tokenDecode.id) {
       req.userId = tokenDecode.id;
+      next();
     } else {
-      return res.json({
+      return res.status(401).json({
         success: false,
-        message: "Not Authorized. Login lagi broo",
+        message: "Tidak ada akses. Silakan login kembali",
+      });
+    }
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        message: "Sesi login telah habis. Silakan login kembali.",
       });
     }
 
-    next();
-  } catch (error) {
-    res.json({ success: false, message: error.message });
+    //? Jika token diubah secara ilegal atau error lainnya (403 Forbidden)
+    return res.status(403).json({
+      success: false,
+      message: "Autentikasi gagal: " + error.message,
+    });
   }
 };
 

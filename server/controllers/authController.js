@@ -3,7 +3,9 @@ import * as authService from "../services/authService.js";
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
-    return res.json({ success: false, message: "Data tidak lengkap" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Data tidak lengkap" });
   }
 
   try {
@@ -20,9 +22,11 @@ export const register = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({ success: true, message: "Register Berhasil", user });
+    return res
+      .status(200)
+      .json({ success: true, message: "Register Berhasil", user });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(400).json({ success: false, message: error.message });
   }
 };
 
@@ -30,7 +34,7 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.json({
+    return res.status(400).json({
       success: false,
       message: "Email dan Passwordnya wajib di isi broo",
     });
@@ -40,7 +44,7 @@ export const login = async (req, res) => {
     const result = await authService.loginService({ email, password });
 
     if (result.status === "UNVERIFIED") {
-      return res.json({
+      return res.status(403).json({
         success: false,
         isVerified: false,
         userId: result.userId,
@@ -57,13 +61,16 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: `Selamat Datang ${user.name}`,
       user,
     });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    const statusCode = error.message.includes("salah") ? 401 : 500;
+    return res
+      .status(statusCode)
+      .json({ success: false, message: error.message });
   }
 };
 
@@ -76,9 +83,11 @@ export const logout = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({ success: true, message: "Anda telah keluar" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Anda telah keluar" });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(400).json({ success: false, message: error.message });
   }
 };
 
@@ -88,13 +97,13 @@ export const sendVerifyOtp = async (req, res) => {
 
     const message = await authService.sendVerifyEmailOtpService(userId);
 
-    res.json({
+    res.status(200).json({
       success: true,
       message,
     });
   } catch (error) {
     console.error("Gagal kirim email:", error);
-    res.json({ success: false, message: error.message });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
@@ -103,7 +112,7 @@ export const verifyEmail = async (req, res) => {
   const { otp } = req.body;
 
   if (!userId || !otp) {
-    return res.json({
+    return res.status(400).json({
       success: false,
       message: "Input Kurang Lengkap Brooo",
     });
@@ -119,22 +128,22 @@ export const verifyEmail = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: "Email berhasil diverifikasi dan Anda telah login otomatis",
       user,
     });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(400).json({ success: false, message: error.message });
   }
 };
 
 //* Pengecekkan authentikasi user
 export const isAuthenticated = async (req, res) => {
   try {
-    return res.json({ success: true });
+    return res.status(200).json({ success: true });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -143,12 +152,12 @@ export const sendResetOtp = async (req, res) => {
   const { email } = req.body;
   try {
     const message = await authService.sendResetOtpService(email);
-    res.json({
+    res.status(200).json({
       success: true,
       message,
     });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(400).json({ success: false, message: error.message });
   }
 };
 
@@ -158,12 +167,12 @@ export const verifyResetOtp = async (req, res) => {
   try {
     const message = await authService.verifyResetOtpService(email, otp);
 
-    res.json({
+    res.status(200).json({
       success: true,
       message,
     });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(400).json({ success: false, message: error.message });
   }
 };
 
@@ -174,11 +183,11 @@ export const resetPassword = async (req, res) => {
   try {
     const message = await authService.resetPasswordService(email, newPassword);
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message,
     });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(400).json({ success: false, message: error.message });
   }
 };
