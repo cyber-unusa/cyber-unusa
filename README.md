@@ -163,6 +163,7 @@ cyber-unusa/
 |   ├── utils/             # Utility functions (auth, middleware, etc.)
 │   └── package.json
 ├── asset/                 # Shared assets
+├── CONTRIBUTING.md        # Panduan kontribusi
 ├── LICENSE                # Lisensi MIT
 ├── netlify.toml           # Netlify config
 └── README.md
@@ -208,6 +209,7 @@ Kami menyambut kontribusi untuk meningkatkan proyek ini. Ikuti langkah-langkah b
 
 - Untuk perubahan besar, disarankan untuk membuka _issue_ terlebih dahulu untuk mendiskusikan rencana perubahan atau penambahan fitur.
 - Pastikan untuk memperbarui dokumentasi atau pengujian jika diperlukan.
+- Ikuti pedoman kode yang ada di `CONTRIBUTING.md` untuk menjaga konsistensi kode di seluruh proyek.
 - Lihat `TODO.md` di direktori `client/` dan `server/` untuk fitur yang sedang dalam pengembangan.
 
 Terima kasih telah berkontribusi! 🚀
