@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../../components/common/Modal";
-import { ImageIcon, Tag, DollarSign, Phone } from "lucide-react";
+import { ImageIcon, Tag, DollarSign, Phone, Calendar } from "lucide-react";
 
 export default function ProductFormModal({ product, onClose, onSave }) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [nomorWa, setNomorWa] = useState("");
+  const [date, setDate] = useState(Date.now());
+  const [endDate, setEndDate] = useState("");
+
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -16,6 +19,8 @@ export default function ProductFormModal({ product, onClose, onSave }) {
       setPrice(product.price);
       setDescription(product.description);
       setNomorWa(product.nomorWa);
+      setDate(product.endDate.slice(0, 10));
+      setEndDate(product.endDate.slice(0, 10));
       setImagePreview(product.imageUrl); // Tampilkan gambar lama
     }
   }, [product]);
@@ -27,6 +32,8 @@ export default function ProductFormModal({ product, onClose, onSave }) {
     formData.append("price", price);
     formData.append("description", description);
     formData.append("nomorWa", nomorWa);
+    formData.append("date", date);
+    formData.append("endDate", endDate);
     if (image) formData.append("image", image);
 
     onSave(formData);
@@ -96,6 +103,39 @@ export default function ProductFormModal({ product, onClose, onSave }) {
                 required
                 className="w-full pl-8 py-1.5 text-sm border rounded focus:ring-1 focus:ring-yellow-500 outline-none"
                 placeholder="0"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="text-xs font-medium text-gray-600">
+              Open Order
+            </label>
+            <div className="relative mt-1">
+              <Calendar className="absolute left-2 top-2 w-4 h-4 text-gray-400" />
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+                className="w-full pl-8 py-1.5 text-sm border rounded focus:ring-1 focus:ring-yellow-500 outline-none"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-medium text-gray-600">
+              Batas Tanggal PO
+            </label>
+            <div className="relative mt-1">
+              <Calendar className="absolute left-2 top-2 w-4 h-4 text-gray-400" />
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                required
+                className="w-full pl-8 py-1.5 text-sm border rounded focus:ring-1 focus:ring-yellow-500 outline-none"
               />
             </div>
           </div>

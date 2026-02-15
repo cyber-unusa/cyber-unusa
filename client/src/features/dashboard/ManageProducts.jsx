@@ -2,7 +2,7 @@ import { useState } from "react";
 import useProducts from "../../hooks/useProducts";
 import ProductFormModal from "../products/ProductFormModal";
 import { Plus, Edit, Trash2, Phone, ShoppingBag } from "lucide-react";
-import { formatRupiah } from "../../utils/utils";
+import { formatRupiah, formatDate } from "../../utils/utils";
 
 const ManageProducts = () => {
   const { products, loading, addProduct, editProduct, deleteProduct } =
@@ -63,6 +63,7 @@ const ManageProducts = () => {
               <th className="px-6 py-3">No</th>
               <th className="px-6 py-3">Foto</th>
               <th className="px-6 py-3">Detail Produk</th>
+              <th className="px-6 py-3">Pre Order</th>
               <th className="px-6 py-3">Harga & Kontak</th>
               <th className="px-6 py-3 text-center">Aksi</th>
             </tr>
@@ -96,6 +97,11 @@ const ManageProducts = () => {
                       <p className="text-sm text-center text-gray-500 line-clamp-2 mt-1">
                         {product.description}
                       </p>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 align-middle">
+                    <div className="text-[13px] text-gray-400 mt-1">
+                      {formatDate(product.date)} - {formatDate(product.endDate)}
                     </div>
                   </td>
                   <td className="px-6 py-4 align-middle">

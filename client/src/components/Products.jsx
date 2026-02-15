@@ -1,5 +1,5 @@
 import useProducts from "../hooks/useProducts";
-import { formatRupiah } from "../utils/utils";
+import { formatRupiah, formatDate } from "../utils/utils";
 
 export default function Products() {
   const { products } = useProducts();
@@ -23,6 +23,8 @@ export default function Products() {
               //Todo 3. Buat URL WhatsApp lengkap
               const whatsappURL = `https://wa.me/${NOMOR_WA}?text=${encodedMessage}`;
 
+              //Todo 4. Cek apakah PO sudah ditutup
+              const isClosed = product.endDate && new Date(product.endDate) < new Date();
               return (
                 <div
                   key={product._id}
@@ -34,9 +36,17 @@ export default function Products() {
                     className="w-full h-64 object-cover"
                   />
                   <div className="p-6 text-left flex-grow flex flex-col">
-                    <h2 className="font-bold text-xl text-gray-800 mb-2">
+                    <h2 className="font-bold text-xl text-gray-800 mb-1">
                       {product.name}
                     </h2>
+
+                    {/* Tampilkan Info Batas Waktu PO */}
+                    {product.endDate && (
+                      <p className="text-xs font-semibold text-red-500 mb-3">
+                        Batas PO: {formatDate(product.endDate)}
+                      </p>
+                    )}
+
                     <p className="font-poppins text-sm text-gray-600 leading-relaxed mb-3">
                       {product.description}
                     </p>
@@ -44,14 +54,21 @@ export default function Products() {
                       {formatRupiah(product.price)}
                     </p>
 
-                    <a
-                      href={whatsappURL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block w-full text-center bg-[#26B99A] hover:bg-[#13A085] text-white font-bold py-3 px-4 rounded-lg transition duration-300"
-                    >
-                      Pesan Sekarang
-                    </a>
+                    {/* Render Kondisional untuk Tombol PO */}
+                    {isClosed ? (
+                      <div className="block w-full text-center bg-gray-400 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed select-none">
+                        PO Ditutup
+                      </div>
+                    ) : (
+                      <a
+                        href={whatsappURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full text-center bg-[#26B99A] hover:bg-[#13A085] text-white font-bold py-3 px-4 rounded-lg transition duration-300"
+                      >
+                        Pesan Sekarang
+                      </a>
+                    )}
                   </div>
                 </div>
               );

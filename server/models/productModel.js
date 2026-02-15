@@ -7,6 +7,8 @@ const productModelSchema = new mongoose.Schema({
   description: { type: String, required: true },
   imageUrl: { type: String, required: true },
   nomorWa: { type: String, required: true },
+  date: { type: Date, require: true, default: Date.now },
+  endDate: { type: Date, required: true },
 });
 
 const productModel =
