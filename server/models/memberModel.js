@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 //? Menyimpan data Panitia
 const memberSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, index: true },
   nim: { type: String, unique: true, required: true }, //! Untuk ID unik
   role: {
     type: String,

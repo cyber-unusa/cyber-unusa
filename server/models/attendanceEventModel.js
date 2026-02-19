@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 //? Absensi acara
 const attendanceEventSchema = new mongoose.Schema({
   eventName: { type: String, required: true },
-  date: { type: Date, required: true },
+  date: { type: Date, required: true, index: true },
   isLocked: { type: Boolean, default: false },
 });
 

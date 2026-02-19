@@ -2,7 +2,7 @@ import memberModel from "../models/memberModel.js";
 import attendanceRecordModel from "../models/attendanceRecordModel.js";
 import { v2 as cloudinary } from "cloudinary";
 
-export const getAllMemberService = async (id) => {
+export const getAllMemberService = async () => {
   const allMembers = await memberModel.find().sort({ name: 1 }).lean();
 
   if (allMembers.length === 0) return [];

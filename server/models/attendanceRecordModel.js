@@ -14,7 +14,10 @@ const attendanceRecordSchema = new mongoose.Schema({
 });
 
 //? Indeks untuk memastikan satu anggota hanya punya satu data per acara
-attendanceRecordSchema.index({ eventId: 1, memberId: 1 }, { unique: true });
+attendanceRecordSchema.index(
+  { eventId: 1, memberId: 1, status: 1 },
+  { unique: true },
+);
 
 const attendanceRecordModel =
   mongoose.models.attendanceRecord ||
