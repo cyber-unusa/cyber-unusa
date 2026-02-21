@@ -329,11 +329,6 @@ export const generateAttendancePDFService = async ({
     const chromium = (await import("@sparticuz/chromium")).default;
     const puppeteerCore = (await import("puppeteer-core")).default;
 
-    //* Mempercepat loading font standar di Vercel
-    await chromium.font(
-      "https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf",
-    );
-
     browser = await puppeteerCore.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
