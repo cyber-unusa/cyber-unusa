@@ -283,8 +283,13 @@ export const generateAttendancePDFService = async ({
     <html lang="id">
     <head>
       <meta charset="UTF-8">
+      
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Tinos:wght@400;700&display=swap" rel="stylesheet">
+
       <style>
-        body { font-family: 'Times New Roman', Times, serif; font-size: 11px; margin: 0; padding: 0; }
+        body { font-family: 'Tinos', 'Times New Roman', serif; font-size: 11px; margin: 0; padding: 0; }
         
         /* Layout Header untuk Logo Kiri & Kanan */
         .header-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
@@ -350,7 +355,7 @@ export const generateAttendancePDFService = async ({
 
   const pdfBuffer = await page.pdf({
     format: "A4",
-    margin: { top: "1cm", right: "1.5cm", bottom: "2cm", left: "1.5cm" },
+    margin: { top: "2cm", right: "2cm", bottom: "2cm", left: "2cm" },
     printBackground: true,
     displayHeaderFooter: true,
     headerTemplate: "<div></div>", // Kosongkan header jika tidak butuh
