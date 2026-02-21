@@ -5,6 +5,7 @@ import Navbar from "../components/layouts/Navbar";
 import Footer from "../components/layouts/Footer";
 import ManageMembers from "../features/dashboard/ManageMembers";
 import ManageAttendance from "../features/dashboard/ManageAttendance";
+import LaporanKehadiran from "../features/dashboard/LaporanKehadiran";
 import { toast } from "react-toastify";
 
 const Presensi = () => {
@@ -49,6 +50,14 @@ const Presensi = () => {
             Kelola Presensi
           </button>
           <button
+            onClick={() => setActiveTab("laporan")}
+            className={`py-2 px-4 ${
+              activeTab === "laporan" ? "border-b-2 border-blue-500" : ""
+            }`}
+          >
+            Laporan Kehadiran
+          </button>
+          <button
             onClick={() => setActiveTab("anggota")}
             className={`py-2 px-4 ${
               activeTab === "anggota" ? "border-b-2 border-blue-500" : ""
@@ -57,9 +66,23 @@ const Presensi = () => {
             Kelola Daftar Anggota
           </button>
         </div>
-        <div>
-          {activeTab === "presensi" && <ManageAttendance />}
-          {activeTab === "anggota" && <ManageMembers />}
+        {/* Kontent Utama */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[500px]">
+          {activeTab === "presensi" && (
+            <div className="animate-fadeIn">
+              <ManageAttendance />
+            </div>
+          )}
+          {activeTab === "laporan" && (
+            <div className="animate-fadeIn">
+              <LaporanKehadiran />
+            </div>
+          )}
+          {activeTab === "anggota" && (
+            <div className="animate-fadeIn">
+              <ManageMembers />
+            </div>
+          )}
         </div>
       </div>
       <Footer />

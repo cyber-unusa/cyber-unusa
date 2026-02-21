@@ -35,3 +35,34 @@ export const toggleAttendanceEventLock = async (eventId) => {
   );
   return response.data;
 };
+
+//? Dapatkan list acara untuk laporan berdasarkan tanggal
+export const getAttendanceReportList = async (startDate, endDate) => {
+  try {
+    const response = await api.get(
+      `/api/attendance/report/list?startDate=${startDate}&endDate=${endDate}`,
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const printAttendanceReport = async (params) => {
+  try {
+    //! Ubah object params { startDate, endDate } atau { eventId } menjadi query string
+    const queryString = new URLSearchParams(params).toString();
+
+    const response = await api.get(
+      `/api/attendance/report/print?${queryString}`,
+      {
+        // ! SANGAT PENTING: Beritahu Axios bahwa kita mengharapkan file (Blob), bukan JSON
+        responseType: "blob",
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};

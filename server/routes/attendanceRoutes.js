@@ -6,6 +6,8 @@ import {
   updateAttendanceRecord,
   deleteAttendanceEvent,
   toggleEventLock,
+  getAttendanceReportList,
+  generateAttendancePDF,
 } from "../controllers/attendanceController.js";
 import adminAuth from "../middleware/adminAuth.js";
 
@@ -19,6 +21,10 @@ attendanceRouter.delete(
   adminAuth,
   deleteAttendanceEvent,
 );
+
+//? Rute untuk Laporan Kehadiran
+attendanceRouter.get("/report/list", adminAuth, getAttendanceReportList);
+attendanceRouter.get("/report/print", adminAuth, generateAttendancePDF);
 
 //? Rute untuk Record Presensi Spesifik
 attendanceRouter.get(

@@ -6,12 +6,22 @@ import {
   fetchAttendanceRecordsByEvent,
   updateAttendanceRecord,
   toggleAttendanceEventLock,
+  getAttendanceReportList,
+  printAttendanceReport,
 } from "../services/attendanceService";
 import { toast } from "react-toastify";
 
 export default function useAttendance() {
   const [attendances, setAttendances] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  //? State Fitur Cetak
+  const [reportStartDate, setReportStartDate] = useState("");
+  const [reportEndDate, setReportEndDate] = useState("");
+  const [reportList, setReportList] = useState([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
 
   const getAttendances = useCallback(async () => {
     setLoading(true);
@@ -60,7 +70,6 @@ export default function useAttendance() {
     try {
       const res = await updateAttendanceRecord(recordId, status);
       if (res.success) {
-        toast.success(res.message);
         return true;
       }
     } catch (error) {
@@ -96,6 +105,49 @@ export default function useAttendance() {
     }
   };
 
+  //? Handler Fitur Cetak Laporan
+  const handleGenerateReportList = async () => {
+    if (!reportStartDate || !reportEndDate) {
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const data = await getAttendanceReportList(
+        reportStartDate,
+        reportEndDate,
+      );
+      if (data.success) {
+        setReportList(data.reportList);
+      } else {
+        console.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handlePrintPDF = async (params) => {
+    setIsPrinting(true);
+    try {
+      const blob = await printAttendanceReport(params);
+      const fileUrl = URL.createObjectURL(blob);
+      setPdfPreviewUrl(fileUrl);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsPrinting(false);
+    }
+  };
+
+  const closePdfPreview = () => {
+    if (pdfPreviewUrl) {
+      URL.revokeObjectURL(pdfPreviewUrl); // Bersihkan memori browser
+    }
+    setPdfPreviewUrl(null);
+  };
+
   return {
     attendances,
     loading,
@@ -105,5 +157,18 @@ export default function useAttendance() {
     getRecordsByEvent,
     editAttendanceRecord,
     toggleAttendanceLock,
+
+    //? Fitur Cetak Laporan
+    reportStartDate,
+    setReportStartDate,
+    reportEndDate,
+    setReportEndDate,
+    reportList,
+    isGenerating,
+    isPrinting,
+    pdfPreviewUrl,
+    handleGenerateReportList,
+    handlePrintPDF,
+    closePdfPreview,
   };
 }

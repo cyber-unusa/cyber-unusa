@@ -56,13 +56,19 @@ export const useMembers = () => {
   };
 
   const deleteMember = async (id) => {
+    const previousMembers = [...members];
+    setMembers((prev) => prev.filter((m) => m._id !== id)); // Optimistic update
+
     try {
       const res = await removeMemberData(id);
       if (res.success) {
         toast.success(res.message);
         getMembers();
+      } else {
+        throw new Error(res.message || "Gagal hapus member");
       }
     } catch (error) {
+      setMembers(previousMembers); // Revert on failure
       toast.error(error.response?.data?.message || "Gagal hapus member");
     }
   };

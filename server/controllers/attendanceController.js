@@ -5,6 +5,8 @@ import {
   toggleEventLockService,
   createAttendanceEventService,
   deleteAttendanceEventService,
+  getAttendanceReportListService,
+  generateAttendancePDFService,
 } from "../services/attendanceService.js";
 
 //? Dapatkan semua Acara Presensi (list-nya saja)
@@ -86,5 +88,49 @@ export const deleteAttendanceEvent = async (req, res) => {
     res.json({ success: true, message: "Acara Presensi berhasil dihapus" });
   } catch (error) {
     res.json({ success: false, message: error.message });
+  }
+};
+
+export const getAttendanceReportList = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.json({
+        success: false,
+        message: "Tanggal mulai dan akhir harus diisi",
+      });
+    }
+
+    const reportList = await getAttendanceReportListService(startDate, endDate);
+    res.json({ success: true, reportList });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const generateAttendancePDF = async (req, res) => {
+  try {
+    const { startDate, endDate, eventId } = req.query;
+
+    const pdfBuffer = await generateAttendancePDFService({
+      startDate,
+      endDate,
+      eventId,
+    });
+
+    let fileName = "Laporan.pdf";
+    if (eventId) {
+      fileName = `Laporan_Kehadiran_${eventId.eventName}.pdf`;
+    } else if (startDate && endDate) {
+      fileName = `Laporan_Kehadiran.pdf`;
+    }
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `inline; filename="${fileName}"`); //? 'inline' agar bisa di-preview di iframe
+
+    res.send(pdfBuffer);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };
