@@ -350,7 +350,7 @@ export const generateAttendancePDFService = async ({
 
   const pdfBuffer = await page.pdf({
     format: "A4",
-    margin: { top: "2cm", right: "2cm", bottom: "2cm", left: "2cm" },
+    margin: { top: "1cm", right: "1.5cm", bottom: "2cm", left: "1.5cm" },
     printBackground: true,
     displayHeaderFooter: true,
     headerTemplate: "<div></div>", // Kosongkan header jika tidak butuh
