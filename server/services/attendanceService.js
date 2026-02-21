@@ -324,7 +324,7 @@ export const generateAttendancePDFService = async ({
   let browser;
 
   //? Cek apakah aplikasi sedang berjalan di Vercel (Production) atau Localhost (Development)
-  if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
+  if (process.env.NODE_ENV === "production") {
     //? Mode Vercel: Gunakan puppeteer-core & sparticuz
     const chromium = (await import("@sparticuz/chromium")).default;
     const puppeteerCore = (await import("puppeteer-core")).default;
