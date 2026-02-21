@@ -1,7 +1,6 @@
 import memberModel from "../models/memberModel.js";
 import attendanceEventModel from "../models/attendanceEventModel.js";
 import attendanceRecordModel from "../models/attendanceRecordModel.js";
-import puppeteer from "puppeteer";
 
 //? Dapatkan semua Acara Presensi (list-nya saja)
 export const getAllAttendanceEventsService = async () => {
@@ -322,10 +321,34 @@ export const generateAttendancePDFService = async ({
     </html>
   `;
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
+  let browser;
+
+  //? Cek apakah aplikasi sedang berjalan di Vercel (Production) atau Localhost (Development)
+  if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
+    //? Mode Vercel: Gunakan puppeteer-core & sparticuz
+    const chromium = (await import("@sparticuz/chromium")).default;
+    const puppeteerCore = (await import("puppeteer-core")).default;
+
+    //* Mempercepat loading font standar di Vercel
+    await chromium.font(
+      "https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf",
+    );
+
+    browser = await puppeteerCore.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
+    });
+  } else {
+    //? Mode Development: Gunakan puppeteer biasa
+    const puppeteer = (await import("puppeteer")).default;
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+  }
 
   const page = await browser.newPage();
   await page.setContent(htmlContent, { waitUntil: "networkidle0" });
