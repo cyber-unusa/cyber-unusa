@@ -144,8 +144,8 @@ export default function MemberFormModal({ member, onClose, onSave }) {
           >
             <option value="Staff">Staff</option>
             <option value="Kadiv.">Kepala Divisi (Kadiv)</option>
-            <option value="Sekertaris 1">Sekertaris 1</option>
-            <option value="Sekertaris 2">Sekertaris 2</option>
+            <option value="Sekretaris 1">Sekretaris 1</option>
+            <option value="Sekretaris 2">Sekretaris 2</option>
             <option value="Bendahara Umum">Bendahara Umum</option>
             <option value="Wakil Ket. Umum">Wakil Ket. Umum</option>
             <option value="Ketua Umum">Ketua Umum</option>
