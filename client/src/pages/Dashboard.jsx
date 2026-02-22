@@ -35,7 +35,11 @@ const Dashboard = () => {
 
   //! Render Loading jika data user belum siap
   if (!userData || userData.role !== "admin") {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Memverifikasi akses...</p>
+      </div>
+    );
   }
 
   // Data Tab Navigasi
