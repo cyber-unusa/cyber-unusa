@@ -136,12 +136,21 @@ const LaporanKehadiran = () => {
               <h3 className="text-lg font-bold text-gray-800">
                 Preview Laporan Presensi
               </h3>
-              <button
-                onClick={closePdfPreview}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded transition-colors"
-              >
-                Tutup
-              </button>
+              <div className="flex gap-4">
+                <a
+                  href={pdfPreviewUrl}
+                  download={pdfFileName}
+                  className="hidden md:block bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded transition-colors items-center"
+                >
+                  Download File
+                </a>
+                <button
+                  onClick={closePdfPreview}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded transition-colors"
+                >
+                  Tutup
+                </button>
+              </div>
             </div>
 
             {/* Konten PDF (Berbeda untuk Desktop dan Mobile) */}
