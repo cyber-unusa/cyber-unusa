@@ -26,9 +26,9 @@ export const getAttendanceRecordsByEventService = async (eventId) => {
   const roleWeights = {
     "Ketua Umum": 1,
     "Wakil Ket. Umum": 2,
-    "Sekretaris 1": 3,
-    "Sekretaris 2": 4,
-    "Bendahara Umum": 5,
+    "Bendahara Umum": 3,
+    "Sekretaris 1": 4,
+    "Sekretaris 2": 5,
     "Kadiv.": 6,
     "Staff": 7,
   };
@@ -244,9 +244,9 @@ export const generateAttendancePDFService = async ({
   const roleWeights = {
     "Ketua Umum": 1,
     "Wakil Ket. Umum": 2,
-    "Sekretaris 1": 3,
-    "Sekretaris 2": 4,
-    "Bendahara Umum": 5,
+    "Bendahara Umum": 3,
+    "Sekretaris 1": 4,
+    "Sekretaris 2": 5,
     "Kadiv.": 6,
     "Staff": 7,
   };
