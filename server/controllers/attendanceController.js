@@ -119,11 +119,12 @@ export const generateAttendancePDF = async (req, res) => {
       eventId,
     });
 
-    let fileName = "Laporan.pdf";
+    //? Logika Penamaan File
+    let fileName = "Laporan_Presensi.pdf";
     if (eventId) {
-      fileName = `Laporan_Kehadiran_${eventId.eventName}.pdf`;
+      fileName = `Laporan_Presensi_Acara.pdf`; 
     } else if (startDate && endDate) {
-      fileName = `Laporan_Kehadiran.pdf`;
+      fileName = `Laporan_Presensi_${startDate}_sd_${endDate}.pdf`;
     }
 
     res.setHeader("Content-Type", "application/pdf");

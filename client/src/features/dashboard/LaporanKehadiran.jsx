@@ -1,19 +1,21 @@
 import useAttendance from "../../hooks/useAttendance";
+import { AlertCircle } from "lucide-react";
 
 const LaporanKehadiran = () => {
   const {
-      reportStartDate,
-      setReportStartDate,
-      reportEndDate,
-      setReportEndDate,
-      reportList,
-      isGenerating,
-      isPrinting,
-      pdfPreviewUrl,
-      handleGenerateReportList,
-      handlePrintPDF,
-      closePdfPreview,
-    } = useAttendance();
+    reportStartDate,
+    setReportStartDate,
+    reportEndDate,
+    setReportEndDate,
+    reportList,
+    isGenerating,
+    isPrinting,
+    pdfPreviewUrl,
+    pdfFileName,
+    handleGenerateReportList,
+    handlePrintPDF,
+    closePdfPreview,
+  } = useAttendance();
 
   return (
     <div className="p-6 max-w-7xl mx-auto min-h-screen bg-gray-50/50">
@@ -142,13 +144,49 @@ const LaporanKehadiran = () => {
               </button>
             </div>
 
-            {/* Konten PDF (Menggunakan iframe) */}
-            <div className="flex-1 w-full bg-gray-200 p-2">
+            {/* Konten PDF (Berbeda untuk Desktop dan Mobile) */}
+            <div className="flex-1 w-full bg-gray-200 p-2 flex flex-col items-center justify-center">
+              {/* Tampilan Desktop (Menggunakan iframe) */}
               <iframe
                 src={pdfPreviewUrl}
                 title="PDF Preview"
-                className="w-full h-full rounded border border-gray-400 shadow-inner"
+                className="hidden md:block w-full h-full rounded border border-gray-400 shadow-inner"
               />
+
+              {/* Tampilan Mobile (Pesan & Tombol Buka) */}
+              <div className="md:hidden flex flex-col items-center justify-center text-center p-6 h-full">
+                <div className="bg-white p-6 rounded-xl shadow-sm border">
+                  <AlertCircle className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+                  <h4 className="text-lg font-bold text-gray-800 mb-2">
+                    Preview Tidak Tersedia di HP
+                  </h4>
+                  <p className="text-gray-600 mb-6 text-sm">
+                    Browser perangkat seluler membatasi pratinjau dokumen di
+                    dalam halaman. Silakan buka atau unduh file untuk
+                    melihatnya.
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    {/* Tombol Buka di Tab Baru (Memicu PDF Viewer bawaan HP) */}
+                    <a
+                      href={pdfPreviewUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                    >
+                      Buka Laporan PDF
+                    </a>
+
+                    {/* Tombol Download (Opsional, karena sudah ada di header modal) */}
+                    <a
+                      href={pdfPreviewUrl}
+                      download={pdfFileName}
+                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-6 rounded-lg border transition-colors"
+                    >
+                      Download File
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

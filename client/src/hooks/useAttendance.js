@@ -22,6 +22,7 @@ export default function useAttendance() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+  const [pdfFileName, setPdfFileName] = useState("Laporan.pdf");
 
   const getAttendances = useCallback(async () => {
     setLoading(true);
@@ -133,6 +134,15 @@ export default function useAttendance() {
     try {
       const blob = await printAttendanceReport(params);
       const fileUrl = URL.createObjectURL(blob);
+
+      if (params.eventId) {
+        setPdfFileName(`Laporan_Presensi_Acara.pdf`);
+      } else if (params.startDate && params.endDate) {
+        setPdfFileName(
+          `Laporan_Presensi_${params.startDate}_sd_${params.endDate}.pdf`,
+        );
+      }
+
       setPdfPreviewUrl(fileUrl);
     } catch (error) {
       console.error(error);
@@ -167,6 +177,7 @@ export default function useAttendance() {
     isGenerating,
     isPrinting,
     pdfPreviewUrl,
+    pdfFileName,
     handleGenerateReportList,
     handlePrintPDF,
     closePdfPreview,

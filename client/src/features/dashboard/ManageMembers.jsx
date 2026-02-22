@@ -85,7 +85,7 @@ export default function ManageMembers() {
                   </td>
                   <td className="px-6 py-4">{member.nim}</td>
                   <td className="px-6 py-4">
-                    {member.divisi != "BPH" ? (
+                    {member.divisi !== "BPH" ? (
                       <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-sm font-semibold rounded-full border border-blue-100">
                         {member.role} {member.divisi}
                       </span>

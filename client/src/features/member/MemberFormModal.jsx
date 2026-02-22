@@ -18,9 +18,36 @@ export default function MemberFormModal({ member, onClose, onSave }) {
       setNim(member.nim);
       setDivisi(member.divisi);
       setImagePreview(member.imageUrl);
-      if (member.role !== "Staff" || member.role !== "Kadiv") setDivisi("BPH");
+      if (member.role !== "Staff" && member.role !== "Kadiv.") {
+        setDivisi("BPH");
+      } else {
+        setDivisi(member.divisi || "PSDM");
+      }
+    } else {
+      // Reset form jika sedang tambah data baru
+      setName("");
+      setRole("Staff");
+      setNim("");
+      setDivisi("PSDM");
+      setImage(null);
+      setImagePreview(null);
     }
   }, [member]);
+
+  const handleRoleChange = (e) => {
+    const selectedRole = e.target.value;
+    setRole(selectedRole);
+
+    if (selectedRole !== "Staff" && selectedRole !== "Kadiv.") {
+      //? Jika pilih selain Staff/Kadiv -> Paksa Divisi jadi BPH
+      setDivisi("BPH");
+    } else {
+      //? Jika pilih Staff/Kadiv tapi state Divisi masih BPH -> Kembalikan ke PSDM (Default)
+      if (divisi === "BPH") {
+        setDivisi("PSDM");
+      }
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -113,10 +140,10 @@ export default function MemberFormModal({ member, onClose, onSave }) {
           <select
             className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
             value={role}
-            onChange={(e) => setRole(e.target.value)}
+            onChange={handleRoleChange}
           >
             <option value="Staff">Staff</option>
-            <option value="Kadiv">Kepala Divisi (Kadiv)</option>
+            <option value="Kadiv.">Kepala Divisi (Kadiv)</option>
             <option value="Sekertaris 1">Sekertaris 1</option>
             <option value="Sekertaris 2">Sekertaris 2</option>
             <option value="Bendahara Umum">Bendahara Umum</option>
@@ -135,12 +162,14 @@ export default function MemberFormModal({ member, onClose, onSave }) {
             value={divisi}
             onChange={(e) => setDivisi(e.target.value)}
           >
-            {role === "Kadiv" || role === "Staff" ? (
+            {role === "Kadiv." || role === "Staff" ? (
               <>
                 <option value="PSDM">PSDM</option>
                 <option value="Pendidikan">Pendidikan</option>
                 <option value="Pengmas">Pengmas</option>
-                <option value="Innovation">Innovation</option>
+                <option value="Innovation & Entrepreneur">
+                  Innovation & Entrepreneur
+                </option>
               </>
             ) : (
               <option value="BPH">Badan Pengurus Harian (BPH)</option>

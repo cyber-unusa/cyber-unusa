@@ -4,14 +4,8 @@ import AttendanceFormModal from "../attendance/AttendanceFormModal";
 import AttendanceDetail from "../attendance/AttendanceDetail";
 import {
   Lock,
-  Unlock,
-  Trash2,
   Plus,
   Calendar,
-  Users,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { formatDate } from "../../utils/utils";

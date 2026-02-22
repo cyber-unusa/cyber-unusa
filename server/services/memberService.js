@@ -3,7 +3,8 @@ import attendanceRecordModel from "../models/attendanceRecordModel.js";
 import { v2 as cloudinary } from "cloudinary";
 
 export const getAllMemberService = async () => {
-  const allMembers = await memberModel.find().sort({ name: 1 }).lean();
+  const allMembers = await memberModel.find().lean();
+  
 
   if (allMembers.length === 0) return [];
 
@@ -26,7 +27,8 @@ export const getAllMemberService = async () => {
     }
   }
 
-  return allMembers.map((member) => {
+  //? Map data anggota dengan stat kehadirannya
+  const mappedMembers = allMembers.map((member) => {
     const memberIdString = member._id.toString();
     const stats = memberStatsMap.get(memberIdString) || {
       totalRecords: 0,
@@ -45,15 +47,64 @@ export const getAllMemberService = async () => {
       attendancePercentage: Number(attendancePercentage),
     };
   });
+
+  //? Bobot Urutan
+  const divisiWeights = {
+    BPH: 1,
+    PSDM: 2,
+    Pendidikan: 3,
+    Pengmas: 4,
+    "Innovation & Entrepreneur": 5,
+  };
+
+  const roleWeights = {
+    "Ketua Umum": 1,
+    "Wakil Ket. Umum": 2,
+    "Sekretaris 1": 3,
+    "Sekretaris 2": 4,
+    "Bendahara Umum": 5,
+    "Kadiv.": 6,
+    "Staff": 7,
+  };
+
+  //? Pengurutan Hierarki -> Jabatan -> Nama
+  mappedMembers.sort((a, b) => {
+    const divA = a.divisi || "BPH";
+    const divB = b.divisi || "BPH";
+
+    const weightDivA = divisiWeights[divA] || 99;
+    const weightDivB = divisiWeights[divB] || 99;
+
+    //! Pertama: Urutkan Divisi
+    if (weightDivA !== weightDivB) {
+      return weightDivA - weightDivB;
+    }
+
+    //! Kedua: Urutkan Jabatan/Role
+    const roleA = a.role || "Staff";
+    const roleB = b.role || "Staff";
+
+    const weightRoleA = roleWeights[roleA] || 99;
+    const weightRoleB = roleWeights[roleB] || 99;
+
+    if (weightRoleA !== weightRoleB) {
+      return weightRoleA - weightRoleB;
+    }
+
+    //! Ketiga: Urutkan Nama (A-Z)
+    return (a.name || "").localeCompare(b.name || "");
+  });
+
+  return mappedMembers;
 };
 
 export const addMemberService = async (data, file) => {
-  const imageUrl = "";
-  const public_id = "";
+  let imageUrl = "";
+  let public_id = "";
 
   if (file) {
-    const imageUrl = file.path;
-    const public_id = file.filename;
+    imageUrl = file.path;
+    public_id = file.filename;
   }
 
   const newMember = new memberModel({

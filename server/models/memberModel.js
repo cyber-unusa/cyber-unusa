@@ -9,7 +9,7 @@ const memberSchema = new mongoose.Schema({
     required: true,
     enum: [
       "Staff",
-      "Kadiv",
+      "Kadiv.",
       "Sekretaris 1",
       "Sekretaris 2",
       "Bendahara Umum",

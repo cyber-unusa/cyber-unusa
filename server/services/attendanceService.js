@@ -9,7 +9,62 @@ export const getAllAttendanceEventsService = async () => {
 
 //? Dapatkan detail Presensi unuk SATU acara (list anggota & status)
 export const getAttendanceRecordsByEventService = async (eventId) => {
-  return await attendanceRecordModel.find({ eventId }).sort({ memberName: 1 });
+  const records = await attendanceRecordModel
+    .find({ eventId })
+    .populate("memberId", "role divisi")
+    .lean();
+
+  //? Bobot Urutan
+  const divisiWeights = {
+    "BPH": 1,
+    "PSDM": 2,
+    "Pendidikan": 3,
+    "Pengmas": 4,
+    "Innovation & Entrepreneur": 5,
+  };
+
+  const roleWeights = {
+    "Ketua Umum": 1,
+    "Wakil Ket. Umum": 2,
+    "Sekretaris 1": 3,
+    "Sekretaris 2": 4,
+    "Bendahara Umum": 5,
+    "Kadiv.": 6,
+    "Staff": 7,
+  };
+
+  records.sort((a, b) => {
+    //? Jika ada anggota yang sudah terhapus dari data master
+    if (!a.memberId) return 1;
+    if (!b.memberId) return -1;
+
+    const divA = a.memberId.divisi || "BPH";
+    const divB = b.memberId.divisi || "BPH";
+
+    const weightDivA = divisiWeights[divA] || 99;
+    const weightDivB = divisiWeights[divB] || 99;
+
+    //! Pertama: Urutkan berdasarkan Divisi
+    if (weightDivA !== weightDivB) {
+      return weightDivA - weightDivB;
+    }
+
+    //! Kedua: Urutkan berdasarkan Jabatan
+    const roleA = a.memberId.role || "Staff";
+    const roleB = b.memberId.role || "Staff";
+
+    const weightRoleA = roleWeights[roleA] || 99;
+    const weightRoleB = roleWeights[roleB] || 99;
+
+    if (weightRoleA !== weightRoleB) {
+      return weightRoleA - weightRoleB;
+    }
+
+    //! Ketiga: Urutkan berdasarkan Nama (A-Z)
+    return (a.memberName || "").localeCompare(b.memberName || "");
+  });
+
+  return records;
 };
 
 //? Membuat Acara Presensi baru
@@ -178,14 +233,62 @@ export const generateAttendancePDFService = async ({
   //? Variabel untuk menampung seluruh halaman HTML
   let allPagesHtml = "";
 
+  const divisiWeights = {
+    "BPH": 1,
+    "PSDM": 2,
+    "Pendidikan": 3,
+    "Pengmas": 4,
+    "Innovation & Entrepreneur": 5,
+  };
+
+  const roleWeights = {
+    "Ketua Umum": 1,
+    "Wakil Ket. Umum": 2,
+    "Sekretaris 1": 3,
+    "Sekretaris 2": 4,
+    "Bendahara Umum": 5,
+    "Kadiv.": 6,
+    "Staff": 7,
+  };
+
   for (let i = 0; i < eventsToPrint.length; i++) {
     const event = eventsToPrint[i];
 
     //! Ambil data anggota yang diabsen untuk acara ini
     const records = await attendanceRecordModel
       .find({ eventId: event._id })
-      .populate("memberId", "nim role divisi")
-      .sort({ memberName: 1 });
+      .populate("memberId", "nim role divisi");
+
+    records.sort((a, b) => {
+      //? Jika ada member yang terhapus dari data master
+      if (!a.memberId) return 1;
+      if (!b.memberId) return -1;
+
+      const divA = a.memberId.divisi || "BPH";
+      const divB = b.memberId.divisi || "BPH";
+
+      const weightDivA = divisiWeights[divA] || 99;
+      const weightDivB = divisiWeights[divB] || 99;
+
+      // Todo: Urutkan berdasarkan Divisi (BPH di atas, lalu PSDM, dst)
+      if (weightDivA !== weightDivB) {
+        return weightDivA - weightDivB;
+      }
+
+      // Todo: Jika divisinya SAMA, urutkan berdasarkan Jabatan (Ketua -> Wakil -> Kadiv -> Staff)
+      const roleA = a.memberId.role || "Staff";
+      const roleB = b.memberId.role || "Staff";
+
+      const weightRoleA = roleWeights[roleA] || 99;
+      const weightRoleB = roleWeights[roleB] || 99;
+
+      if (weightRoleA !== weightRoleB) {
+        return weightRoleA - weightRoleB;
+      }
+
+      // Todo: Jika Divisi & Jabatan SAMA (contoh: sesama Staff PSDM), urutkan berdasarkan Nama (A-Z)
+      return a.memberName.localeCompare(b.memberName);
+    });
 
     //? Format Tanggal Acara
     const eventDate = new Date(event.date).toLocaleDateString("id-ID", {
@@ -205,7 +308,18 @@ export const generateAttendancePDFService = async ({
       else if (record.status === "Izin") statusColor = "orange";
 
       const nim = record.memberId?.nim || "-";
-      const jabatan = record.memberId?.role || record.memberId?.divisi || "-";
+      let jabatan = "-";
+
+      if (record.memberId) {
+        const role = record.memberId.role || "";
+        const divisi = record.memberId.divisi || "";
+
+        if (divisi !== "BPH") {
+          jabatan = `${role} ${divisi}`; //? Output contoh: "Staff PSDM"
+        } else {
+          jabatan = `${role}`; //? Output contoh: "Ketua Umum"
+        }
+      }
 
       htmlTableRows += `
         <tr>
