@@ -146,28 +146,43 @@ export default function Kegiatan() {
                   {selectedKegiatan.description}
                 </p>
 
-                {new Date(selectedKegiatan.endDate) <
-                  Date.now() + 14 * 24 * 60 * 60 * 1000 &&
-                  !new Date() > new Date(selectedKegiatan.endDate) && (
-                    <div className="block w-full text-center bg-gray-400 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed">
-                      Acara Selesai
-                    </div>
-                  )}
+                {(() => {
+                  const hariIni = new Date();
+                  const tglSelesai = new Date(selectedKegiatan.endDate);
+                  const ambangBatas14Hari = new Date(
+                    Date.now() + 14 * 24 * 60 * 60 * 1000,
+                  );
 
-                {new Date() > new Date(selectedKegiatan.endDate) ? (
-                  <div className="block w-full text-center bg-gray-400 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed">
-                    Pendaftaran Ditutup
-                  </div>
-                ) : (
-                  <a
-                    href={selectedKegiatan.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full text-center bg-[var(--lowprim)] hover:opacity-90 text-white font-bold py-3 px-4 rounded-lg transition duration-300"
-                  >
-                    Daftar Sekarang
-                  </a>
-                )}
+                  //? Jika sudah melewati endDate (Acara Selesai/Tutup)
+                  if (hariIni > tglSelesai) {
+                    return (
+                      <div className="block w-full text-center bg-gray-400 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed">
+                        Acara Selesai
+                      </div>
+                    );
+                  }
+
+                  //? Jika endDate masuk dalam rentang 14 hari dari sekarang (Segera Berakhir)
+                  if (tglSelesai < ambangBatas14Hari) {
+                    return (
+                      <div className="block w-full text-center bg-gray-400 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed">
+                        Pendaftaran Ditutup
+                      </div>
+                    );
+                  }
+
+                  //? Jika masih jauh dari endDate (Bisa Daftar)
+                  return (
+                    <a
+                      href={selectedKegiatan.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full text-center bg-[var(--lowprim)] hover:opacity-90 text-white font-bold py-3 px-4 rounded-lg transition duration-300"
+                    >
+                      Daftar Sekarang
+                    </a>
+                  );
+                })()}
               </div>
             </div>
           </div>
