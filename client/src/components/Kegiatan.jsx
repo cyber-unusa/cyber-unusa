@@ -16,21 +16,35 @@ export default function Kegiatan() {
       {kegiatans && kegiatans.length > 0 ? (
         <div className="container px-6 mx-auto flex flex-wrap gap-8 justify-center">
           {kegiatans.map((item) => {
-            const isClosed = new Date(item.endDate) < new Date();
+            const now = new Date();
+            const isRegistClosed = new Date(item.endDate) < now;
+            const isClosed = new Date(item.endDate) < new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
 
             return (
               <div
-                className="rounded-lg shadow-lg overflow-hidden mb-10 lg:w-72 flex flex-col bg-white group cursor-pointer hover:-translate-y-1 transition-all duration-300"
+                className={`rounded-lg shadow-lg overflow-hidden mb-10 lg:w-72 flex flex-col bg-white group cursor-pointer hover:-translate-y-1 transition-all duration-300 ${isClosed ? "opacity-90" : ""}`}
                 id={item._id}
                 key={item._id}
-                onClick={() => selectedKegiatan(item)} // Buka modal saat kartu diklik
+                onClick={() => setSelectedKegiatan(item)} // Buka modal saat kartu diklik
               >
-                <div className="overflow-hidden h-48">
+                <div className="relative overflow-hidden h-48">
                   <img
                     src={item.imageUrl}
                     alt="banner"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ${isClosed ? "grayscale" : ""}`}
                   />
+
+                  {isRegistClosed && !isClosed && (
+                    <div className="absolute top-3 right-3 bg-yellow-600/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-10 font-nunito tracking-wider">
+                      Pendaftaran ditutup
+                    </div>
+                  )}
+
+                  {isClosed && (
+                    <div className="absolute top-3 right-3 bg-red-600/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-10 font-nunito tracking-wider">
+                      Acara Selesai
+                    </div>
+                  )}
                 </div>
 
                 <div className="py-6 px-4 flex flex-col flex-1">
@@ -59,12 +73,21 @@ export default function Kegiatan() {
                     Lihat Detail
                   </button>
 
+                  {isRegistClosed && !isClosed && (
+                    <div
+                      className="py-2 px-4 text-center text-sm font-bold rounded-lg text-white bg-gray-400 cursor-not-allowed font-poppin w-full select-none"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Pendaftaran ditutup
+                    </div>
+                  )}
+
                   {isClosed ? (
                     <div
                       className="py-2 px-4 text-center text-sm font-bold rounded-lg text-white bg-gray-400 cursor-not-allowed font-poppin w-full select-none"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      Pendaftaran Sudah Ditutup
+                      Acara Selesai
                     </div>
                   ) : (
                     <a
