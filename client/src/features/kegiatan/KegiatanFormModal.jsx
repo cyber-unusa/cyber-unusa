@@ -6,6 +6,7 @@ export default function KegiatanFormModal({ kegiatan, onClose, onSave }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [endDate, setEndDate] = useState("");
 
   const [image, setImage] = useState(null);
@@ -18,6 +19,11 @@ export default function KegiatanFormModal({ kegiatan, onClose, onSave }) {
       setLink(kegiatan.link);
       setImagePreview(kegiatan.imageUrl);
       setEndDate(kegiatan.endDate.slice(0, 10)); //! Format YYYY-MM-DD
+      if (kegiatan.date) {
+        setDate(kegiatan.date.slice(0, 10));
+      } else {
+        setDate(new Date().toISOString().split("T")[0]);
+      }
     }
   }, [kegiatan]);
 
@@ -25,6 +31,7 @@ export default function KegiatanFormModal({ kegiatan, onClose, onSave }) {
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", title);
+    formData.append("date", date);
     formData.append("endDate", endDate);
     formData.append("description", description);
     formData.append("link", link);
@@ -70,36 +77,20 @@ export default function KegiatanFormModal({ kegiatan, onClose, onSave }) {
         </div>
 
         {/* Inputs */}
-        <div>
-          <label className="text-xs font-medium text-gray-600">
-            Nama Kegiatan
-          </label>
-          <div className="relative mt-1">
-            <Type className="absolute left-2 top-2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              className="w-full pl-8 py-1.5 text-sm border rounded focus:ring-1 focus:ring-blue-500 outline-none"
-              placeholder="Nama Kegiatan..."
-            />
-          </div>
-        </div>
-
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="text-xs font-medium text-gray-600">
-              Batas Pendaftaran
+              Nama Kegiatan
             </label>
             <div className="relative mt-1">
-              <Calendar className="absolute left-2 top-2 w-4 h-4 text-gray-400" />
+              <Type className="absolute left-2 top-2 w-4 h-4 text-gray-400" />
               <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 required
                 className="w-full pl-8 py-1.5 text-sm border rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                placeholder="Nama Kegiatan..."
               />
             </div>
           </div>
@@ -116,6 +107,39 @@ export default function KegiatanFormModal({ kegiatan, onClose, onSave }) {
                 required
                 className="w-full pl-8 py-1.5 text-sm border rounded focus:ring-1 focus:ring-blue-500 outline-none"
                 placeholder="https://..."
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="text-xs font-medium text-gray-600">
+              Awal Pendaftaran
+            </label>
+            <div className="relative mt-1">
+              <Calendar className="absolute left-2 top-2 w-4 h-4 text-gray-400" />
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+                className="w-full pl-8 py-1.5 text-sm border rounded focus:ring-1 focus:ring-blue-500 outline-none"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-medium text-gray-600">
+              Batas Pendaftaran
+            </label>
+            <div className="relative mt-1">
+              <Calendar className="absolute left-2 top-2 w-4 h-4 text-gray-400" />
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                required
+                className="w-full pl-8 py-1.5 text-sm border rounded focus:ring-1 focus:ring-blue-500 outline-none"
               />
             </div>
           </div>
