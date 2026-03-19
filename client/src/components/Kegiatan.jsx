@@ -18,7 +18,9 @@ export default function Kegiatan() {
           {kegiatans.map((item) => {
             const now = new Date();
             const isRegistClosed = new Date(item.endDate) < now;
-            const isClosed = new Date(item.endDate) < new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+            const isClosed =
+              new Date(item.endDate) <
+              new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
 
             return (
               <div
@@ -143,6 +145,14 @@ export default function Kegiatan() {
                 <p className="text-gray-600 whitespace-pre-wrap leading-relaxed mb-6">
                   {selectedKegiatan.description}
                 </p>
+
+                {new Date(selectedKegiatan.endDate) <
+                  Date.now() + 14 * 24 * 60 * 60 * 1000 &&
+                  !new Date() > new Date(selectedKegiatan.endDate) && (
+                    <div className="block w-full text-center bg-gray-400 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed">
+                      Acara Selesai
+                    </div>
+                  )}
 
                 {new Date() > new Date(selectedKegiatan.endDate) ? (
                   <div className="block w-full text-center bg-gray-400 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed">
