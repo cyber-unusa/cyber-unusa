@@ -40,6 +40,7 @@ export default function Products() {
                       src={product.imageUrl}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
                     />
                   </div>
                   <div className="p-6 text-left flex-grow flex flex-col">
@@ -121,6 +122,7 @@ export default function Products() {
                 src={selectedProduct.imageUrl}
                 alt={selectedProduct.name}
                 className="w-full h-auto max-h-80 md:max-h-full object-contain rounded-lg"
+                loading="lazy"
               />
             </div>
 

@@ -24,6 +24,7 @@ export default function Dokumenter() {
                 <img
                   src={doc.imageUrl}
                   alt={doc.title}
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 {/* Overlay Hitam Transparan saat Hover */}

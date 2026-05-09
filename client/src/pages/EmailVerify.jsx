@@ -4,6 +4,7 @@ import { useContext, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { AppContext } from "../context/Context";
 import { ShieldCheck } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 export default function EmailVerify() {
   const { isLoggedin, userData } = useContext(AppContext);
@@ -58,61 +59,67 @@ export default function EmailVerify() {
   }, [isLoggedin, userData, navigate]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-950 relative overflow-hidden">
-      {/* Background Effect */}
-      <div className="absolute top-[-20%] left-[30%] w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[120px]"></div>
+    <>
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
 
-      <div className="bg-slate-900/60 backdrop-blur-xl p-8 rounded-2xl shadow-2xl w-full max-w-sm border border-slate-700 z-10 mx-4">
-        <div className="flex justify-center mb-6">
-          <div className="p-4 bg-green-500/10 rounded-full">
-            <ShieldCheck size={48} className="text-green-500" />
+      <div className="flex items-center justify-center min-h-screen bg-slate-950 relative overflow-hidden">
+        {/* Background Effect */}
+        <div className="absolute top-[-20%] left-[30%] w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[120px]"></div>
+
+        <div className="bg-slate-900/60 backdrop-blur-xl p-8 rounded-2xl shadow-2xl w-full max-w-sm border border-slate-700 z-10 mx-4">
+          <div className="flex justify-center mb-6">
+            <div className="p-4 bg-green-500/10 rounded-full">
+              <ShieldCheck size={48} className="text-green-500" />
+            </div>
           </div>
+
+          <h1 className="text-white text-2xl font-bold text-center mb-2">
+            Verifikasi Keamanan
+          </h1>
+          <p className="text-slate-400 text-center text-sm mb-8">
+            Masukkan 6 digit kode OTP yang telah dikirim ke email Anda untuk
+            mengaktifkan akun.
+          </p>
+
+          <form onSubmit={onSubmitHandler}>
+            <div
+              className="flex justify-between gap-2 mb-8"
+              onPaste={handlePaste}
+            >
+              {Array(6)
+                .fill(0)
+                .map((_, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    maxLength="1"
+                    required
+                    className="w-10 h-12 sm:w-12 sm:h-14 bg-slate-800 text-white text-center text-xl font-bold rounded-lg border border-slate-600 focus:border-green-500 focus:ring-2 focus:ring-green-500/50 outline-none transition-all"
+                    ref={(e) => (inputRefs.current[index] = e)}
+                    onInput={(e) => handleInput(e, index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                  />
+                ))}
+            </div>
+
+            <button className="w-full py-3 rounded-lg bg-green-600 hover:bg-green-500 text-white font-bold shadow-lg hover:shadow-green-500/30 transition-all">
+              Verifikasi Akun
+            </button>
+          </form>
+
+          <p className="text-slate-500 text-center mt-6 text-sm">
+            Tidak menerima kode?{" "}
+            <span
+              onClick={sendOtp}
+              className="text-green-400 font-medium cursor-pointer hover:underline"
+            >
+              Kirim Ulang
+            </span>
+          </p>
         </div>
-
-        <h1 className="text-white text-2xl font-bold text-center mb-2">
-          Verifikasi Keamanan
-        </h1>
-        <p className="text-slate-400 text-center text-sm mb-8">
-          Masukkan 6 digit kode OTP yang telah dikirim ke email Anda untuk
-          mengaktifkan akun.
-        </p>
-
-        <form onSubmit={onSubmitHandler}>
-          <div
-            className="flex justify-between gap-2 mb-8"
-            onPaste={handlePaste}
-          >
-            {Array(6)
-              .fill(0)
-              .map((_, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  maxLength="1"
-                  required
-                  className="w-10 h-12 sm:w-12 sm:h-14 bg-slate-800 text-white text-center text-xl font-bold rounded-lg border border-slate-600 focus:border-green-500 focus:ring-2 focus:ring-green-500/50 outline-none transition-all"
-                  ref={(e) => (inputRefs.current[index] = e)}
-                  onInput={(e) => handleInput(e, index)}
-                  onKeyDown={(e) => handleKeyDown(e, index)}
-                />
-              ))}
-          </div>
-
-          <button className="w-full py-3 rounded-lg bg-green-600 hover:bg-green-500 text-white font-bold shadow-lg hover:shadow-green-500/30 transition-all">
-            Verifikasi Akun
-          </button>
-        </form>
-
-        <p className="text-slate-500 text-center mt-6 text-sm">
-          Tidak menerima kode?{" "}
-          <span
-            onClick={sendOtp}
-            className="text-green-400 font-medium cursor-pointer hover:underline"
-          >
-            Kirim Ulang
-          </span>
-        </p>
       </div>
-    </div>
+    </>
   );
 }

@@ -33,6 +33,7 @@ export default function Kegiatan() {
                   <img
                     src={item.imageUrl}
                     alt="banner"
+                    loading="lazy"
                     className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ${isClosed ? "grayscale" : ""}`}
                   />
 
@@ -129,6 +130,7 @@ export default function Kegiatan() {
               <img
                 src={selectedKegiatan.imageUrl}
                 alt={selectedKegiatan.title}
+                loading="lazy"
                 className="w-full h-80 object-contain bg-gray-50"
               />
               <div className="p-6 md:p-8">

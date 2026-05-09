@@ -9,9 +9,10 @@ import {
   staffInnovation,
 } from "../utils/constants";
 import CircularGallery from "../components/common/CircularGallery";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Import } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
+import { Helmet } from "react-helmet-async";
 
 const Member = () => {
   const staffSectionRef = useRef(null);
@@ -66,6 +67,7 @@ const Member = () => {
             src={foto}
             alt={`Foto ${nama}`}
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         </div>
         <h3 className="font-semibold text-lg mb-1 text-gray-800">{nama}</h3>
@@ -96,138 +98,148 @@ const Member = () => {
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <Navbar />
+    <>
+      <Helmet>
+        <title>Anggota & Struktur Divisi — Cyber UNUSA</title>
+        <meta
+          name="description"
+          content="Struktur divisi dan anggota UKM Cyber UNUSA: PSDM, Pendidikan, Pengmas, dan Inovasi & Entrepreneurship."
+        />
+      </Helmet>
 
-      {/* Main Hero */}
-      <section
-        id="memberHero"
-        className="pt-24 lg:pt-28 pb-16 lg:pb-20 bg-gradient-to-br from-cyan-50 via-blue-50 to-purple-50"
-      >
-        <div className="container mx-auto px-6">
-          <div className="flex flex-wrap lg:flex-nowrap items-center justify-between gap-12 lg:gap-16">
-            <div className="w-full lg:w-1/2 text-center lg:text-left">
-              <h1 className="text-3xl lg:text-4xl font-extrabold text-[#13A085] mb-4">
-                Struktur Divisi <br /> UKM Cyber UNUSA
-              </h1>
-              <p className="font-poppins text-gray-600 text-lg lg:text-xl mb-8 leading-relaxed">
-                UKM CYBER UNUSA memiliki 4 divisi utama: PSDM, Pendidikan,
-                Pengabdian Masyarakat (Pengmas), serta Inovasi &
-                Entrepreneurship. Setiap divisi dipimpin oleh seorang Kepala
-                Divisi (Kadiv) dan didukung oleh staff yang berdedikasi.
-              </p>
-              <button
-                onClick={handleClick}
-                className="py-3 px-6 text-base font-semibold rounded-lg text-white bg-[#26B99A] hover:bg-[#13A085] shadow-md hover:shadow-lg transition duration-300 ease-in-out inline-flex items-center group"
+      <div className="bg-gray-50 min-h-screen">
+        <Navbar />
+
+        {/* Main Hero */}
+        <section
+          id="memberHero"
+          className="pt-24 lg:pt-28 pb-16 lg:pb-20 bg-gradient-to-br from-cyan-50 via-blue-50 to-purple-50"
+        >
+          <div className="container mx-auto px-6">
+            <div className="flex flex-wrap lg:flex-nowrap items-center justify-between gap-12 lg:gap-16">
+              <div className="w-full lg:w-1/2 text-center lg:text-left">
+                <h1 className="text-3xl lg:text-4xl font-extrabold text-[#13A085] mb-4">
+                  Struktur Divisi <br /> UKM Cyber UNUSA
+                </h1>
+                <p className="font-poppins text-gray-600 text-lg lg:text-xl mb-8 leading-relaxed">
+                  UKM CYBER UNUSA memiliki 4 divisi utama: PSDM, Pendidikan,
+                  Pengabdian Masyarakat (Pengmas), serta Inovasi &
+                  Entrepreneurship. Setiap divisi dipimpin oleh seorang Kepala
+                  Divisi (Kadiv) dan didukung oleh staff yang berdedikasi.
+                </p>
+                <button
+                  onClick={handleClick}
+                  className="py-3 px-6 text-base font-semibold rounded-lg text-white bg-[#26B99A] hover:bg-[#13A085] shadow-md hover:shadow-lg transition duration-300 ease-in-out inline-flex items-center group"
+                >
+                  Lihat Staff Divisi
+                  <ArrowDown className="ml-2 h-5 w-5 transform transition-transform duration-300 group-hover:translate-y-1" />
+                </button>
+              </div>
+              {/* Kartu Divisi di Kanan */}
+              <motion.div
+                className="w-full lg:w-1/2"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.4 }}
               >
-                Lihat Staff Divisi
-                <ArrowDown className="ml-2 h-5 w-5 transform transition-transform duration-300 group-hover:translate-y-1" />
-              </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {devisiList.map((item, idx) => (
+                    <motion.div key={idx} variants={itemVariants}>
+                      <DevisiCard {...item} />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
             </div>
-            {/* Kartu Divisi di Kanan */}
-            <motion.div
-              className="w-full lg:w-1/2"
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.4 }}
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {devisiList.map((item, idx) => (
-                  <motion.div variants={itemVariants}>
-                    <DevisiCard key={idx} {...item} />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Member Slider Section */}
-      <section
-        id="staffDivisi"
-        ref={staffSectionRef}
-        className="py-16 lg:py-24 bg-white"
-      >
-        <div className="container mx-auto px-6">
-          <h2 className="text-center font-bold text-3xl lg:text-4xl text-[#13A085] mb-16">
-            Staff Divisi
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
-            {/* Staff PSDM */}
-            <div className="border border-gray-200 p-6 bg-white text-center rounded-xl shadow-md">
-              <h3 className="text-blue-600 text-2xl font-bold mb-6">
-                Staff PSDM
-              </h3>
-              {/* Hapus 'relative' dari pembungkus div ini */}
-              <div className="h-80 w-full">
-                <CircularGallery
-                  bend={0}
-                  textColor="#333"
-                  borderRadius={0.05}
-                  scrollEase={0.03}
-                  items={psdmItems}
-                />
+        {/* Member Slider Section */}
+        <section
+          id="staffDivisi"
+          ref={staffSectionRef}
+          className="py-16 lg:py-24 bg-white"
+        >
+          <div className="container mx-auto px-6">
+            <h2 className="text-center font-bold text-3xl lg:text-4xl text-[#13A085] mb-16">
+              Staff Divisi
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+              {/* Staff PSDM */}
+              <div className="border border-gray-200 p-6 bg-white text-center rounded-xl shadow-md">
+                <h3 className="text-blue-600 text-2xl font-bold mb-6">
+                  Staff PSDM
+                </h3>
+                {/* Hapus 'relative' dari pembungkus div ini */}
+                <div className="h-80 w-full">
+                  <CircularGallery
+                    bend={0}
+                    textColor="#333"
+                    borderRadius={0.05}
+                    scrollEase={0.03}
+                    items={psdmItems}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Staff Pendidikan */}
-            <div className="border border-gray-200 p-6 bg-white text-center rounded-xl shadow-md">
-              <h3 className="text-green-600 text-2xl font-bold mb-6">
-                Staff Pendidikan
-              </h3>
-              {/* Hapus 'relative' dari pembungkus div ini */}
-              <div className="h-80 w-full">
-                <CircularGallery
-                  bend={0}
-                  textColor="#333"
-                  borderRadius={0.05}
-                  scrollEase={0.03}
-                  items={pendidikanItems}
-                />
+              {/* Staff Pendidikan */}
+              <div className="border border-gray-200 p-6 bg-white text-center rounded-xl shadow-md">
+                <h3 className="text-green-600 text-2xl font-bold mb-6">
+                  Staff Pendidikan
+                </h3>
+                {/* Hapus 'relative' dari pembungkus div ini */}
+                <div className="h-80 w-full">
+                  <CircularGallery
+                    bend={0}
+                    textColor="#333"
+                    borderRadius={0.05}
+                    scrollEase={0.03}
+                    items={pendidikanItems}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Staff Pengmas */}
-            <div className="border border-gray-200 p-6 bg-white text-center rounded-xl shadow-md">
-              <h3 className="text-purple-600 text-2xl font-bold mb-6">
-                Staff Pengmas
-              </h3>
-              {/* Hapus 'relative' dari pembungkus div ini */}
-              <div className="h-80 w-full">
-                <CircularGallery
-                  bend={0}
-                  textColor="#333"
-                  borderRadius={0.05}
-                  scrollEase={0.03}
-                  items={pengmasItems}
-                />
+              {/* Staff Pengmas */}
+              <div className="border border-gray-200 p-6 bg-white text-center rounded-xl shadow-md">
+                <h3 className="text-purple-600 text-2xl font-bold mb-6">
+                  Staff Pengmas
+                </h3>
+                {/* Hapus 'relative' dari pembungkus div ini */}
+                <div className="h-80 w-full">
+                  <CircularGallery
+                    bend={0}
+                    textColor="#333"
+                    borderRadius={0.05}
+                    scrollEase={0.03}
+                    items={pengmasItems}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Staff Innovation */}
-            <div className="border border-gray-200 p-6 bg-white text-center rounded-xl shadow-md">
-              <h3 className="text-[var(--yel)] text-2xl font-bold mb-6">
-                Staff Innovation & Entrepreneur
-              </h3>
-              {/* Hapus 'relative' dari pembungkus div ini */}
-              <div className="h-80 w-full">
-                <CircularGallery
-                  bend={0}
-                  textColor="#333"
-                  borderRadius={0.05}
-                  scrollEase={0.03}
-                  items={innovationItems}
-                />
+              {/* Staff Innovation */}
+              <div className="border border-gray-200 p-6 bg-white text-center rounded-xl shadow-md">
+                <h3 className="text-[var(--yel)] text-2xl font-bold mb-6">
+                  Staff Innovation & Entrepreneur
+                </h3>
+                {/* Hapus 'relative' dari pembungkus div ini */}
+                <div className="h-80 w-full">
+                  <CircularGallery
+                    bend={0}
+                    textColor="#333"
+                    borderRadius={0.05}
+                    scrollEase={0.03}
+                    items={innovationItems}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 };
 

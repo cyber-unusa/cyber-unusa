@@ -20,6 +20,7 @@ export default function BphCard({ foto, nama, jabatan, color }) {
           src={foto}
           alt=""
           className="rounded-full w-24 h-24 sm:w-28 sm:h-28 md:w-30 md:h-30 object-cover"
+          loading="lazy"
         />
       </div>
       <h3 className="font-semibold text-lg mb-1">{nama}</h3>

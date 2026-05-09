@@ -17,6 +17,7 @@ export default function HeroSection() {
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
+      loading="lazy"
       aria-label="Hero Section"
     >
       <div className="absolute inset-0 bg-[#0d2f4a]/70" aria-hidden="true" />

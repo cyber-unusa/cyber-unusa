@@ -7,6 +7,7 @@ import ManageMembers from "../features/dashboard/ManageMembers";
 import ManageAttendance from "../features/dashboard/ManageAttendance";
 import LaporanKehadiran from "../features/dashboard/LaporanKehadiran";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
 
 const Presensi = () => {
   const { userData } = useContext(AppContext);
@@ -36,57 +37,63 @@ const Presensi = () => {
   }
 
   return (
-    <div>
-      <Navbar />
-      <div className="container mx-auto mt-20 p-4 pb-32">
-        <h1 className="text-3xl font-bold mb-4">Manajemen Presensi</h1>
-        <div className="flex border-b border-zinc-200 mb-4">
-          <button
-            onClick={() => setActiveTab("presensi")}
-            className={`py-2 px-4 ${
-              activeTab === "presensi" ? "border-b-2 border-blue-500" : ""
-            }`}
-          >
-            Kelola Presensi
-          </button>
-          <button
-            onClick={() => setActiveTab("laporan")}
-            className={`py-2 px-4 ${
-              activeTab === "laporan" ? "border-b-2 border-blue-500" : ""
-            }`}
-          >
-            Laporan Kehadiran
-          </button>
-          <button
-            onClick={() => setActiveTab("anggota")}
-            className={`py-2 px-4 ${
-              activeTab === "anggota" ? "border-b-2 border-blue-500" : ""
-            }`}
-          >
-            Kelola Daftar Anggota
-          </button>
+    <>
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
+
+      <div>
+        <Navbar />
+        <div className="container mx-auto mt-20 p-4 pb-32">
+          <h1 className="text-3xl font-bold mb-4">Manajemen Presensi</h1>
+          <div className="flex border-b border-zinc-200 mb-4">
+            <button
+              onClick={() => setActiveTab("presensi")}
+              className={`py-2 px-4 ${
+                activeTab === "presensi" ? "border-b-2 border-blue-500" : ""
+              }`}
+            >
+              Kelola Presensi
+            </button>
+            <button
+              onClick={() => setActiveTab("laporan")}
+              className={`py-2 px-4 ${
+                activeTab === "laporan" ? "border-b-2 border-blue-500" : ""
+              }`}
+            >
+              Laporan Kehadiran
+            </button>
+            <button
+              onClick={() => setActiveTab("anggota")}
+              className={`py-2 px-4 ${
+                activeTab === "anggota" ? "border-b-2 border-blue-500" : ""
+              }`}
+            >
+              Kelola Daftar Anggota
+            </button>
+          </div>
+          {/* Kontent Utama */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[500px]">
+            {activeTab === "presensi" && (
+              <div className="animate-fadeIn">
+                <ManageAttendance />
+              </div>
+            )}
+            {activeTab === "laporan" && (
+              <div className="animate-fadeIn">
+                <LaporanKehadiran />
+              </div>
+            )}
+            {activeTab === "anggota" && (
+              <div className="animate-fadeIn">
+                <ManageMembers />
+              </div>
+            )}
+          </div>
         </div>
-        {/* Kontent Utama */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[500px]">
-          {activeTab === "presensi" && (
-            <div className="animate-fadeIn">
-              <ManageAttendance />
-            </div>
-          )}
-          {activeTab === "laporan" && (
-            <div className="animate-fadeIn">
-              <LaporanKehadiran />
-            </div>
-          )}
-          {activeTab === "anggota" && (
-            <div className="animate-fadeIn">
-              <ManageMembers />
-            </div>
-          )}
-        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 };
 

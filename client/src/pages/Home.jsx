@@ -8,6 +8,7 @@ import AIChatWidget from "../components/AIChatWidget";
 import { useContext, useEffect } from "react";
 import { AppContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
   const { userData } = useContext(AppContext);
@@ -22,33 +23,42 @@ const Home = () => {
   }, [userData, navigate]);
 
   return (
-    <div>
-      <Navbar />
+    <>
+      <Helmet>
+        <title>Cyber Computer & Security UNUSA</title>
+        <meta
+          name="description"
+          content="Cyber UNUSA adalah wadah bagi mahasiswa Universitas Nahdlatul Ulama Surabaya yang bergerak di bidang teknologi, seperti editing, programming, dan networking."
+        />
+      </Helmet>
+      <div>
+        <Navbar />
 
-      {/* Hero section */}
-      <section id="home" className="pt-2 mt-14">
-        <HeroSection />
-      </section>
+        {/* Hero section */}
+        <section id="home" className="pt-2 mt-14">
+          <HeroSection />
+        </section>
 
-      {/* Pengurus Inti */}
-      <section id="pengurus" className="pt-32 pb-32">
-        <Pengurus />
-      </section>
+        {/* Pengurus Inti */}
+        <section id="pengurus" className="pt-32 pb-32">
+          <Pengurus />
+        </section>
 
-      {/* event */}
-      <section id="event pt-36 pb-32">
-        <Event />
-      </section>
+        {/* event */}
+        <section id="event pt-36 pb-32">
+          <Event />
+        </section>
 
-      {/* Dokumenter */}
-      <section id="dokumenter" className="pt-36 pb-32">
-        <Dokumenter />
-      </section>
+        {/* Dokumenter */}
+        <section id="dokumenter" className="pt-36 pb-32">
+          <Dokumenter />
+        </section>
 
-      <AIChatWidget />
+        <AIChatWidget />
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 };
 

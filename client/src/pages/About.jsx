@@ -1,10 +1,19 @@
 import Footer from "../components/layouts/Footer";
 import Navbar from "../components/layouts/Navbar";
 import { Dot } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 export default function About() {
   return (
     <>
+      <Helmet>
+        <title>Tentang Kami — Cyber UNUSA</title>
+        <meta
+          name="description"
+          content="Sejarah, visi, misi, dan makna lambang UKM Cyber Security Universitas Nahdlatul Ulama Surabaya."
+        />
+      </Helmet>
+
       <Navbar />
       {/* Section 1: Sejarah UKM */}
       <div className="container mx-auto mt-20 px-4 sm:px-6 lg:px-8 py-12 flex flex-col lg:flex-row items-center">
@@ -14,6 +23,7 @@ export default function About() {
             src="/asset/cyber-logo-2.webp" // Pastikan path ini benar
             alt="Logo UKM Cyber UNUSA dengan latar"
             className="w-3/4 sm:w-1/2 lg:w-full max-w-md object-contain" // Ukuran lebih konsisten
+            loading="lazy"
           />
         </div>
         {/* Konten Teks Sejarah */}
@@ -64,8 +74,9 @@ export default function About() {
             {/* Gambar Lambang */}
             <div className="w-full lg:w-1/2 flex justify-center">
               <img
-                src="/asset/logo.webp" // Pastikan path ini benar
+                src="/asset/logo.webp"
                 alt="Logo UKM Cyber UNUSA"
+                loading="lazy"
                 className="w-1/2 sm:w-1/3 lg:w-1/2 max-w-xs h-auto object-contain" // Ukuran disesuaikan
               />
             </div>
