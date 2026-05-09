@@ -12,7 +12,7 @@ export default function Page404() {
           Page not found
         </h1>
         <img
-          src="/asset/com.jpg"
+          src="/asset/com.webp"
           alt="Logo"
           className="object-cover w-64 mb-8 rounded-full"
         />

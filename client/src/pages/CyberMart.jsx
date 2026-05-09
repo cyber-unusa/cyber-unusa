@@ -32,7 +32,7 @@ export default function CyberMart() {
           {/* Gambar */}
           <div className="lg:w-1/2">
             <img
-              src="/asset/services-img.png"
+              src="/asset/services-img.webp"
               alt="Cyber Services Illustration"
               className="w-full h-auto object-contain max-w-lg mx-auto drop-shadow-xl"
             />

@@ -11,7 +11,7 @@ export default function About() {
         {/* Gambar Sejarah */}
         <div className="w-full lg:w-1/2 flex justify-center lg:justify-start mb-8 lg:mb-0 lg:pr-8">
           <img
-            src="/asset/cyber-logo-2.png" // Pastikan path ini benar
+            src="/asset/cyber-logo-2.webp" // Pastikan path ini benar
             alt="Logo UKM Cyber UNUSA dengan latar"
             className="w-3/4 sm:w-1/2 lg:w-full max-w-md object-contain" // Ukuran lebih konsisten
           />
@@ -64,7 +64,7 @@ export default function About() {
             {/* Gambar Lambang */}
             <div className="w-full lg:w-1/2 flex justify-center">
               <img
-                src="/asset/logo.png" // Pastikan path ini benar
+                src="/asset/logo.webp" // Pastikan path ini benar
                 alt="Logo UKM Cyber UNUSA"
                 className="w-1/2 sm:w-1/3 lg:w-1/2 max-w-xs h-auto object-contain" // Ukuran disesuaikan
               />

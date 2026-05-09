@@ -7,7 +7,7 @@ const CoomingSoon = () => {
   return (
     <div class="min-h-screen flex flex-col justify-center items-center bg-[var(--secbg)]">
       <img
-        src="/asset/com.jpg"
+        src="/asset/com.webp"
         alt="Logo"
         className="object-cover w-64 mb-8 rounded-full"
       />
