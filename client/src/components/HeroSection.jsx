@@ -35,7 +35,11 @@ export default function HeroSection() {
         <h2 className="text-3xl sm:text-5xl font-semibold mb-4">
           Selamat Datang di Web <br />
           <TextType
-            text={["Cyber UNUSA", "UKM Cyber UNUSA", "Cyber Community"]}
+            text={[
+              "Cyber Computer & Security",
+              "UKM Cyber UNUSA",
+              "Cyber Community",
+            ]}
             typingSpeed={100}
             deletingSpeed={75}
             pauseDuration={1500}
