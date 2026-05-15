@@ -32,7 +32,7 @@ export default function HeroSection() {
             👋
           </span>
         </h1>
-        <h2 className="text-3xl sm:text-5xl font-semibold mb-4">
+        <h2 className="text-3xl sm:text-4xl font-semibold mb-4">
           Selamat Datang di Web <br />
           <TextType
             text={[
